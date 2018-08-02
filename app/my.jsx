@@ -2,7 +2,7 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 
  import 'bootstrap/dist/js/bootstrap.bundle.js'
-import 'bootstrap/dist/css/bootstrap.css';
+  import 'bootstrap/dist/css/bootstrap.css';
 
  
 const propsValues = {

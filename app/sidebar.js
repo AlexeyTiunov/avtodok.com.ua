@@ -26,10 +26,15 @@ export class Sidebar  extends React.Component
      
      render()
      {
-       return   <div id='sidebar'>  
-                  <Sidebar_nav items={ITEMS}/>      
+       return   <div id="sidebar"> 
+       
+                  <div class="sidebar-scroll"> 
+                     <div id='sidebar-content'>  
+                        <Sidebar_nav items={ITEMS}/>      
            
-                     </div>        
+                     </div>  
+                    </div>
+                   </div>      
          
        
          

@@ -3,7 +3,9 @@ var React = require('react');
 var Li= require("./sidebar_li.js");
 //var Sidebar_nav =require('./sidebar_nav.js');
 import {Sidebar_nav} from './sidebar_nav.js';
-import {items as ITEMS }from './sidebar_nav.js'; 
+import {items as ITEMS }from './sidebar_nav.js';
+//import './css/plugins.css'; 
+//require('style-loader!css-loader!./css/plugins.css');
  
  
   alert(Sidebar_nav);

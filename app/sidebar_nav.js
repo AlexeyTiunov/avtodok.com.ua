@@ -9,7 +9,7 @@ debugger
   */  
 export var items = [
   {name:"Головна", href:"#", className:"" ,inner:null},  
-  {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
+  {name:"Особистий кабіне", href:"#", className:"sidebar-nav-menu",
     inner:[  {name:"Замовлення", href:"cabinet_orders.html", className:"" ,inner:null},
              {name:"Баланс", href:"cabinet_cash.html",className:"" ,inner:null},
              {name:"Історія позицій", href:"cabinet_cash.html",className:"" ,inner:null},
@@ -61,19 +61,33 @@ export class Sidebar_nav  extends React.Component
                        if (item.inner instanceof Array )
                      {
                          
+                        let gg= item.inner.map(function(item_inner){
+                                           
+                                           return <li>{item_inner.name}</li>;
+                                           
+                         });
                          
+                                     
                          
                          const c = (<li>
                                      <a href={item.href} className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
                                     <ul>
                                         
-                                    
+                                       {gg}
                                     
                                     
                                      </ul>
                                      </li>
                                     );
-                          return c;
+                         return c;
+                         
+                     }
+                     {
+                         const ff=  ( <li>
+                               <a  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                              </li> ) 
+                      return ff;        
+                          
                          
                      }
                      
@@ -82,9 +96,10 @@ export class Sidebar_nav  extends React.Component
                      
                  } else
                  {
-                     return  ( <li>
+                     const f=  ( <li>
                                <a  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
-                              </li> )
+                              </li> ) 
+                      return f;        
                      
                  }
              

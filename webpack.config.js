@@ -25,7 +25,8 @@ module.exports = {
                 exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
-                    presets:["env", "react"]    // используемые плагины
+                    presets:["env", "react"],    // используемые плагины
+                    plugins: ["babel-plugin-transform-remove-strict-mode"]
                 }
             },
             {
@@ -33,7 +34,8 @@ module.exports = {
                 exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
-                    presets:["env", "react"]    // используемые плагины
+                    presets:["env", "react"],    // используемые плагины
+                    plugins: ["babel-plugin-transform-remove-strict-mode"]
                 }
             },
             {

@@ -7,7 +7,13 @@
  *  use them only in specific pages. Also, if you remove a js plugin you won't use, make
  *  sure to remove its initialization from uiInit().
  */
+//var $=require('jquery');
+//require ('./slimScroll.js');
+require('./plugins.js');
 
+//import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.js';
+//import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css';
+//require ('bootstrap3-wysihtml5-bower');
 var App = function() {
 
     /* Helper variables - set in uiInit() */

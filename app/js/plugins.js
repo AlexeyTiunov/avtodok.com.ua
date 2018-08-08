@@ -6800,7 +6800,7 @@ var Handlebars = function() {
         return f
     }();
   glob = "undefined" == typeof window ? global : window,
-    Handlebars = glob.Handlebars;
+   // Handlebars = glob.Handlebars;
 this.wysihtml5 = this.wysihtml5 || {}, this.wysihtml5.tpl = this.wysihtml5.tpl || {}, this.wysihtml5.tpl.blockquote = Handlebars.template(function(a, b, c, d, e) {
         function f(a) {
             var b, c = "";

@@ -9,7 +9,7 @@
  */
 //var $=require('jquery');
 //require ('./slimScroll.js');
-require('./plugins.js');
+//require('./plugins.js');
 
 //import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.js';
 //import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css';

@@ -19,8 +19,8 @@ require ('./js/app.js');
    
  
  
-  alert(Sidebar_nav);
-  debugger   
+  //alert(Sidebar_nav);
+  //debugger   
 
 
      
@@ -38,15 +38,20 @@ export class Sidebar  extends React.Component
      render()
      {
        return  (<div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
-                 <div id="sidebar">        
+                 <div id="sidebar" className="alert alert-success">        
                   <div className='sidebar-scroll'> 
                      <div id='sidebar-content'>  
                         <Sidebar_nav items={ITEMS}/>      
            
                      </div>  
                     </div>
-                   </div> 
-                  </div>)     
+                   </div>
+                   <header className="navbar navbar-inverse navbar-fixed-top "> </header> 
+                  </div>
+                  
+                  
+                  
+                  )     
          
        
          

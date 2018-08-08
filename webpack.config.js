@@ -5,6 +5,12 @@ var entryArray=[];
 entryArray.push("./app/sidebar_li.js");
 entryArray.push("./app/sidebar.js");
 entryArray.push('./app/css/plugins.css'); 
+entryArray.push('./app/js/plugins.js'); 
+entryArray.push('./app/js/app.js');
+entryArray.push('./app/js/pages/index.js');
+entryArray.push('./app/css/main.css');
+entryArray.push('./app/css/themes.css');
+entryArray.push('./app/css/themes/fire.css');
 
 
 
@@ -22,7 +28,8 @@ module.exports = {
         rules:[   //загрузчик для jsx
             {
                 test: /\.jsx?$/, // определяем тип файлов
-                exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
+               // exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
+                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),/app\/js\//], 
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
                     presets:["env", "react"],    // используемые плагины
@@ -31,7 +38,8 @@ module.exports = {
             },
             {
                 test: /\.js?$/, // определяем тип файлов
-                exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
+               // exclude: /(.*?)(node_modules|plugins\.js|app\.js)$/,  // исключаем из обработки папку node_modules
+                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),/app\/js\//],
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
                     presets:["env", "react"],    // используемые плагины

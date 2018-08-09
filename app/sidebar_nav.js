@@ -83,14 +83,14 @@ export class Sidebar_nav  extends React.Component
                          
                         let gg= item.inner.map(function(item_inner){
                                            
-                                           return <li>{item_inner.name}</li>;
+                                           return <li><a href="cabinet_orders.html"><i className="gi gi-table sidebar-nav-icon"></i><font><font>{item_inner.name}</font></font></a></li>;
                                            
                          });
                          
                                      
                          
                          const c = (<li>
-                                     <a href={item.href} className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                                     <a href={item.href} className={item.className}><i className="fa fa-angle-left sidebar-nav-indicator"></i><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
                                     <ul>
                                         
                                        {gg}

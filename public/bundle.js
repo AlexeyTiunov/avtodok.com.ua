@@ -747,9 +747,12 @@ module.exports = __webpack_require__.p + "ca49283d2c290f4eeb9d325440855c58.png";
 /*!***********************!*\
   !*** ./app/js/app.js ***!
   \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: App */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App", function() { return App; });
 /*
  *  Document   : app.js
  *  Author     : pixelcave
@@ -8991,6 +8994,71 @@ Prism.languages.php=Prism.languages.extend("clike",{keyword:/\b(and|or|xor|array
 
 /***/ }),
 
+/***/ "./app/page_content.js":
+/*!*****************************!*\
+  !*** ./app/page_content.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var Page_content = exports.Page_content = function (_React$Component) {
+  _inherits(Page_content, _React$Component);
+
+  function Page_content(props) {
+    _classCallCheck(this, Page_content);
+
+    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+  }
+
+  _createClass(Page_content, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } });
+    }
+  }]);
+
+  return Page_content;
+}(React.Component);
+
+/***/ }),
+
 /***/ "./app/sidebar.js":
 /*!************************!*\
   !*** ./app/sidebar.js ***!
@@ -9018,6 +9086,10 @@ var _createClass = function () {
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var _sidebar_nav = __webpack_require__(/*! ./sidebar_nav.js */ "./app/sidebar_nav.js");
+
+var _sidebar_header = __webpack_require__(/*! ./sidebar_header.js */ "./app/sidebar_header.js");
+
+var _page_content = __webpack_require__(/*! ./page_content.js */ "./app/page_content.js");
 
 __webpack_require__(/*! bootstrap/dist/js/bootstrap.bundle.js */ "./node_modules/bootstrap/dist/js/bootstrap.bundle.js");
 
@@ -9074,7 +9146,7 @@ var Sidebar = exports.Sidebar = function (_React$Component) {
   _createClass(Sidebar, [{
     key: 'render',
     value: function render() {
-      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: 'alert alert-success' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content' }, React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, ' '));
+      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: 'alert alert-success' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content' }, React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, null)));
     }
   }]);
 
@@ -9082,9 +9154,115 @@ var Sidebar = exports.Sidebar = function (_React$Component) {
 }(React.Component);
 
 debugger;
-ReactDOM.render(React.createElement(Sidebar, null), document.getElementById("app"));
+var body = document.getElementsByTagName("body");
+ReactDOM.render(React.createElement(Sidebar, null), body[0]);
 debugger;
 //require ('./js/app.js');
+
+/***/ }),
+
+/***/ "./app/sidebar_header.js":
+/*!*******************************!*\
+  !*** ./app/sidebar_header.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Sidebar_header = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+window.$ = jQuery;
+var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
+//import {App} from './js/app.js';
+
+
+var Sidebar_control_button = function (_React$Component) {
+    _inherits(Sidebar_control_button, _React$Component);
+
+    function Sidebar_control_button(props) {
+        _classCallCheck(this, Sidebar_control_button);
+
+        var _this = _possibleConstructorReturn(this, (Sidebar_control_button.__proto__ || Object.getPrototypeOf(Sidebar_control_button)).call(this, props));
+
+        _this.press = _this.press.bind(_this);
+        _this.state = { parentMod: props.parentMod };
+
+        return _this;
+    }
+
+    _createClass(Sidebar_control_button, [{
+        key: 'press',
+        value: function press(e) {
+            console.log(e);
+            App.App.sidebar('toggle-sidebar');
+            $("body").css("width", "100%");
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('ul', { className: 'nav navbar-nav-custom' }, React.createElement('li', null, React.createElement('a', { href: 'javascript:void(0)', onClick: this.press }, React.createElement('i', { className: 'fa fa-bars fa-fw' }))));
+        }
+    }]);
+
+    return Sidebar_control_button;
+}(React.Component);
+
+var Sidebar_header = exports.Sidebar_header = function (_React$Component2) {
+    _inherits(Sidebar_header, _React$Component2);
+
+    function Sidebar_header(props) {
+        _classCallCheck(this, Sidebar_header);
+
+        return _possibleConstructorReturn(this, (Sidebar_header.__proto__ || Object.getPrototypeOf(Sidebar_header)).call(this, props));
+    }
+
+    _createClass(Sidebar_header, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, React.createElement(Sidebar_control_button, { parentMod: this.props.parentMod }));
+        }
+    }]);
+
+    return Sidebar_header;
+}(React.Component);
 
 /***/ }),
 
@@ -63904,14 +64082,15 @@ module.exports = function (css) {
 /***/ }),
 
 /***/ 0:
-/*!******************************************************************************************************************************************************************************************************!*\
-  !*** multi ./app/sidebar_li.js ./app/sidebar.js ./app/css/plugins.css ./app/js/plugins.js ./app/js/app.js ./app/js/pages/index.js ./app/css/main.css ./app/css/themes.css ./app/css/themes/fire.css ***!
-  \******************************************************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./app/sidebar_li.js ./app/sidebar.js ./app/sidebar_header.js ./app/css/plugins.css ./app/js/plugins.js ./app/js/app.js ./app/js/pages/index.js ./app/css/main.css ./app/css/themes.css ./app/css/themes/fire.css ***!
+  \******************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! ./app/sidebar_li.js */"./app/sidebar_li.js");
 __webpack_require__(/*! ./app/sidebar.js */"./app/sidebar.js");
+__webpack_require__(/*! ./app/sidebar_header.js */"./app/sidebar_header.js");
 __webpack_require__(/*! ./app/css/plugins.css */"./app/css/plugins.css");
 __webpack_require__(/*! ./app/js/plugins.js */"./app/js/plugins.js");
 __webpack_require__(/*! ./app/js/app.js */"./app/js/app.js");

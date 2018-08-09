@@ -11,6 +11,8 @@ var Li= require("./sidebar_li.js");
 //var Sidebar_nav =require('./sidebar_nav.js');
 import {Sidebar_nav} from './sidebar_nav.js';
 import {items as ITEMS }from './sidebar_nav.js';
+import {Sidebar_header} from './sidebar_header.js'
+import {Page_content} from './page_content.js' 
 //import './css/plugins.css'; 
 //require('style-loader!css-loader!./css/plugins.css');
 import 'bootstrap/dist/js/bootstrap.bundle.js'
@@ -46,7 +48,10 @@ export class Sidebar  extends React.Component
                      </div>  
                     </div>
                    </div>
-                   <header className="navbar navbar-inverse navbar-fixed-top "> </header> 
+                   <div id="main-container"> 
+                     <Sidebar_header parentMod={this}/>
+                     <Page_content/>
+                   </div>
                   </div>
                   
                   
@@ -60,9 +65,10 @@ export class Sidebar  extends React.Component
     
 }
  debugger
+ var body=document.getElementsByTagName("body"); 
 ReactDOM.render(
 <Sidebar/>,
- document.getElementById("app")
+   body[0]
 
 )
  debugger

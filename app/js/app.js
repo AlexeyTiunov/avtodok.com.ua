@@ -14,7 +14,7 @@
 //import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.js';
 //import 'bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css';
 //require ('bootstrap3-wysihtml5-bower');
-var App = function() {
+export var App = function() {
 
     /* Helper variables - set in uiInit() */
     var page, pageContent, header, footer, sidebar, sidebarAlt, sScroll;

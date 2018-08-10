@@ -8994,10 +8994,10 @@ Prism.languages.php=Prism.languages.extend("clike",{keyword:/\b(and|or|xor|array
 
 /***/ }),
 
-/***/ "./app/page_content.js":
-/*!*****************************!*\
-  !*** ./app/page_content.js ***!
-  \*****************************/
+/***/ "./app/main_component.js":
+/*!*******************************!*\
+  !*** ./app/main_component.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9006,7 +9006,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Page_content = undefined;
+exports.Extends = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -9041,7 +9041,7 @@ function _inherits(subClass, superClass) {
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
-var Extends = function (_React$Component) {
+var Extends = exports.Extends = function (_React$Component) {
     _inherits(Extends, _React$Component);
 
     function Extends(props) {
@@ -9049,7 +9049,7 @@ var Extends = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Extends.__proto__ || Object.getPrototypeOf(Extends)).call(this, props));
 
-        _this.state = { parentMod: new _sidebar.Sidebar(), renderIN: React.createElement('div', null) };
+        _this.state = { parentMod: Object, renderIN: React.createElement('div', null) };
 
         return _this;
     }
@@ -9062,36 +9062,112 @@ var Extends = function (_React$Component) {
                 obj.render();
             } catch (e) {}
         }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            alert("updated");
+        }
     }]);
 
     return Extends;
 }(React.Component);
 
-var Page_content = exports.Page_content = function (_Extends) {
-    _inherits(Page_content, _Extends);
+/***/ }),
 
-    function Page_content(props) {
-        _classCallCheck(this, Page_content);
+/***/ "./app/page_content.js":
+/*!*****************************!*\
+  !*** ./app/page_content.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-        return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
-        //this.state={renderIN:""};
-        //this.state={parentMod:props.parentMod};  
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Page_content = undefined;
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
     }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
 
-    _createClass(Page_content, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.state.parentMod.childUpdate(this);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
-        }
-    }]);
+var _get = function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;if (getter === undefined) {
+      return undefined;
+    }return getter.call(receiver);
+  }
+};
 
-    return Page_content;
-}(Extends);
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var Page_content = exports.Page_content = function (_Extends) {
+  _inherits(Page_content, _Extends);
+
+  function Page_content(props) {
+    _classCallCheck(this, Page_content);
+
+    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+    //this.state={renderIN:""};
+    //this.state={parentMod:props.parentMod};  
+  }
+
+  _createClass(Page_content, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'childUpdate', this).call(this, this, React.createElement('h1', null, 'success'));
+      // this.state.parentMod.childUpdate(this);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
+    }
+  }]);
+
+  return Page_content;
+}(_main_component.Extends);
 
 /***/ }),
 
@@ -9132,6 +9208,8 @@ var _page_content = __webpack_require__(/*! ./page_content.js */ "./app/page_con
 var _sidebar_userinfo = __webpack_require__(/*! ./sidebar_userinfo.js */ "./app/sidebar_userinfo.js");
 
 var _sidebar_brand = __webpack_require__(/*! ./sidebar_brand.js */ "./app/sidebar_brand.js");
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
 
 __webpack_require__(/*! ./css/plugins.css */ "./app/css/plugins.css");
 
@@ -9191,8 +9269,8 @@ __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
     
 }  */
 
-var Sidebar = exports.Sidebar = function (_React$Component) {
-  _inherits(Sidebar, _React$Component);
+var Sidebar = exports.Sidebar = function (_Extends) {
+  _inherits(Sidebar, _Extends);
 
   function Sidebar(props) {
     _classCallCheck(this, Sidebar);
@@ -9219,7 +9297,7 @@ var Sidebar = exports.Sidebar = function (_React$Component) {
   }]);
 
   return Sidebar;
-}(React.Component);
+}(_main_component.Extends);
 
 debugger;
 var body = document.getElementsByTagName("body");

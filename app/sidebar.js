@@ -15,7 +15,10 @@ import {items as ITEMS }from './sidebar_nav.js';
 import {Sidebar_header} from './sidebar_header.js'
 import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
-import {Sidebar_brand} from './sidebar_brand.js' 
+import {Sidebar_brand} from './sidebar_brand.js'
+import {Extends} from './main_component.js'
+
+ 
 import './css/plugins.css'; 
 
 require ('bootstrap/dist/js/bootstrap.js');
@@ -40,7 +43,7 @@ require ('./js/app.js');
 }  */
      
 
-export class Sidebar  extends React.Component
+export class Sidebar  extends Extends
 {
     constructor(props) 
      {  

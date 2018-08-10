@@ -8,10 +8,11 @@ entryArray.push("./app/sidebar_header.js");
 entryArray.push('./app/css/plugins.css'); 
 entryArray.push('./app/js/plugins.js'); 
 entryArray.push('./app/js/app.js');
+//entryArray.push('./app/js/main_component_test.js');
 entryArray.push('./app/js/pages/index.js');
 entryArray.push('./app/css/main.css');
 entryArray.push('./app/css/themes.css');
-entryArray.push('./app/css/themes/fire.css');
+entryArray.push('./app/css/themes/fire.css'); 
 
 
 

@@ -1,0 +1,12 @@
+<?
+ function my_autoloader($class) {
+    include  $class . '.php';
+}
+spl_autoload_register('my_autoloader');  
+
+$ItemCodeCorrection_FPS= "ItemCodeCorrectionAdd_FPS" ;
+$ItemCodeCorrection_FPS= new $ItemCodeCorrection_FPS("FP70A1322X",Array(),Array(),Array(),Array());
+var_dump($ItemCodeCorrection_FPS->GetModifyItemCodesAr());    
+    
+    
+?>

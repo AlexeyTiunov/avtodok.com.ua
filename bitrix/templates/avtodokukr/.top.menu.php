@@ -1,0 +1,67 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"ГOЛОВНА", 
+		"/index.php", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"ПРОФІЛЬ", 
+		"/personal/profile/", 
+		Array(), 
+		Array(), 
+		"false" 
+	),
+	Array(
+		"НОВИНИ", 
+		"/news/", 
+		Array(), 
+		Array(), 
+		"false" 
+	),
+	Array(
+		"ДОКУМЕНТИ", 
+		"/docc/index.php", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"OЛИВА", 
+		"/personal/order/catalog/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"РАДІАТОРИ", 
+		"/personal/order/radiators/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"ЗАПЧАСТИНИ ДЛЯ ХОДОВИЙ", 
+		"/personal/order/chassis/index.php", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"КОНТАКТИ", 
+		"/contacts/index.php", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"ЗАПЧАСТИНИ <br>Б\\В", 
+		"/personal/order/usedparts/index.php", 
+		Array(), 
+		Array(), 
+		"" 
+	)
+);
+?>

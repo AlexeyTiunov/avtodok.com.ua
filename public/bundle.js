@@ -9004,58 +9004,94 @@ Prism.languages.php=Prism.languages.extend("clike",{keyword:/\b(and|or|xor|array
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
+exports.Page_content = undefined;
 
 var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
 }();
 
+var _sidebar = __webpack_require__(/*! ./sidebar.js */ "./app/sidebar.js");
+
 function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
 function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
-var Page_content = exports.Page_content = function (_React$Component) {
-  _inherits(Page_content, _React$Component);
+var Extends = function (_React$Component) {
+    _inherits(Extends, _React$Component);
 
-  function Page_content(props) {
-    _classCallCheck(this, Page_content);
+    function Extends(props) {
+        _classCallCheck(this, Extends);
 
-    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
-  }
+        var _this = _possibleConstructorReturn(this, (Extends.__proto__ || Object.getPrototypeOf(Extends)).call(this, props));
 
-  _createClass(Page_content, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } });
+        _this.state = { parentMod: new _sidebar.Sidebar(), renderIN: React.createElement('div', null) };
+
+        return _this;
     }
-  }]);
 
-  return Page_content;
+    _createClass(Extends, [{
+        key: 'childUpdate',
+        value: function childUpdate(obj, renderIN) {
+            try {
+                obj.setState({ renderIN: renderIN });
+                obj.render();
+            } catch (e) {}
+        }
+    }]);
+
+    return Extends;
 }(React.Component);
+
+var Page_content = exports.Page_content = function (_Extends) {
+    _inherits(Page_content, _Extends);
+
+    function Page_content(props) {
+        _classCallCheck(this, Page_content);
+
+        return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+        //this.state={renderIN:""};
+        //this.state={parentMod:props.parentMod};  
+    }
+
+    _createClass(Page_content, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.state.parentMod.childUpdate(this);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
+        }
+    }]);
+
+    return Page_content;
+}(Extends);
 
 /***/ }),
 
@@ -9144,6 +9180,16 @@ __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //alert(Sidebar_nav);
 //debugger   
 
+/*class Extends extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+         this.state={parentMod:this};
+        
+    }
+    
+}  */
 
 var Sidebar = exports.Sidebar = function (_React$Component) {
   _inherits(Sidebar, _React$Component);
@@ -9155,9 +9201,20 @@ var Sidebar = exports.Sidebar = function (_React$Component) {
   }
 
   _createClass(Sidebar, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {}
+  }, {
+    key: 'childUpdate',
+    value: function childUpdate(obj) {
+      try {
+        obj.setState({ renderIN: React.createElement('h1', null, 'success') });
+        obj.render();
+      } catch (e) {}
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, null)));
+      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })));
     }
   }]);
 
@@ -9321,19 +9378,56 @@ var Sidebar_control_button = function (_React$Component) {
     return Sidebar_control_button;
 }(React.Component);
 
-var Sidebar_header = exports.Sidebar_header = function (_React$Component2) {
-    _inherits(Sidebar_header, _React$Component2);
+var Search_form = function (_React$Component2) {
+    _inherits(Search_form, _React$Component2);
+
+    function Search_form(props) {
+        _classCallCheck(this, Search_form);
+
+        var _this2 = _possibleConstructorReturn(this, (Search_form.__proto__ || Object.getPrototypeOf(Search_form)).call(this, props));
+
+        _this2.keypress = _this2.keypress.bind(_this2);
+
+        return _this2;
+    }
+
+    _createClass(Search_form, [{
+        key: 'keypress',
+        value: function keypress() {
+            alert("keypressed");
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('form', { className: 'navbar-form-custom', role: "\u041F\u043E\u0438\u0441\u043A" }, React.createElement('div', { className: 'form-group' }, React.createElement('input', { onKeyDown: this.keypress, type: 'text', id: 'top-search', name: 'top-search', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440 \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0438.." })));
+        }
+    }]);
+
+    return Search_form;
+}(React.Component);
+
+var Sidebar_header = exports.Sidebar_header = function (_React$Component3) {
+    _inherits(Sidebar_header, _React$Component3);
 
     function Sidebar_header(props) {
         _classCallCheck(this, Sidebar_header);
 
-        return _possibleConstructorReturn(this, (Sidebar_header.__proto__ || Object.getPrototypeOf(Sidebar_header)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Sidebar_header.__proto__ || Object.getPrototypeOf(Sidebar_header)).call(this, props));
+
+        _this3.state = { parentMod: props.parentMod };
+
+        return _this3;
     }
 
     _createClass(Sidebar_header, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.state.parentMod.childUpdate(this);
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, React.createElement(Sidebar_control_button, { parentMod: this.props.parentMod }));
+            return React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, React.createElement(Sidebar_control_button, { parentMod: this.props.parentMod }), React.createElement(Search_form, null));
         }
     }]);
 
@@ -9600,7 +9694,7 @@ var Sidebar_userinfo = exports.Sidebar_userinfo = function (_React$Component) {
     _createClass(Sidebar_userinfo, [{
         key: 'render',
         value: function render() {
-            return React.createElement('div', { className: 'sidebar-section sidebar-user clearfix' }, React.createElement('div', { className: 'sidebar-user-avatar' }, React.createElement('a', { href: '#' }, React.createElement('img', { src: 'img/placeholders/avatars/avatar2.jpg', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }))), React.createElement('div', { className: 'sidebar-user-name' }, React.createElement('font', null, React.createElement('font', null, 'USER 1'))), React.createElement('div', { className: 'sidebar-user-links' }, React.createElement('a', { href: 'cabinet_profile.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041F\u0440\u043E\u0444\u0456\u043B\u044C" }, React.createElement('i', { className: 'gi gi-user' })), React.createElement('a', { href: '#modal-user-settings', 'data-toggle': 'modal', 'class': 'enable-tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438" }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { href: 'login.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u0412\u0438\u0439\u0442\u0438" }, React.createElement('i', { className: 'gi gi-exit' }))));
+            return React.createElement('div', { className: 'sidebar-section sidebar-user clearfix' }, React.createElement('div', { className: 'sidebar-user-avatar' }, React.createElement('a', { href: '#' }, React.createElement('img', { src: '/app/img/placeholders/avatars/avatar2.jpg', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }))), React.createElement('div', { className: 'sidebar-user-name' }, React.createElement('font', null, React.createElement('font', null, 'USER 1'))), React.createElement('div', { className: 'sidebar-user-links' }, React.createElement('a', { href: 'cabinet_profile.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041F\u0440\u043E\u0444\u0456\u043B\u044C" }, React.createElement('i', { className: 'gi gi-user' })), React.createElement('a', { href: '#modal-user-settings', 'data-toggle': 'modal', 'class': 'enable-tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438" }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { href: 'login.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u0412\u0438\u0439\u0442\u0438" }, React.createElement('i', { className: 'gi gi-exit' }))));
         }
     }]);
 

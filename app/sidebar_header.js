@@ -50,23 +50,58 @@ class Sidebar_control_button extends React.Component
     }
 }
 
+class Search_form extends React.Component     
+{
+     constructor(props) 
+     {  
+       super(props);      
+       this.keypress=this.keypress.bind(this);  
+         
+     } 
+     
+     keypress()
+     {
+         alert("keypressed");
+     }
+     
+     
+     
+     
+     render()  {
+     return (  <form  className="navbar-form-custom" role="Поиск">
+                        <div className="form-group">
+                            <input  onKeyDown={this.keypress}   type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
+                        </div>
+                    </form>
+     
+     
+     )}
+    
+}
+
 
 
 export class Sidebar_header  extends React.Component
 {
     constructor(props) 
      {  
-       super(props);      
+       super(props); 
+       
+       this.state={parentMod:props.parentMod};       
          
          
      } 
+     componentDidMount()
+     {
+      this.state.parentMod.childUpdate(this);
+     }
      
      
      render()
      {
       return ( <header className="navbar navbar-inverse navbar-fixed-top ">
                  <Sidebar_control_button parentMod={this.props.parentMod}/>
-      
+                 <Search_form/>
       
                </header>
              )

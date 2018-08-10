@@ -17,7 +17,7 @@ export class Sidebar_userinfo extends React.Component
          return ( <div className="sidebar-section sidebar-user clearfix">
                                     <div className="sidebar-user-avatar">
                                             <a href="#">
-                                                <img src="img/placeholders/avatars/avatar2.jpg" alt="аватар"/>
+                                                <img src="/app/img/placeholders/avatars/avatar2.jpg" alt="аватар"/>
                                             </a>
                                         </div>
                                         <div className="sidebar-user-name"><font><font>USER 1</font></font></div>

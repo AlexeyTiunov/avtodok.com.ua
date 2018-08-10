@@ -28,7 +28,16 @@ require ('./js/app.js');
   //alert(Sidebar_nav);
   //debugger   
 
-
+/*class Extends extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+         this.state={parentMod:this};
+        
+    }
+    
+}  */
      
 
 export class Sidebar  extends React.Component
@@ -40,13 +49,29 @@ export class Sidebar  extends React.Component
          
      } 
      
+     componentDidMount()
+     {
+       
+     }
+     childUpdate(obj)
+     {
+         try
+         {
+           obj.setState({renderIN:<h1>success</h1>})
+           obj.render();  
+         }catch (e)
+         {
+             
+         }
+        
+     }
      
      render()
      {
        return  (<div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
                  <div id="sidebar" className="">        
                   <div className='sidebar-scroll'> 
-                     <div id='sidebar-content'>
+                     <div id='sidebar-content' className='sidebar-content'>
                         <Sidebar_brand/>    
                         <Sidebar_userinfo/> 
                         <Sidebar_nav items={ITEMS}/>      
@@ -56,7 +81,7 @@ export class Sidebar  extends React.Component
                    </div>
                    <div id="main-container"> 
                      <Sidebar_header parentMod={this}/>
-                     <Page_content/>
+                     <Page_content parentMod={this}/>
                    </div>
                   </div>
                   

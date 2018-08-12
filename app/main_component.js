@@ -2,17 +2,52 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 import {Sidebar} from './sidebar.js'
 
+window.objectReg={};
+
 export class Extends extends React.Component
 {
+   //////////////////////////////////////////////////  
+    
     constructor(props)
     {
         super(props);
-         this.state={parentMod:Object,renderIN:<div></div>};
+           
+         this.state={parentMod:Object,
+                     renderIN:<div></div>,
+                     dataRecieved:null,
+         
+                     };
+         this.xhr = new XMLHttpRequest();
+        
   
         
     }
     
-    childUpdate(obj,renderIN)
+   
+     componentDidUpdate(prevProps, prevState)
+     {
+         alert("updated");
+     }
+     
+    
+     
+     componentDidMount() 
+     {
+         debugger;
+       objectReg[this.constructor.name]=this.constructor.name;   
+         
+         
+     }
+     componentWillUnmount()
+     {
+         debugger;
+      delete objectReg[this.constructor.name];  
+         
+     }
+     
+    ///////////////////////////////////////////////////////////////////// 
+     
+      childUpdate(obj,renderIN)
      {
          try
          {
@@ -24,9 +59,27 @@ export class Extends extends React.Component
          }
         
      }
-     componentDidUpdate(prevProps, prevState)
+     makeRequest(method,url,type,data)
      {
-         alert("updated");
+        thisO=this; 
+         
+       thisO.xhr.open(method,url,type);
+       thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+       thisO.xhr.onreadystatechange = function()
+        {
+            if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
+            {
+               //alert(xhr.status + ': ' + xhr.responseText);
+               thisO.setState({dataRecieved:thisO.xhr.responseText});  
+            }
+            
+        }
+       this.xhr.send(data);    
+         
+         
+         
      }
+     
+     
     
 }

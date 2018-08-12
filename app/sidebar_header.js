@@ -1,6 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react'); 
 import 'jquery'; 
+import {Extends} from './main_component.js'
 var jQuery=require('jquery'); 
 window.$=jQuery;
 var App=require('./js/app.js'); 
@@ -8,7 +9,7 @@ var App=require('./js/app.js');
   
 
 
-class Sidebar_control_button extends React.Component
+class Sidebar_control_button extends Extends
 {
     constructor(props) 
      {  
@@ -50,7 +51,7 @@ class Sidebar_control_button extends React.Component
     }
 }
 
-class Search_form extends React.Component     
+class Search_form extends Extends     
 {
      constructor(props) 
      {  
@@ -81,7 +82,7 @@ class Search_form extends React.Component
 
 
 
-export class Sidebar_header  extends React.Component
+export class Sidebar_header  extends Extends
 {
     constructor(props) 
      {  

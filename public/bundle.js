@@ -9041,20 +9041,49 @@ function _inherits(subClass, superClass) {
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
+window.objectReg = {};
+
 var Extends = exports.Extends = function (_React$Component) {
     _inherits(Extends, _React$Component);
+
+    ////////////////////////////////////////////////// 
 
     function Extends(props) {
         _classCallCheck(this, Extends);
 
         var _this = _possibleConstructorReturn(this, (Extends.__proto__ || Object.getPrototypeOf(Extends)).call(this, props));
 
-        _this.state = { parentMod: Object, renderIN: React.createElement('div', null) };
+        _this.state = { parentMod: Object,
+            renderIN: React.createElement('div', null),
+            dataRecieved: null
+
+        };
+        _this.xhr = new XMLHttpRequest();
 
         return _this;
     }
 
     _createClass(Extends, [{
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            alert("updated");
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            debugger;
+            objectReg[this.constructor.name] = this.constructor.name;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            debugger;
+            delete objectReg[this.constructor.name];
+        }
+
+        ///////////////////////////////////////////////////////////////////// 
+
+    }, {
         key: 'childUpdate',
         value: function childUpdate(obj, renderIN) {
             try {
@@ -9063,9 +9092,19 @@ var Extends = exports.Extends = function (_React$Component) {
             } catch (e) {}
         }
     }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps, prevState) {
-            alert("updated");
+        key: 'makeRequest',
+        value: function makeRequest(method, url, type, data) {
+            thisO = this;
+
+            thisO.xhr.open(method, url, type);
+            thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            thisO.xhr.onreadystatechange = function () {
+                if (thisO.xhr.readyState == 4 && thisO.xhr.status == 200) {
+                    //alert(xhr.status + ': ' + xhr.responseText);
+                    thisO.setState({ dataRecieved: thisO.xhr.responseText });
+                }
+            };
+            this.xhr.send(data);
         }
     }]);
 
@@ -9084,89 +9123,91 @@ var Extends = exports.Extends = function (_React$Component) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
 exports.Page_content = undefined;
 
 var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
+   function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+         var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+      }
+   }return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+   };
 }();
 
 var _get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;if (getter === undefined) {
-      return undefined;
-    }return getter.call(receiver);
-  }
+   if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+      var parent = Object.getPrototypeOf(object);if (parent === null) {
+         return undefined;
+      } else {
+         return get(parent, property, receiver);
+      }
+   } else if ("value" in desc) {
+      return desc.value;
+   } else {
+      var getter = desc.get;if (getter === undefined) {
+         return undefined;
+      }return getter.call(receiver);
+   }
 };
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
 
 function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+   if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+   }
 }
 
 function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+   if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+   }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+   if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var Page_content = exports.Page_content = function (_Extends) {
-  _inherits(Page_content, _Extends);
+   _inherits(Page_content, _Extends);
 
-  function Page_content(props) {
-    _classCallCheck(this, Page_content);
+   function Page_content(props) {
+      _classCallCheck(this, Page_content);
 
-    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
-    //this.state={renderIN:""};
-    //this.state={parentMod:props.parentMod};  
-  }
+      return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+      //this.state={renderIN:""};
+      //this.state={parentMod:props.parentMod};  
+   }
 
-  _createClass(Page_content, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'childUpdate', this).call(this, this, React.createElement('h1', null, 'success'));
-      // this.state.parentMod.childUpdate(this);
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
-    }
-  }]);
+   _createClass(Page_content, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidMount', this).call(this);
+         // super.childUpdate(this,<h1>success</h1>);   
+         // this.state.parentMod.childUpdate(this);
+         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'makeRequest', this).call(this, "POST", "/ws/auth.php", false, "LOGIN=Alex");
+      }
+   }, {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate(prevProps, prevState) {
+         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+      }
+   }, {
+      key: 'render',
+      value: function render() {
+         return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
+      }
+   }]);
 
-  return Page_content;
+   return Page_content;
 }(_main_component.Extends);
 
 /***/ }),
@@ -9398,6 +9439,8 @@ var _createClass = function () {
 
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -9425,8 +9468,8 @@ var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
 
 
-var Sidebar_control_button = function (_React$Component) {
-    _inherits(Sidebar_control_button, _React$Component);
+var Sidebar_control_button = function (_Extends) {
+    _inherits(Sidebar_control_button, _Extends);
 
     function Sidebar_control_button(props) {
         _classCallCheck(this, Sidebar_control_button);
@@ -9454,10 +9497,10 @@ var Sidebar_control_button = function (_React$Component) {
     }]);
 
     return Sidebar_control_button;
-}(React.Component);
+}(_main_component.Extends);
 
-var Search_form = function (_React$Component2) {
-    _inherits(Search_form, _React$Component2);
+var Search_form = function (_Extends2) {
+    _inherits(Search_form, _Extends2);
 
     function Search_form(props) {
         _classCallCheck(this, Search_form);
@@ -9482,10 +9525,10 @@ var Search_form = function (_React$Component2) {
     }]);
 
     return Search_form;
-}(React.Component);
+}(_main_component.Extends);
 
-var Sidebar_header = exports.Sidebar_header = function (_React$Component3) {
-    _inherits(Sidebar_header, _React$Component3);
+var Sidebar_header = exports.Sidebar_header = function (_Extends3) {
+    _inherits(Sidebar_header, _Extends3);
 
     function Sidebar_header(props) {
         _classCallCheck(this, Sidebar_header);
@@ -9510,7 +9553,7 @@ var Sidebar_header = exports.Sidebar_header = function (_React$Component3) {
     }]);
 
     return Sidebar_header;
-}(React.Component);
+}(_main_component.Extends);
 
 /***/ }),
 

@@ -18,7 +18,7 @@ export class Extends extends React.Component
          
                      };
          this.xhr = new XMLHttpRequest();
-        
+         //this.objectReg={};
   
         
     }
@@ -34,14 +34,14 @@ export class Extends extends React.Component
      componentDidMount() 
      {
          debugger;
-       objectReg[this.constructor.name]=this.constructor.name;   
+       window.objectReg[this.constructor.name]=this;   
          
          
      }
      componentWillUnmount()
      {
          debugger;
-      delete objectReg[this.constructor.name];  
+      delete window.objectReg[this.constructor.name];  
          
      }
      

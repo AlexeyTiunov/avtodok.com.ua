@@ -6,7 +6,7 @@ var jQuery=require('jquery');
 window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
-  
+ debugger;  
 
 
 class Sidebar_control_button extends Extends
@@ -57,11 +57,24 @@ class Search_form extends Extends
      {  
        super(props);      
        this.keypress=this.keypress.bind(this);  
-         
+        debugger;  
      } 
      
      keypress()
-     {
+     {  
+         debugger;
+        if (window.objectReg['Page_content'])
+        {
+            Uobject=window.objectReg['Page_content'];
+            Uobject.setState({renderIN:<h1>success</h1>});
+            Uobject.render(); 
+            
+        }else
+        {
+             alert("error");  
+             
+        } 
+         alert("error");
          alert("keypressed");
      }
      

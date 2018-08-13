@@ -9046,7 +9046,7 @@ window.objectReg = {};
 var Extends = exports.Extends = function (_React$Component) {
     _inherits(Extends, _React$Component);
 
-    ////////////////////////////////////////////////// 
+    //////////////////////////////////////////////////  
 
     function Extends(props) {
         _classCallCheck(this, Extends);
@@ -9059,6 +9059,8 @@ var Extends = exports.Extends = function (_React$Component) {
 
         };
         _this.xhr = new XMLHttpRequest();
+        //this.objectReg={};
+
 
         return _this;
     }
@@ -9072,13 +9074,13 @@ var Extends = exports.Extends = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             debugger;
-            objectReg[this.constructor.name] = this.constructor.name;
+            window.objectReg[this.constructor.name] = this;
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             debugger;
-            delete objectReg[this.constructor.name];
+            delete window.objectReg[this.constructor.name];
         }
 
         ///////////////////////////////////////////////////////////////////// 
@@ -9466,7 +9468,7 @@ var jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquer
 window.$ = jQuery;
 var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
-
+debugger;
 
 var Sidebar_control_button = function (_Extends) {
     _inherits(Sidebar_control_button, _Extends);
@@ -9508,13 +9510,22 @@ var Search_form = function (_Extends2) {
         var _this2 = _possibleConstructorReturn(this, (Search_form.__proto__ || Object.getPrototypeOf(Search_form)).call(this, props));
 
         _this2.keypress = _this2.keypress.bind(_this2);
-
+        debugger;
         return _this2;
     }
 
     _createClass(Search_form, [{
         key: 'keypress',
         value: function keypress() {
+            debugger;
+            if (window.objectReg['Page_content']) {
+                Uobject = window.objectReg['Page_content'];
+                Uobject.setState({ renderIN: React.createElement('h1', null, 'success') });
+                Uobject.render();
+            } else {
+                alert("error");
+            }
+            alert("error");
             alert("keypressed");
         }
     }, {

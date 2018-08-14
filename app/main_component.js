@@ -26,7 +26,7 @@ export class Extends extends React.Component
    
      componentDidUpdate(prevProps, prevState)
      {
-         alert("updated");
+         //alert("updated");
      }
      
     
@@ -61,8 +61,10 @@ export class Extends extends React.Component
      }
      makeRequest(method,url,type,data)
      {
-        thisO=this; 
+        thisO=this;
+       
          
+       thisO.setState({dataRecieved:null});  
        thisO.xhr.open(method,url,type);
        thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
        thisO.xhr.onreadystatechange = function()
@@ -70,7 +72,9 @@ export class Extends extends React.Component
             if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
             {
                //alert(xhr.status + ': ' + xhr.responseText);
-               thisO.setState({dataRecieved:thisO.xhr.responseText});  
+               thisO.setState( function (prevState,props){
+                   {dataRecieved:thisO.xhr.responseText}
+               });  
             }
             
         }

@@ -1,16 +1,18 @@
 <?
-  error_reporting(E_ALL);
+  
   require_once ($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');  
   require_once  ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Search/Search_ITG4.php");
   require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php");  
   session_start();
   global $USER; 
-  
+ error_reporting(0);
+  ini_set("display_errors","1"); 
   ////
   $_SESSION['GLUSERMASS'] =$USER->GetUserGroupArray(); 
   
   //// 
-  
+  var_dump($_POST);
+  //die();
   
 function GetUserID_1CByID( $ID )
 {
@@ -60,29 +62,30 @@ function GetUserID_1CByID( $ID )
   
    if(!isSet( $_REQUEST["ICODE"]))
       {
-          $_REQUEST["ICODE"]=$_GET['icode']  ;
+          $_REQUEST["ICODE"]=$_POST['ItemCode']  ;
                //  Приводим к стандартному виду ( верхний регистр, удалены "левые символы" )
           #$_REQUEST["ICODE"] = PrepareICode( $_REQUEST["ICODE"] );
            $_REQUEST["ICODE"] = preg_replace("/[^A-Za-z0-9]*/i", "",$_REQUEST["ICODE"]);
                  //  разруливаем ситуации с новым поиском и пересчетом текущих результаттов ( сортировка, пересчет цен в валюту и т.п.
       } else
       {
-        $_REQUEST["ICODE"]=$_GET['icode']  ; 
+        $_REQUEST["ICODE"]=$_POST['ItemCode']  ; 
          //  Приводим к стандартному виду ( верхний регистр, удалены "левые символы" )
          $_REQUEST["ICODE"] = preg_replace("/[^A-Za-z0-9]*/i", "",$_REQUEST["ICODE"]);       
          
                
       }  
+       
        if(!isSet( $_REQUEST["BCODE"]) )
        {
                       
-           $_REQUEST["BCODE"]= $_GET['BCODE'];
+           $_REQUEST["BCODE"]= $_POST['BCODE'];
        }     
     
      $cartItemsCnt =0;
      CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');
-     
-     
+    
+       //var_dump ($_REQUEST["ICODE"] );
      
      if (isset($_SESSION['arBrands_ITG']) && isset ($_SESSION['arRegion_ITG']))
            {
@@ -102,11 +105,13 @@ function GetUserID_1CByID( $ID )
                  $_SESSION['arBrands_ITG'] = $arBrands;
            }
            
-           
+      //  var_dump ($_REQUEST["ICODE"]);        
            
      $UID = GetUserID_1CByID($USER->GetID());
-     (!$UID && $USER->IsAuthorized())
-     {} 
+     if(!$UID && $USER->IsAuthorized())
+     {
+         
+     } 
      
      
      $CondConfirm=CheckCondConfirm($USER->GetID());
@@ -124,12 +129,12 @@ function GetUserID_1CByID( $ID )
      
       $itemCodeGAF= $_REQUEST["ICODE"];
       
+      $_REQUEST["CURRENCY"]="USD";
       $_GET["pg"]=0;
       $_REQUEST["NUM_PAG"]=1000;
       $_REQUEST["CMB_SORT"] = "PRICE";
-      
-      
-      $items = new Search_ITG(array(    'user'=>$UID,
+     
+     $paramsArray=array(    'user'=>$UID,
                                         'userID'=>$USER->GetID(),
                                         'usergrouparray'=>$USER->GetUserGroupArray(),
                                          'currency'=>$_REQUEST["CURRENCY"], 
@@ -141,14 +146,21 @@ function GetUserID_1CByID( $ID )
                                          'arBrands'=>$arBrands['id'],
                                          'region'=>$arRegions['Code'],
                                          'regionID'=>$arRegions['id'],
-                                        'DBB'=>$DBS));
+                                        'DBB'=>$DBS);
+                                         
+      
+      $items = new Search_ITG($paramsArray );
+      
+      $url = $items->getUrl();
+      $sqlstring=$items->returnSqlString();
      
      
     
   if ($items->getNumRows()== 0)
   {}
+  
       
-     echo json_encode($products = $items->getArrItems()); 
+    // var_dump(json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE)); 
      // $brands = $items->getBrans();
       
       

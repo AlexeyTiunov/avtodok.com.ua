@@ -9068,7 +9068,7 @@ var Extends = exports.Extends = function (_React$Component) {
     _createClass(Extends, [{
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps, prevState) {
-            alert("updated");
+            //alert("updated");
         }
     }, {
         key: 'componentDidMount',
@@ -9098,6 +9098,7 @@ var Extends = exports.Extends = function (_React$Component) {
         value: function makeRequest(method, url, type, data) {
             thisO = this;
 
+            thisO.setState({ dataRecieved: null });
             thisO.xhr.open(method, url, type);
             thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             thisO.xhr.onreadystatechange = function () {
@@ -9196,6 +9197,7 @@ var Page_content = exports.Page_content = function (_Extends) {
          // super.childUpdate(this,<h1>success</h1>);   
          // this.state.parentMod.childUpdate(this);
          _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'makeRequest', this).call(this, "POST", "/ws/auth.php", false, "LOGIN=Alex");
+         alert(this.state.dataRecieved);
       }
    }, {
       key: 'componentDidUpdate',
@@ -9429,6 +9431,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Sidebar_header = undefined;
 
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
 var _createClass = function () {
     function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
@@ -9509,15 +9527,30 @@ var Search_form = function (_Extends2) {
 
         var _this2 = _possibleConstructorReturn(this, (Search_form.__proto__ || Object.getPrototypeOf(Search_form)).call(this, props));
 
-        _this2.keypress = _this2.keypress.bind(_this2);
+        _this2.state = { parentMod: Object,
+            renderIN: React.createElement('div', null),
+            dataRecieved: null
+
+        };
+        _this2.keyup = _this2.keyup.bind(_this2);
         debugger;
         return _this2;
     }
 
     _createClass(Search_form, [{
-        key: 'keypress',
-        value: function keypress() {
+        key: 'keyup',
+        value: function keyup(event) {
+            if (event.keyCode == 13) {
+                if (event.target.value == "") return;
+            }
+
+            var itemCode = event.target.value;
+            var data = "ItemCode=" + itemCode + "";
+            _get(Search_form.prototype.__proto__ || Object.getPrototypeOf(Search_form.prototype), 'makeRequest', this).call(this, "POST", "/ws/searchItems.php", false, data);
+            alert(this.state.dataRecieved);
+
             debugger;
+            console.log(event);
             if (window.objectReg['Page_content']) {
                 Uobject = window.objectReg['Page_content'];
                 Uobject.setState({ renderIN: React.createElement('h1', null, 'success') });
@@ -9531,7 +9564,7 @@ var Search_form = function (_Extends2) {
     }, {
         key: 'render',
         value: function render() {
-            return React.createElement('form', { className: 'navbar-form-custom', role: "\u041F\u043E\u0438\u0441\u043A" }, React.createElement('div', { className: 'form-group' }, React.createElement('input', { onKeyDown: this.keypress, type: 'text', id: 'top-search', name: 'top-search', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440 \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0438.." })));
+            return React.createElement('form', { className: 'navbar-form-custom', role: "\u041F\u043E\u0438\u0441\u043A" }, React.createElement('div', { className: 'form-group' }, React.createElement('input', { onKeyUp: this.keyup, type: 'text', id: 'top-search', name: 'top-search', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440 \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0438.." })));
         }
     }]);
 

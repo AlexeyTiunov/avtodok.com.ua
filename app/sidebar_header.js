@@ -55,14 +55,32 @@ class Search_form extends Extends
 {
      constructor(props) 
      {  
-       super(props);      
-       this.keypress=this.keypress.bind(this);  
+       super(props); 
+        this.state={parentMod:Object,
+                     renderIN:<div></div>,
+                     dataRecieved:null,
+         
+                     };     
+       this.keyup=this.keyup.bind(this);  
         debugger;  
      } 
      
-     keypress()
+     keyup(event)
      {  
+         if (event.keyCode==13)
+         {
+              if (event.target.value=="") return;
+             
+         }
+         
+         var itemCode=event.target.value;
+         var data="ItemCode="+itemCode+"";
+         super.makeRequest("POST","/ws/searchItems.php",false,data);
+          alert(this.state.dataRecieved);
+         
+         
          debugger;
+         console.log(event);
         if (window.objectReg['Page_content'])
         {
             Uobject=window.objectReg['Page_content'];
@@ -84,7 +102,7 @@ class Search_form extends Extends
      render()  {
      return (  <form  className="navbar-form-custom" role="Поиск">
                         <div className="form-group">
-                            <input  onKeyDown={this.keypress}   type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
+                            <input  onKeyUp={this.keyup}   type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
                         </div>
                     </form>
      

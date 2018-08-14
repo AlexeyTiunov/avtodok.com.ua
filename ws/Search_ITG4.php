@@ -1,5 +1,6 @@
 <?php
-error_reporting(0) ;
+error_reporting(E_ALL) ;
+ ini_set("display_errors","1");
 require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php"); 
 class Customer
     {
@@ -33,9 +34,20 @@ class Search_ITG
     public $UserGroupArray;
     public $AnalogForOurStock ;
     public $spesialUsers =array();
-   
+    
     function __construct($params)
     {
+        $this->DBNAME='ITG_price_union';
+        $this->prepareSql();
+        
+        $this->DBNAME='ITG_price_union_JPN';
+        $this->prepareSql();
+        
+        
+    }
+   private function onstruct($params)
+    {
+        
         $this->spesialUsers["Zolotov"]=1979;
         $this->spesialUsers["Prokhorov"]=517;
         $this->spesialUsers ["Tiunov"]=852; 
@@ -64,7 +76,7 @@ class Search_ITG
         
         $this->DBNAME='ITG_price_union_JPN';
         $this->prepareSql();
-        $this->getExactCompare();
+        $this->getExactCompare();       
         $this->getArray();
         
          # $this->sqlString=$this->sql['exact'];
@@ -73,7 +85,10 @@ class Search_ITG
         {
           
             #echo "<br />2:condition";
-            $this->getCompetitor();
+            
+            
+            $this->getCompetitor(); 
+            
             #$this->numRows
            /* if ($this->numRows == 0)
             {
@@ -128,7 +143,7 @@ class Search_ITG
     public static function manualConnect()
     {
              $port=31006;
-        $DB = new mysqli("localhost","bitrix","a251d851","bitrix",$port);
+        $DB = new mysqli("localhost","bitrix","a251d851","avtodok.com.ua",$port);
         $DB->set_charset("utf8");
               $DB->query("SET NAMES 'utf8'");
         return $DB;
@@ -486,6 +501,7 @@ class Search_ITG
     }
     private function getArray()
     {
+        var_dump($this->sql);
         #echo "<br />inside getArray()";
         $DB = $this->dbConn;
         $brands = array();
@@ -622,7 +638,7 @@ class Search_ITG
         #else echo "нет на складе";
     }
     private function getExactCompare()
-    {
+    {    var_dump($this->sql);
          $DB = $this->dbConn;
          $DB-> query("SET NAMES 'utf8'");
         $sqlPartColumnRegion = $DB->query($this->sql['partColumnRegion']);//

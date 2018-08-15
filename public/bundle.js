@@ -9094,17 +9094,57 @@ var Extends = exports.Extends = function (_React$Component) {
             } catch (e) {}
         }
     }, {
+        key: 'handleRecievedDataForRender',
+        value: function handleRecievedDataForRender(data) {
+            return JSON.parse(data);
+        }
+    }, {
         key: 'makeRequest',
         value: function makeRequest(method, url, type, data) {
             thisO = this;
 
-            thisO.setState({ dataRecieved: null });
+            // thisO.setState({dataRecieved:null});  
             thisO.xhr.open(method, url, type);
             thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             thisO.xhr.onreadystatechange = function () {
                 if (thisO.xhr.readyState == 4 && thisO.xhr.status == 200) {
+                    // Uobject=window.objectReg['Page_content'];
+                    //  Uobject.setState({renderIN:<h3>{thisO.xhr.responseText}</h3>});
+                    //  Uobject.render();
                     //alert(xhr.status + ': ' + xhr.responseText);
+                    ///  thisO.setState( function (prevState,props){
+                    // {dataRecieved:thisO.xhr.responseText}
                     thisO.setState({ dataRecieved: thisO.xhr.responseText });
+
+                    //thisO.forceUpdate(); 
+                }
+            };
+            this.xhr.send(data);
+        }
+    }, {
+        key: 'makeRequestUpdateObject',
+        value: function makeRequestUpdateObject(method, url, type, data, obj) {
+
+            if (typeof obj != "Object") {
+                return;
+            }
+            thisO = this;
+
+            // thisO.setState({dataRecieved:null});  
+            thisO.xhr.open(method, url, type);
+            thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            thisO.xhr.onreadystatechange = function () {
+                if (thisO.xhr.readyState == 4 && thisO.xhr.status == 200) {
+
+                    Uobject = window.objectReg[obj.constructor.name];
+                    Uobject.setState({ renderIN: React.createElement('h3', null, thisO.xhr.responseText) });
+                    Uobject.render();
+                    //alert(xhr.status + ': ' + xhr.responseText);
+                    //  thisO.setState( function (prevState,props){
+                    // {dataRecieved:thisO.xhr.responseText}
+                    thisO.setState({ dataRecieved: thisO.xhr.responseText });
+
+                    //thisO.forceUpdate(); 
                 }
             };
             this.xhr.send(data);
@@ -9126,92 +9166,211 @@ var Extends = exports.Extends = function (_React$Component) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-   value: true
+  value: true
 });
 exports.Page_content = undefined;
 
 var _createClass = function () {
-   function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-         var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-      }
-   }return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-   };
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
 }();
 
 var _get = function get(object, property, receiver) {
-   if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);if (parent === null) {
-         return undefined;
-      } else {
-         return get(parent, property, receiver);
-      }
-   } else if ("value" in desc) {
-      return desc.value;
-   } else {
-      var getter = desc.get;if (getter === undefined) {
-         return undefined;
-      }return getter.call(receiver);
-   }
+  if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;if (getter === undefined) {
+      return undefined;
+    }return getter.call(receiver);
+  }
 };
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
 
 function _classCallCheck(instance, Constructor) {
-   if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-   }
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
 }
 
 function _possibleConstructorReturn(self, call) {
-   if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-   }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-   if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var Page_content = exports.Page_content = function (_Extends) {
-   _inherits(Page_content, _Extends);
+  _inherits(Page_content, _Extends);
 
-   function Page_content(props) {
-      _classCallCheck(this, Page_content);
+  function Page_content(props) {
+    _classCallCheck(this, Page_content);
 
-      return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
-      //this.state={renderIN:""};
-      //this.state={parentMod:props.parentMod};  
-   }
+    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+    //this.state={renderIN:""};
+    //this.state={parentMod:props.parentMod};  
+  }
 
-   _createClass(Page_content, [{
-      key: 'componentDidMount',
-      value: function componentDidMount() {
-         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidMount', this).call(this);
-         // super.childUpdate(this,<h1>success</h1>);   
-         // this.state.parentMod.childUpdate(this);
-         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'makeRequest', this).call(this, "POST", "/ws/auth.php", false, "LOGIN=Alex");
-         alert(this.state.dataRecieved);
-      }
-   }, {
-      key: 'componentDidUpdate',
-      value: function componentDidUpdate(prevProps, prevState) {
-         _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
-      }
-   }, {
-      key: 'render',
-      value: function render() {
-         return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
-      }
-   }]);
+  _createClass(Page_content, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidMount', this).call(this);
+      // super.childUpdate(this,<h1>success</h1>);   
+      // this.state.parentMod.childUpdate(this);
 
-   return Page_content;
+      //  super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, this.state.renderIN);
+    }
+  }]);
+
+  return Page_content;
+}(_main_component.Extends);
+
+/***/ }),
+
+/***/ "./app/search_content.js":
+/*!*******************************!*\
+  !*** ./app/search_content.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Search_table = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var m = { functionToHandle: null };
+
+var mapForSearchData = {
+    BrandCode: { functionToHandle: null, className: null, value: null },
+    BrandName: { functionToHandle: null, className: null, makeHiddenInner: "BrandCode" },
+    ItemCode: { functionToHandle: sFunction, className: null },
+    Caption: { functionToHandle: sFunction, className: "hidden-xs sorting" },
+    DeliveryDays: { functionToHandle: null, className: "sorting" },
+    Quantity: { functionToHandle: null, className: "sorting" },
+    RegionShortName: { functionToHandle: null, className: null },
+    RegionCode: { functionToHandle: null, className: null },
+    ReturnableParts: {},
+    Weight: {},
+    Currency: {},
+    PercentSupp: {},
+    Price: {},
+    PriceUSD: {}
+
+};
+function sFunction(obj) {
+    if (odj.makeHiddenInner) {
+        this[odj.makeHiddenInner];
+    }
+    var a = React.createElement('td', { className: obj.className });
+    return a;
+}
+
+var Search_table = exports.Search_table = function (_Extends) {
+    _inherits(Search_table, _Extends);
+
+    function Search_table(props) {
+        _classCallCheck(this, Search_table);
+
+        return _possibleConstructorReturn(this, (Search_table.__proto__ || Object.getPrototypeOf(Search_table)).call(this, props));
+    }
+
+    _createClass(Search_table, [{
+        key: 'dataSort',
+        value: function dataSort(data) {}
+    }, {
+        key: 'makeDataForRender',
+        value: function makeDataForRender(data) {
+            var mas = [];
+            for (i in data) {
+                for (item in data[i]) {
+                    if (item in mapForSearchData == false) {}
+                    var config = mapForSearchData[item];
+                    func = config['functionToHandle'];
+
+                    if (func != null && func != undefined) {
+                        func.call(this);
+                    }
+
+                    var c = React.createElement('td', null);
+                }
+            }
+        }
+
+        /////////////////////////////////////
+
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', { 'class': 'hidden-xs' }, '#'), React.createElement('th', null, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', null, "\u041A\u043E\u0434"), React.createElement('th', { 'class': 'hidden-xs' }, "\u041E\u043F\u0438\u0441"), React.createElement('th', { 'class': 'sorting' }, "\u0421\u0440\u043E\u043A"), React.createElement('th', null, "\u041A-\u0432\u043E"), React.createElement('th', null, "\u0420\u0435\u0433\u0456\u043E\u043D"), React.createElement('th', { 'class': 'hidden-xs sorting' }, "\u041D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'hidden-xs' }, "\u0412\u0430\u0433\u0430"), React.createElement('th', { 'class': 'hidden-xs sorting' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'sorting' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', null, "\u0414\u0456\u044F"))), React.createElement('tbody', null)));
+        }
+    }]);
+
+    return Search_table;
 }(_main_component.Extends);
 
 /***/ }),
@@ -9255,6 +9414,8 @@ var _sidebar_userinfo = __webpack_require__(/*! ./sidebar_userinfo.js */ "./app/
 var _sidebar_brand = __webpack_require__(/*! ./sidebar_brand.js */ "./app/sidebar_brand.js");
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
 
 __webpack_require__(/*! ./css/plugins.css */ "./app/css/plugins.css");
 
@@ -9431,22 +9592,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Sidebar_header = undefined;
 
-var _get = function get(object, property, receiver) {
-    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-        var parent = Object.getPrototypeOf(object);if (parent === null) {
-            return undefined;
-        } else {
-            return get(parent, property, receiver);
-        }
-    } else if ("value" in desc) {
-        return desc.value;
-    } else {
-        var getter = desc.get;if (getter === undefined) {
-            return undefined;
-        }return getter.call(receiver);
-    }
-};
-
 var _createClass = function () {
     function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
@@ -9540,31 +9685,54 @@ var Search_form = function (_Extends2) {
     _createClass(Search_form, [{
         key: 'keyup',
         value: function keyup(event) {
-            if (event.keyCode == 13) {
-                if (event.target.value == "") return;
+            //  alert(this.state.dataRecieved);
+            if (event.keyCode != 13) {
+                // if (event.target.value=="") return;
+                event.preventDefault();
+                return;
             }
 
             var itemCode = event.target.value;
-            var data = "ItemCode=" + itemCode + "";
-            _get(Search_form.prototype.__proto__ || Object.getPrototypeOf(Search_form.prototype), 'makeRequest', this).call(this, "POST", "/ws/searchItems.php", false, data);
-            alert(this.state.dataRecieved);
-
-            debugger;
-            console.log(event);
-            if (window.objectReg['Page_content']) {
-                Uobject = window.objectReg['Page_content'];
-                Uobject.setState({ renderIN: React.createElement('h1', null, 'success') });
-                Uobject.render();
-            } else {
-                alert("error");
+            if (itemCode == "") {
+                event.preventDefault();
+                return;
             }
-            alert("error");
-            alert("keypressed");
+            var data = "ItemCode=" + itemCode + "";
+            this.makeRequest("POST", "/ws/searchItems.php", false, data);
+            // alert(this.state.dataRecieved);
+
+
+            /* debugger;
+             console.log(event);
+            if (window.objectReg['Page_content'])
+            {
+               // Uobject=window.objectReg['Page_content'];
+              //  Uobject.setState({renderIN:<h1>success</h1>});
+             //   Uobject.render(); 
+                
+            }else
+            {
+                // alert("error");  
+                 
+            } 
+            // alert("error");
+            // alert("keypressed");*/
+        }
+
+        //////////////////////////////////////////   
+
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            debugger;
+            alert(this.state.dataRecieved);
         }
     }, {
         key: 'render',
         value: function render() {
-            return React.createElement('form', { className: 'navbar-form-custom', role: "\u041F\u043E\u0438\u0441\u043A" }, React.createElement('div', { className: 'form-group' }, React.createElement('input', { onKeyUp: this.keyup, type: 'text', id: 'top-search', name: 'top-search', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440 \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0438.." })));
+            return React.createElement('form', { onSubmit: function onSubmit(e) {
+                    return e.preventDefault();
+                }, className: 'navbar-form-custom', role: "\u041F\u043E\u0438\u0441\u043A" }, React.createElement('div', { className: 'form-group' }, React.createElement('input', { onKeyUp: this.keyup, type: 'text', id: 'top-search', name: 'top-search', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440 \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0438.." })));
         }
     }]);
 

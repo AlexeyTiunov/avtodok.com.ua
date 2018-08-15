@@ -159,8 +159,8 @@ function GetUserID_1CByID( $ID )
   if ($items->getNumRows()== 0)
   {}
   
-      
-    // var_dump(json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE)); 
+       //var_dump($products = $items->getArrItems());
+     var_dump(json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE)); 
      // $brands = $items->getBrans();
       
       

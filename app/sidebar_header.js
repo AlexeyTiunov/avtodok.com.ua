@@ -67,42 +67,54 @@ class Search_form extends Extends
      
      keyup(event)
      {  
-         if (event.keyCode==13)
+       //  alert(this.state.dataRecieved);
+         if (event.keyCode!=13)
          {
-              if (event.target.value=="") return;
-             
+             // if (event.target.value=="") return;
+             event.preventDefault();
+             return;
          }
          
          var itemCode=event.target.value;
+         if (itemCode=="") 
+         {
+           event.preventDefault();
+           return;  
+         }
          var data="ItemCode="+itemCode+"";
-         super.makeRequest("POST","/ws/searchItems.php",false,data);
-          alert(this.state.dataRecieved);
+         this.makeRequest("POST","/ws/searchItems.php",false,data);
+         // alert(this.state.dataRecieved);
          
          
-         debugger;
+        /* debugger;
          console.log(event);
         if (window.objectReg['Page_content'])
         {
-            Uobject=window.objectReg['Page_content'];
-            Uobject.setState({renderIN:<h1>success</h1>});
-            Uobject.render(); 
+           // Uobject=window.objectReg['Page_content'];
+          //  Uobject.setState({renderIN:<h1>success</h1>});
+         //   Uobject.render(); 
             
         }else
         {
-             alert("error");  
+            // alert("error");  
              
         } 
-         alert("error");
-         alert("keypressed");
+        // alert("error");
+        // alert("keypressed");*/
+     }
+     
+   //////////////////////////////////////////   
+     componentDidUpdate(prevProps, prevState)
+     {
+          debugger; 
+       alert(this.state.dataRecieved);  
      }
      
      
-     
-     
      render()  {
-     return (  <form  className="navbar-form-custom" role="Поиск">
+     return (  <form  onSubmit={ (e)=>e.preventDefault() } className="navbar-form-custom" role="Поиск">
                         <div className="form-group">
-                            <input  onKeyUp={this.keyup}   type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
+                            <input  onKeyUp={this.keyup}    type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
                         </div>
                     </form>
      

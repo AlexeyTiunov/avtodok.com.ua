@@ -17,6 +17,7 @@ import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
+import {Search_content} from './search_content.js'   
 
  
 import './css/plugins.css'; 

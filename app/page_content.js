@@ -19,8 +19,9 @@ export class Page_content  extends Extends
          super.componentDidMount();
       // super.childUpdate(this,<h1>success</h1>);   
      // this.state.parentMod.childUpdate(this);
-        super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
-        alert(this.state.dataRecieved);
+      
+      //  super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
+       
      }
      componentDidUpdate(prevProps, prevState)
      {

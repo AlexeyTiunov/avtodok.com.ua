@@ -6,6 +6,7 @@ var jQuery=require('jquery');
 window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
+import {Search_table} from './search_content.js' 
  debugger;  
 
 
@@ -68,12 +69,14 @@ class Search_form extends Extends
      keyup(event)
      {  
        //  alert(this.state.dataRecieved);
-         if (event.keyCode!=13)
+       /*  if (event.keyCode!=13)
          {
              // if (event.target.value=="") return;
              event.preventDefault();
              return;
-         }
+         } */
+         Uobject=window.objectReg['Page_content'];
+         Uobject.setState({renderIN:<Search_table/>});
          
          var itemCode=event.target.value;
          if (itemCode=="") 
@@ -112,9 +115,9 @@ class Search_form extends Extends
      
      
      render()  {
-     return (  <form  onSubmit={ (e)=>e.preventDefault() } className="navbar-form-custom" role="Поиск">
+     return (  <form  onSubmit={ (e)=>e.preventDefault() }  onReset={(e)=>e.preventDefault()} className="navbar-form-custom" autocomplete="off" role="Поиск">
                         <div className="form-group">
-                            <input  onKeyUp={this.keyup}    type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
+                            <input  onKeyUp={this.keyup} onReset={(e)=>e.preventDefault()}   type="text" id="top-search" name="top-search" className="form-control" placeholder="Введите номер запчасти.."/>
                         </div>
                     </form>
      

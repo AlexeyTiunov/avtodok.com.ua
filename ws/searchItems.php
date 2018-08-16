@@ -11,7 +11,7 @@
   $_SESSION['GLUSERMASS'] =$USER->GetUserGroupArray(); 
   
   //// 
-  var_dump($_POST);
+  //var_dump($_POST);
   //die();
   
 function GetUserID_1CByID( $ID )
@@ -106,7 +106,11 @@ function GetUserID_1CByID( $ID )
            }
            
       //  var_dump ($_REQUEST["ICODE"]);        
-           
+     
+      if(!$USER->IsAuthorized())
+     {
+           die();
+     }       
      $UID = GetUserID_1CByID($USER->GetID());
      if(!$UID && $USER->IsAuthorized())
      {
@@ -158,9 +162,13 @@ function GetUserID_1CByID( $ID )
     
   if ($items->getNumRows()== 0)
   {}
+       
+        $masToReturn["BRANDS"]=$items->getBrans();
+        $masToReturn["ITEMS"]= $items->getArrItems(); 
+        echo (json_encode($masToReturn,JSON_UNESCAPED_UNICODE))
   
        //var_dump($products = $items->getArrItems());
-     var_dump(json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE)); 
+    // var_dump ( json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE) ) ; 
      // $brands = $items->getBrans();
       
       

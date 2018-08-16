@@ -5,33 +5,49 @@ import {Extends} from './main_component.js'
 var m={functionToHandle:null,};
 
 var mapForSearchData={
-  BrandCode:{functionToHandle:null,className:null,value:null},
-  BrandName:{functionToHandle:null,className:null,makeHiddenInner:"BrandCode"},
+  BrandCode:{functionToHandle:sFunction,className:null,makeHiddenInner:true,value:null},
+  BrandName:{functionToHandle:sFunction,className:null,value:null},
   ItemCode:{functionToHandle:sFunction,className:null},
-  Caption:{functionToHandle:sFunction,className:"hidden-xs sorting"},
-  DeliveryDays:{functionToHandle:null,className:"sorting"},
-  Quantity:{functionToHandle:null,className:"sorting"},
-  RegionShortName:{functionToHandle:null,className:null},
-  RegionCode:{functionToHandle:null,className:null},
-  ReturnableParts:{},
-  Weight:{},
-  Currency:{},
-  PercentSupp:{},
-  Price:{},
-  PriceUSD:{}  
+  Caption:{functionToHandle:sFunction,className:"hidden-xs sorting",value:null},
+  DeliveryDays:{functionToHandle:sFunction,className:"sorting",value:null},
+  Quantity:{functionToHandle:sFunction,className:"sorting",value:null},
+  RegionShortName:{functionToHandle:sFunction,className:null,value:null},
+  RegionCode:{functionToHandle:sFunction,className:null,makeHiddenInner:true,value:null},
+  ReturnableParts:{functionToHandle:sFunction,className:null,value:null},
+  Weight:{functionToHandle:sFunction,className:null,value:null},
+  Currency:{functionToHandle:sFunction,className:null,value:null},
+  PercentSupp:{functionToHandle:sFunction,className:null,value:null},
+  Price:{functionToHandle:sFunction,className:null,value:null},
+  PriceUSD:{functionToHandle:sFunction,className:null,value:null},  
     
     
 }
-function sFunction(obj)
+
+function extend(o,p)
 {
-  if (odj.makeHiddenInner)
+    for (prop in p)
+    {
+        o[prop]=p[prop];
+    }
+    return o;
+}
+function sFunction(value)   //obj = (for example ) BrandCode --{}
+{
+  if (this.makeHiddenInner)
   {
-      this[odj.makeHiddenInner]
-  }  
-  const a= ( <td className={obj.className}>
-     
+    const a= (<input type='hidden' value={value} />);
+    this.value=a;      
+  }
+  else
+  {
+  const a= ( <td className={this.className}>
+                    {value}
                   </td> )
-             return a;
+  this.value=a;    
+             
+  } 
+  
+  
 }
 
 
@@ -41,7 +57,12 @@ export class Search_table extends Extends
    constructor(props) 
      {  
        
-         super(props);        
+         super(props);
+         this.state={parentMod:Object,
+                     renderIN:<div></div>,
+                     dataRecieved:null,
+                     tableBody:[]
+                     };        
          
      }
      dataSort(data)
@@ -53,62 +74,99 @@ export class Search_table extends Extends
      
      makeDataForRender(data)
      {
-         var mas=[];
-         for (i in data)
+         
+         dat=(JSON.parse(data)).ITEMS;
+         for (i in dat)
          {
-             for (item in data[i])
+             var  mapForSearchDataLocal=extend({},mapForSearchData);
+             for (item in dat[i])
              {
-                 if ((item in mapForSearchData)==false)
+                 if ((item in mapForSearchDataLocal)==false)
                  {
-                     
+                    continue; 
                  }
-                 var config=mapForSearchData[item];                 
+                 var config=mapForSearchDataLocal[item];    //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr>          
                  func=config['functionToHandle'];
                  
                  if (func!=null && func!=undefined)
                  {
-                     func.call(this);
+                     func.call(config,dat[i][item]);
                  }
                  
-                 const c=( <td>
-                           </td> )
+                 
                  
              }
-                                        
              
+             var mas=[]
+             for (item in mapForSearchDataLocal)
+             {
+              mas.push(mapForSearchDataLocal[item].value);   
+             }   
+             const b=(<tr>{mas.map(function(item){return item;})} </tr>)                              
+             this.state.tableBody.push(b); 
+             //this.setState({tableBody:this.state.tableBody});
+                                       
          }
          
      }
      
      /////////////////////////////////////
+     componentDidUpdate(prevProps, prevState)
+     {
+          debugger;
+        //this.state.tableBody=[];
+       // this.makeDataForRender(this.state.dataRecieved);
+       
+          
+     }
+     componentWillUpdate()
+     {  
+          
+     }
+     
+     
      render()
      {
-         return ( <div className="table-responsive">
+        
+         debugger; 
+         if (this.state.dataRecieved!=null && this.state.dataRecieved!="")
+          {
+          this.state.tableBody=[];
+          this.makeDataForRender(this.state.dataRecieved);
+          }else
+          {
+             this.state.tableBody=[]; 
+          }   
+         return (  <div class="block">
+                     <div className="table-responsive">
                        <table className="table table-vcenter">
                             <thead> 
                                  <tr>
-                                        <th class="hidden-xs">#</th>
+                                        
                                         <th>Бренд</th>
                                         <th>Код</th>
                                         <th class="hidden-xs">Опис</th>
                                         <th class="sorting">Срок</th>
                                         <th>К-во</th>
                                         <th>Регіон</th>
-                                        <th class="hidden-xs sorting">Надійність</th>
-                                        <th class="hidden-xs">Вага</th>
-                                        <th class="hidden-xs sorting">Ціна</th>
-                                        <th class="sorting">Ціна $</th>
-                                        <th>Дія</th>
+                                        <th className="hidden-xs sorting">Надійність</th>
+                                        <th className="hidden-xs">Вага</th>
+                                        <th className="hidden-xs">$</th>
+                                        <th className="hidden-xs sorting">Ціна</th>
+                                        <th className="sorting">Ціна $</th> 
+                                        
                                     </tr>
                              </thead> 
-                             <tbody>   
+                             <tbody>  
                              
+                                {this.state.tableBody.map(function(item){return item})}
                              
                              </tbody>   
                              
                              
                              
                        </table>
+                     </div>
                 </div>)
          
          

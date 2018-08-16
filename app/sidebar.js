@@ -17,13 +17,13 @@ import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
-import {Search_content} from './search_content.js'   
+import {Search_table} from './search_content.js'   
 
  
 import './css/plugins.css'; 
 
 require ('bootstrap/dist/js/bootstrap.js');
-require ('bootstrap/dist/css/bootstrap.css');
+require ('bootstrap/dist/css/bootstrap.min.css');
 
 require ('./js/app.js');
 //require('style-loader!css-loader!./css/plugins.css');         

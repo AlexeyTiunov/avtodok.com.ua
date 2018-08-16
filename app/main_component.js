@@ -76,13 +76,14 @@ export class Extends extends React.Component
         {
             if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
             {
-               // Uobject=window.objectReg['Page_content'];
-               //  Uobject.setState({renderIN:<h3>{thisO.xhr.responseText}</h3>});
-               //  Uobject.render();
+                Uobject=window.objectReg['Search_table'];
+                debugger;
+                // Uobject.setState({renderIN:<h3>{thisO.xhr.responseText}</h3>});
+                // Uobject.render();
                //alert(xhr.status + ': ' + xhr.responseText);
              ///  thisO.setState( function (prevState,props){
                   // {dataRecieved:thisO.xhr.responseText}
-                thisO.setState({dataRecieved:thisO.xhr.responseText});  
+                Uobject.setState({dataRecieved:thisO.xhr.responseText});  
                
                //thisO.forceUpdate(); 
             }
@@ -113,10 +114,10 @@ export class Extends extends React.Component
                  
                  Uobject=window.objectReg[obj.constructor.name];
                  Uobject.setState({renderIN:<h3>{thisO.xhr.responseText}</h3>});
-                 Uobject.render();
+               //Uobject.render();
                //alert(xhr.status + ': ' + xhr.responseText);
-             //  thisO.setState( function (prevState,props){
-                  // {dataRecieved:thisO.xhr.responseText}
+               //  thisO.setState( function (prevState,props){
+               // {dataRecieved:thisO.xhr.responseText}
                 thisO.setState({dataRecieved:thisO.xhr.responseText});  
                
                //thisO.forceUpdate(); 

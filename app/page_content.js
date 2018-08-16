@@ -1,7 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 import {Extends} from './main_component.js' 
-
+import {Search_table} from './search_content.js'
 
 
 
@@ -33,7 +33,7 @@ export class Page_content  extends Extends
      {
          return (<div id="page-content" style={ {'min-height': '977px'} } > 
          
-         
+                  
                   {this.state.renderIN}
          
                 </div> )

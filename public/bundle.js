@@ -9240,7 +9240,7 @@ var Page_content = exports.Page_content = function (_Extends) {
       // super.childUpdate(this,<h1>success</h1>);   
       // this.state.parentMod.childUpdate(this);
 
-      //  super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
+      // super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
     }
   }, {
     key: 'componentDidUpdate',
@@ -9266,12 +9266,18 @@ var Page_content = exports.Page_content = function (_Extends) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Search_table = undefined;
+exports.Pagination = exports.Search_table = undefined;
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+};
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -9294,53 +9300,76 @@ function _classCallCheck(instance, Constructor) {
 function _possibleConstructorReturn(self, call) {
     if (!self) {
         throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
-var m = { functionToHandle: null };
-
-var mapForSearchData = {
-    BrandCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
-    BrandName: { functionToHandle: sFunction, className: null, value: null },
-    ItemCode: { functionToHandle: sFunction, className: null },
-    Caption: { functionToHandle: sFunction, className: "hidden-xs sorting", value: null },
-    DeliveryDays: { functionToHandle: sFunction, className: "sorting", value: null },
-    Quantity: { functionToHandle: sFunction, className: "sorting", value: null },
-    RegionShortName: { functionToHandle: sFunction, className: null, value: null },
-    RegionCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
-    ReturnableParts: { functionToHandle: sFunction, className: null, value: null },
-    Weight: { functionToHandle: sFunction, className: null, value: null },
-    Currency: { functionToHandle: sFunction, className: null, value: null },
-    PercentSupp: { functionToHandle: sFunction, className: null, value: null },
-    Price: { functionToHandle: sFunction, className: null, value: null },
-    PriceUSD: { functionToHandle: sFunction, className: null, value: null }
-
+function getMapForSearchData() {
+    var mapForSearchData = {
+        BrandCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
+        BrandName: { functionToHandle: sFunction, className: null, value: null },
+        ItemCode: { functionToHandle: sFunction, className: null },
+        Caption: { functionToHandle: sFunction, className: "hidden-xs sorting", value: null },
+        DeliveryDays: { functionToHandle: sFunction, className: "sorting", value: null },
+        Quantity: { functionToHandle: sFunction, className: "sorting", value: null },
+        RegionFullName: { functionToHandle: sFunction, className: null, value: null },
+        RegionShortName: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
+        RegionCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
+        PercentSupp: { functionToHandle: { wrapperA: wrapperA, sFunction: sFunction }, className: null, wrapperClassName: "label label-success", value: null },
+        Weight: { functionToHandle: sFunction, className: null, value: null },
+        Currency: { functionToHandle: sFunction, className: null, value: null },
+        //ReturnableParts:{functionToHandle:sFunction,className:null,value:null},
+        Price: { functionToHandle: sFunction, className: null, value: null
+            //PriceUSD:{functionToHandle:sFunction,className:null,value:null}, 
+        } };
+    return mapForSearchData;
+}
+var regionCodeColors = { "1": "warning", //bootstrap classes
+    "2": "active",
+    "3": "active",
+    "4": "active",
+    "default": "danger"
 };
 
-function extend(o, p) {
+function extend_old(o, p) {
     for (prop in p) {
         o[prop] = p[prop];
     }
     return o;
 }
+function extend(o, p) {
+
+    for (prop in p) {
+        vl = Object.getOwnPropertyDescriptor(p, prop);
+        Object.defineProperty(o, prop, { value: vl.value, enumerable: true, writable: true });
+        // o[prop]=p[prop];
+    }
+    return o;
+}
+
 function sFunction(value) //obj = (for example ) BrandCode --{}
 {
     if (this.makeHiddenInner) {
         var a = React.createElement('input', { type: 'hidden', value: value });
         this.value = a;
     } else {
+
         var _a = React.createElement('td', { className: this.className }, value);
+
         this.value = _a;
     }
+}
+function wrapperA(value) {
+    var a = React.createElement('a', { href: '#', className: this.wrapperClassName }, value);
+    this.value = a;
 }
 
 var Search_table = exports.Search_table = function (_Extends) {
@@ -9354,7 +9383,10 @@ var Search_table = exports.Search_table = function (_Extends) {
         _this.state = { parentMod: Object,
             renderIN: React.createElement('div', null),
             dataRecieved: null,
-            tableBody: []
+            tableBody: [],
+            numberOfrow: 5,
+            page: 1,
+            dataQuantity: 1
         };
 
         return _this;
@@ -9362,31 +9394,69 @@ var Search_table = exports.Search_table = function (_Extends) {
 
     _createClass(Search_table, [{
         key: 'dataSort',
-        value: function dataSort(data) {}
+        value: function dataSort(data) {
+            if (data.length == 1) return;
+            for (i = 0; i < data.length; i++) {
+                for (j = 0; j < data.length - i - 1; j++) {
+                    if (Number(data[j].Price) > Number(data[j + 1].Price)) {
+                        helpMas = data[j];
+                        data[j] = data[j + 1];
+                        data[j + 1] = helpMas;
+                    }
+                }
+            }
+        }
     }, {
         key: 'makeDataForRender',
         value: function makeDataForRender(data) {
 
             dat = JSON.parse(data).ITEMS;
-            for (i in dat) {
-                var mapForSearchDataLocal = extend({}, mapForSearchData);
+            this.dataSort(dat);
+            startPagination = this.state.numberOfrow * this.state.page - this.state.numberOfrow + 1;
+            endPagination = startPagination + this.state.numberOfrow - 1;
+            this.state.dataQuantity = dat.length % this.state.numberOfrow > 0 ? (dat.length - dat.length % this.state.numberOfrow) / this.state.numberOfrow + 1 : dat.length / this.state.numberOfrow;
+            for (i = 0; i < dat.length; i++) {
+                if (i + 1 < startPagination || i + 1 > endPagination) continue;
+                var mapForSearchDataLocal = extend({}, getMapForSearchData());
+                var colorClass = "";
                 for (item in dat[i]) {
+
                     if (item in mapForSearchDataLocal == false) {
                         continue;
                     }
-                    var config = mapForSearchDataLocal[item]; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr>          
-                    func = config['functionToHandle'];
+                    var config = mapForSearchDataLocal[item]; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
+                    if (_typeof(config.functionToHandle) == "object") {
+                        for (func in config.functionToHandle) {
+                            if (config.functionToHandle[func] != null && config.functionToHandle[func] != undefined) {
+                                if (config.value == null) config.functionToHandle[func].call(config, dat[i][item]);else config.functionToHandle[func].call(config, config.value);
+                            }
+                        }
+                    } else {
 
-                    if (func != null && func != undefined) {
-                        func.call(config, dat[i][item]);
+                        func = config['functionToHandle'];
+
+                        if (func != null && func != undefined) {
+                            func.call(config, dat[i][item]);
+                        }
+                    }
+                    if (item == "RegionCode") {
+                        if (regionCodeColors[dat[i][item]] == undefined || regionCodeColors[dat[i][item]] == null) {
+                            colorClass = regionCodeColors.default;
+                        } else {
+                            colorClass = regionCodeColors[dat[i][item]];
+                        }
                     }
                 }
 
                 var mas = [];
                 for (item in mapForSearchDataLocal) {
-                    mas.push(mapForSearchDataLocal[item].value);
+                    if (mapForSearchDataLocal[item].value != null) {
+                        mas.push(mapForSearchDataLocal[item].value);
+                    } else {
+                        mas.push(React.createElement('td', null));
+                    }
                 }
-                var b = React.createElement('tr', null, mas.map(function (item) {
+                var b = React.createElement('tr', { className: colorClass }, mas.map(function (item) {
                     return item;
                 }), ' ');
                 this.state.tableBody.push(b);
@@ -9412,18 +9482,58 @@ var Search_table = exports.Search_table = function (_Extends) {
 
             debugger;
             if (this.state.dataRecieved != null && this.state.dataRecieved != "") {
+
                 this.state.tableBody = [];
                 this.makeDataForRender(this.state.dataRecieved);
             } else {
                 this.state.tableBody = [];
             }
-            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', null, "\u041A\u043E\u0434"), React.createElement('th', { 'class': 'hidden-xs' }, "\u041E\u043F\u0438\u0441"), React.createElement('th', { 'class': 'sorting' }, "\u0421\u0440\u043E\u043A"), React.createElement('th', null, "\u041A-\u0432\u043E"), React.createElement('th', null, "\u0420\u0435\u0433\u0456\u043E\u043D"), React.createElement('th', { className: 'hidden-xs sorting' }, "\u041D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C"), React.createElement('th', { className: 'hidden-xs' }, "\u0412\u0430\u0433\u0430"), React.createElement('th', { className: 'hidden-xs' }, '$'), React.createElement('th', { className: 'hidden-xs sorting' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { className: 'sorting' }, "\u0426\u0456\u043D\u0430 $"))), React.createElement('tbody', null, this.state.tableBody.map(function (item) {
+            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement(Pagination, { quantity: this.state.dataQuantity }), React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', null, "\u041A\u043E\u0434"), React.createElement('th', { 'class': 'hidden-xs' }, "\u041E\u043F\u0438\u0441"), React.createElement('th', { 'class': 'sorting' }, "\u0421\u0440\u043E\u043A"), React.createElement('th', null, "\u041A-\u0432\u043E"), React.createElement('th', null, "\u0420\u0435\u0433\u0456\u043E\u043D"), React.createElement('th', { className: 'hidden-xs sorting' }, "\u041D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C"), React.createElement('th', { className: 'hidden-xs' }, "\u0412\u0430\u0433\u0430"), React.createElement('th', { className: 'hidden-xs' }, '$'), React.createElement('th', { className: 'hidden-xs sorting' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { className: 'sorting' }, "\u0426\u0456\u043D\u0430 $"))), React.createElement('tbody', null, this.state.tableBody.map(function (item) {
                 return item;
-            })))));
+            }))), React.createElement(Pagination, { quantity: this.state.dataQuantity })));
         }
     }]);
 
     return Search_table;
+}(_main_component.Extends);
+
+//////////////////////////////////////////////////////////
+
+
+var Pagination = exports.Pagination = function (_Extends2) {
+    _inherits(Pagination, _Extends2);
+
+    function Pagination(props) {
+        _classCallCheck(this, Pagination);
+
+        // this.state={quantity:this.props.quantity}; 
+        var _this2 = _possibleConstructorReturn(this, (Pagination.__proto__ || Object.getPrototypeOf(Pagination)).call(this, props));
+
+        _this2.click = _this2.click.bind(_this2);
+
+        return _this2;
+    }
+
+    _createClass(Pagination, [{
+        key: 'click',
+        value: function click(e) {
+            Uobject = window.objectReg['Search_table'];
+            Uobject.setState({ page: Number(e.target.innerHTML) });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var masLi = [];
+            for (i = 0; i < this.props.quantity; i++) {
+                masLi.push(React.createElement('li', { onClick: this.click, className: 'page-item' }, React.createElement('a', { className: 'page-link', href: '#' }, i + 1)));
+            }
+            return React.createElement('ul', { className: 'pagination' }, masLi.map(function (item) {
+                return item;
+            }));
+        }
+    }]);
+
+    return Pagination;
 }(_main_component.Extends);
 
 /***/ }),

@@ -109,7 +109,7 @@ function GetUserID_1CByID( $ID )
      
       if(!$USER->IsAuthorized())
      {
-           die();
+         //  die();
      }       
      $UID = GetUserID_1CByID($USER->GetID());
      if(!$UID && $USER->IsAuthorized())

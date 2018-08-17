@@ -9273,12 +9273,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Pagination = exports.Search_table = undefined;
 
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-} : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-};
-
 var _createClass = function () {
     function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
@@ -9288,6 +9282,12 @@ var _createClass = function () {
         if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
     };
 }();
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+};
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
 
@@ -9313,23 +9313,36 @@ var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/in
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 function getMapForSearchData() {
+    function gProperty(name) {
+
+        function b() {
+            return this[name].value;
+        }
+
+        return b;
+    }
+
     var mapForSearchData = {
         BrandCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
         BrandName: { functionToHandle: sFunction, className: null, value: null },
         ItemCode: { functionToHandle: sFunction, className: null },
         Caption: { functionToHandle: sFunction, className: "hidden-xs sorting", value: null },
-        DeliveryDays: { functionToHandle: sFunction, className: "sorting", value: null },
+        DeliveryDays: { functionToHandle: { formatNumber: formatNumber, sFunction: sFunction }, params: ["", ".", "0"], className: "sorting", value: null },
         Quantity: { functionToHandle: sFunction, className: "sorting", value: null },
         RegionFullName: { functionToHandle: sFunction, className: null, value: null },
-        RegionShortName: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
-        RegionCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
-        PercentSupp: { functionToHandle: { wrapperA: wrapperA, sFunction: sFunction }, className: null, wrapperClassName: "label label-success", value: null },
+        RegionShortName: { functionToHandle: sFunction, dontShow: true, className: null, makeHiddenInner: true, value: null }, //
+        RegionCode: { functionToHandle: sFunction, dontShow: true, className: null, makeHiddenInner: true, value: null }, //
+        PercentSupp: { functionToHandle: { addPercentSign: addPercentSign, wrapperA: wrapperA, sFunction: sFunction }, className: null, wrapperClassName: "label label-success", value: null },
         Weight: { functionToHandle: sFunction, className: null, value: null },
         Currency: { functionToHandle: sFunction, className: null, value: null },
-        //ReturnableParts:{functionToHandle:sFunction,className:null,value:null},
-        Price: { functionToHandle: sFunction, className: null, value: null
-            //PriceUSD:{functionToHandle:sFunction,className:null,value:null}, 
-        } };
+        ReturnableParts: { functionToHandle: sFunction, dontShow: true, className: null, value: null }, //
+        Price: { functionToHandle: { formatNumber: formatNumber }, params: ["", ".", "3"], dontShow: true, className: null, value: null }, // 
+        PriceUSD: { functionToHandle: { convertSum: convertSum, sFunction: sFunction }, params: ["", "", gProperty("Price")], className: null, value: null }
+    };
+    for (item in mapForSearchData) {
+        mapForSearchData[item].__proto__ = mapForSearchData;
+    }
+
     return mapForSearchData;
 }
 var regionCodeColors = { "1": "warning", //bootstrap classes
@@ -9367,9 +9380,69 @@ function sFunction(value) //obj = (for example ) BrandCode --{}
         this.value = _a;
     }
 }
+
 function wrapperA(value) {
     var a = React.createElement('a', { href: '#', className: this.wrapperClassName }, value);
     this.value = a;
+}
+function addPercentSign(value) {
+    this.value = value + "%";
+}
+function formatNumber(value, pointDelimeter, quantityAfterPoint) {
+    if (pointDelimeter != "." && pointDelimeter != "," || pointDelimeter == ".") {
+        pointDelimeter = ".";
+        var pattern = / \,/;
+        value = value.replace(pattern, pointDelimeter);
+    } else {
+        pointDelimeter = ",";
+        var pattern = / \./;
+        value = value.replace(pattern, pointDelimeter);
+    }
+
+    if (quantityAfterPoint == null || quantityAfterPoint == undefined) {
+        quantityAfterPoint = "2";
+    }
+    var pattern = new RegExp("^([0-9]*?)(\.|\,{1})([0-9]{" + quantityAfterPoint + "})([0-9]*)$");
+    // var pattern= /^([0-9]*?)(\.|\,{1})([0-9]{2})([0-9]*)$/;
+    if (pattern.test(value)) {
+        if (quantityAfterPoint == "0") this.value = value.replace(pattern, '$1');else this.value = value.replace(pattern, '$1$2$3');
+    } else {
+        this.value = value;
+    }
+}
+function makeConfiguration() {
+    if (this == undefined) return;
+    var config = this; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
+    if (_typeof(config.functionToHandle) == "object") {
+        for (func in config.functionToHandle) {
+            if (config.functionToHandle[func] != null && config.functionToHandle[func] != undefined) {
+                if (config.params) {
+
+                    if (config.value == null) {
+                        config.params[0] = dat[i][item];
+                        //config.functionToHandle[func].apply(config,config.functionToHandle.params);
+                    } else {
+                        config.params[0] = config.value;
+                        //config.functionToHandle[func].apply(config,config.functionToHandle.params);  
+                    }
+                    config.functionToHandle[func].apply(config, config.params);
+                } else {
+                    if (config.value == null) config.functionToHandle[func].call(config, dat[i][item]);else config.functionToHandle[func].call(config, config.value);
+                }
+            }
+        }
+    } else {
+
+        func = config['functionToHandle'];
+
+        if (func != null && func != undefined) {
+            func.call(config, dat[i][item]);
+        }
+    }
+}
+function convertSum(curFrom, curTo, sum) {
+    summ = sum.bind(this)();
+    this.value = summ;
 }
 
 var Search_table = exports.Search_table = function (_Extends) {
@@ -9424,21 +9497,49 @@ var Search_table = exports.Search_table = function (_Extends) {
                     if (item in mapForSearchDataLocal == false) {
                         continue;
                     }
-                    var config = mapForSearchDataLocal[item]; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
-                    if (_typeof(config.functionToHandle) == "object") {
-                        for (func in config.functionToHandle) {
-                            if (config.functionToHandle[func] != null && config.functionToHandle[func] != undefined) {
-                                if (config.value == null) config.functionToHandle[func].call(config, dat[i][item]);else config.functionToHandle[func].call(config, config.value);
+                    makeConfiguration.call(mapForSearchDataLocal[item]);
+
+                    /* var config=mapForSearchDataLocal[item];    //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
+                     if (typeof config.functionToHandle == "object") 
+                     {
+                         for (func in config.functionToHandle)
+                         {
+                           if (config.functionToHandle[func]!=null && config.functionToHandle[func]!=undefined)
+                            {
+                              if (config.params)
+                              {
+                                  
+                                if (config.value==null)
+                                {
+                                 config.params[0]=dat[i][item];  
+                                 //config.functionToHandle[func].apply(config,config.functionToHandle.params);
+                                }else
+                                {
+                                  config.params[0]=config.value;  
+                                  //config.functionToHandle[func].apply(config,config.functionToHandle.params);  
+                                } 
+                                config.functionToHandle[func].apply(config,config.params);   
+                              } else
+                              { 
+                               if (config.value==null)   
+                               config.functionToHandle[func].call(config,dat[i][item]);
+                               else config.functionToHandle[func].call(config,config.value);
+                              }
                             }
-                        }
-                    } else {
-
-                        func = config['functionToHandle'];
-
-                        if (func != null && func != undefined) {
-                            func.call(config, dat[i][item]);
-                        }
-                    }
+                             
+                         }
+                         
+                     } else
+                     {
+                         
+                             
+                         func=config['functionToHandle'];
+                         
+                         if (func!=null && func!=undefined)
+                          {
+                             func.call(config,dat[i][item]);
+                          }
+                     } */
                     if (item == "RegionCode") {
                         if (regionCodeColors[dat[i][item]] == undefined || regionCodeColors[dat[i][item]] == null) {
                             colorClass = regionCodeColors.default;
@@ -9448,12 +9549,17 @@ var Search_table = exports.Search_table = function (_Extends) {
                     }
                 }
 
+                for (item in mapForSearchDataLocal) {
+                    if (mapForSearchDataLocal[item].value == null) {
+
+                        makeConfiguration.call(mapForSearchDataLocal[item]);
+                    }
+                }
+
                 var mas = [];
                 for (item in mapForSearchDataLocal) {
-                    if (mapForSearchDataLocal[item].value != null) {
+                    if (mapForSearchDataLocal[item].value != null && !mapForSearchDataLocal[item].dontShow) {
                         mas.push(mapForSearchDataLocal[item].value);
-                    } else {
-                        mas.push(React.createElement('td', null));
                     }
                 }
                 var b = React.createElement('tr', { className: colorClass }, mas.map(function (item) {

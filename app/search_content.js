@@ -111,6 +111,8 @@ function wrapperA(value)
 }
 function addPercentSign(value)
 {
+    if (value==undefined) this.value="100%";
+    else 
     this.value=value+"%"; 
 }
 function formatNumber(value,pointDelimeter,quantityAfterPoint)
@@ -149,7 +151,7 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
     
     
 }
- function makeConfiguration()
+ function makeConfiguration(val)
  {
      if (this==undefined) return;
       var config=this;    //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
@@ -164,7 +166,7 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
                               
                             if (config.value==null)
                             {
-                             config.params[0]=dat[i][item];  
+                             config.params[0]=val;  
                              //config.functionToHandle[func].apply(config,config.functionToHandle.params);
                             }else
                             {
@@ -262,7 +264,7 @@ export class Search_table extends Extends
                  {
                     continue; 
                  }
-                 makeConfiguration.call(mapForSearchDataLocal[item]);
+                 makeConfiguration.call(mapForSearchDataLocal[item],dat[i][item]);
                
                 /* var config=mapForSearchDataLocal[item];    //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
                  if (typeof config.functionToHandle == "object") 
@@ -326,6 +328,11 @@ export class Search_table extends Extends
                {
                    
                   makeConfiguration.call(mapForSearchDataLocal[item]); 
+               }
+               if (mapForSearchDataLocal[item].value==null)
+               {
+                   const f=<td></td>;
+                   mapForSearchDataLocal[item].value=f;
                }  
                  
              }

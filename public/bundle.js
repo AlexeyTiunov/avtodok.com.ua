@@ -9386,7 +9386,7 @@ function wrapperA(value) {
     this.value = a;
 }
 function addPercentSign(value) {
-    this.value = value + "%";
+    if (value == undefined) this.value = "100%";else this.value = value + "%";
 }
 function formatNumber(value, pointDelimeter, quantityAfterPoint) {
     if (pointDelimeter != "." && pointDelimeter != "," || pointDelimeter == ".") {
@@ -9410,7 +9410,7 @@ function formatNumber(value, pointDelimeter, quantityAfterPoint) {
         this.value = value;
     }
 }
-function makeConfiguration() {
+function makeConfiguration(val) {
     if (this == undefined) return;
     var config = this; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
     if (_typeof(config.functionToHandle) == "object") {
@@ -9419,7 +9419,7 @@ function makeConfiguration() {
                 if (config.params) {
 
                     if (config.value == null) {
-                        config.params[0] = dat[i][item];
+                        config.params[0] = val;
                         //config.functionToHandle[func].apply(config,config.functionToHandle.params);
                     } else {
                         config.params[0] = config.value;
@@ -9497,7 +9497,7 @@ var Search_table = exports.Search_table = function (_Extends) {
                     if (item in mapForSearchDataLocal == false) {
                         continue;
                     }
-                    makeConfiguration.call(mapForSearchDataLocal[item]);
+                    makeConfiguration.call(mapForSearchDataLocal[item], dat[i][item]);
 
                     /* var config=mapForSearchDataLocal[item];    //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
                      if (typeof config.functionToHandle == "object") 
@@ -9553,6 +9553,10 @@ var Search_table = exports.Search_table = function (_Extends) {
                     if (mapForSearchDataLocal[item].value == null) {
 
                         makeConfiguration.call(mapForSearchDataLocal[item]);
+                    }
+                    if (mapForSearchDataLocal[item].value == null) {
+                        var f = React.createElement('td', null);
+                        mapForSearchDataLocal[item].value = f;
                     }
                 }
 

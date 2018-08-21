@@ -8,6 +8,7 @@ entryArray.push("./app/sidebar_header.js");
 entryArray.push('./app/css/plugins.css'); 
 entryArray.push('./app/js/plugins.js'); 
 entryArray.push('./app/js/app.js');
+//entryArray.push('./app/js/modernizr-2.7.1-respond-1.4.2.min.js');
 //entryArray.push('./app/js/request.js');    
 entryArray.push('./app/js/pages/index.js');
 entryArray.push('./app/css/main.css');
@@ -31,7 +32,7 @@ module.exports = {
             {
                 test: /\.jsx?$/, // определяем тип файлов
                // exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
-                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),/app\/js\//], 
+                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),path.resolve(__dirname, 'app/js/vendor/'),/app\/js\//], 
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
                     presets:["env", "react"],    // используемые плагины
@@ -41,7 +42,7 @@ module.exports = {
             {
                 test: /\.js?$/, // определяем тип файлов
                // exclude: /(.*?)(node_modules|plugins\.js|app\.js)$/,  // исключаем из обработки папку node_modules
-                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),/app\/js\//],
+                exclude: [/node_modules/,path.resolve(__dirname, 'app/js/'),path.resolve(__dirname, 'app/js/vendor/'),/app\/js\//],
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
                     presets:["env", "react"],    // используемые плагины

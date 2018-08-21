@@ -9150,6 +9150,29 @@ var Extends = exports.Extends = function (_React$Component) {
             };
             this.xhr.send(data);
         }
+    }, {
+        key: 'makeRequestToRecieveData',
+        value: function makeRequestToRecieveData(method, url, type, data) {
+            var _this2 = this;
+
+            thisO = this;
+            var Pro = new Promise(function (resolve, reject) {
+                thisO.xhr.open(method, url, type);
+                thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                thisO.xhr.onreadystatechange = function () {
+                    if (thisO.xhr.readyState == 4 && thisO.xhr.status == 200) {
+                        resolve(thisO.xhr.responseText);
+                    } else {
+                        reject("ERROR");
+                    }
+                };
+                _this2.xhr.send(data);
+            });
+
+            // thisO.setState({dataRecieved:null});  
+
+            return Pro;
+        }
     }]);
 
     return Extends;
@@ -9240,7 +9263,7 @@ var Page_content = exports.Page_content = function (_Extends) {
       // super.childUpdate(this,<h1>success</h1>);   
       // this.state.parentMod.childUpdate(this);
 
-      // super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
+      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'makeRequest', this).call(this, "POST", "/ws/auth.php", false, "LOGIN=Alex");
     }
   }, {
     key: 'componentDidUpdate',
@@ -9271,7 +9294,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Pagination = exports.Search_table = undefined;
+exports.BusketButton = exports.Pagination = exports.Search_table = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -9290,6 +9313,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 };
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _jquery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -9311,6 +9342,12 @@ function _inherits(subClass, superClass) {
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+//import $ from  './js/vendor/jquery-1.11.1.min.js';
+
+window.jQuery = _jquery2.default;
+window.$ = _jquery2.default;
+__webpack_require__(/*! bootstrap/dist/js/bootstrap.js */ "./node_modules/bootstrap/dist/js/bootstrap.js");
+__webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
 
 function getMapForSearchData() {
     function gProperty(name) {
@@ -9323,7 +9360,7 @@ function getMapForSearchData() {
     }
 
     var mapForSearchData = {
-        BrandCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null },
+        BrandCode: { functionToHandle: sFunction, className: null, makeHiddenInner: true, value: null, inputVal: null },
         BrandName: { functionToHandle: sFunction, className: null, value: null },
         ItemCode: { functionToHandle: sFunction, className: null },
         Caption: { functionToHandle: sFunction, className: "hidden-xs sorting", value: null },
@@ -9337,10 +9374,15 @@ function getMapForSearchData() {
         Currency: { functionToHandle: sFunction, className: null, value: null },
         ReturnableParts: { functionToHandle: sFunction, dontShow: true, className: null, value: null }, //
         Price: { functionToHandle: { formatNumber: formatNumber }, params: ["", ".", "3"], dontShow: true, className: null, value: null }, // 
-        PriceUSD: { functionToHandle: { convertSum: convertSum, sFunction: sFunction }, params: ["", "", gProperty("Price")], className: null, value: null }
+        PriceUSD: { functionToHandle: { convertSum: convertSum, sFunction: sFunction }, params: ["", "", gProperty("Price")], className: null, value: null },
+        Action: { functionToHandle: { makeButtonAction: makeButtonAction, sFunction: sFunction }, className: "text-center", value: null }
     };
+
     for (item in mapForSearchData) {
         mapForSearchData[item].__proto__ = mapForSearchData;
+        Object.defineProperty(mapForSearchData[item], "toString", { enumerable: true, writable: true, value: function value() {
+                return item;
+            } });
     }
 
     return mapForSearchData;
@@ -9371,7 +9413,8 @@ function extend(o, p) {
 function sFunction(value) //obj = (for example ) BrandCode --{}
 {
     if (this.makeHiddenInner) {
-        var a = React.createElement('input', { type: 'hidden', value: value });
+        var a = React.createElement('input', { type: 'hidden', name: this.toString(), value: value });
+        this.inputValue = value;
         this.value = a;
     } else {
 
@@ -9443,6 +9486,24 @@ function makeConfiguration(val) {
 function convertSum(curFrom, curTo, sum) {
     summ = sum.bind(this)();
     this.value = summ;
+}
+function makeButtonAction() {
+    if (this.prototype) {
+        obj = this.prototype;
+    } else {
+        obj = this.__proto__;
+    }
+
+    var mas = {};
+    for (item in obj) {
+        if (obj[item] && obj[item].makeHiddenInner) {
+            //const a= (<input type='hidden' value={value} />); 
+            // var a = obj[item].toString()+"="+obj[item].inputValue;  
+            mas[obj[item].toString()] = obj[item].inputValue;
+        }
+    }
+    var b = React.createElement(BusketButton, { inputs: mas });
+    this.value = b;
 }
 
 var Search_table = exports.Search_table = function (_Extends) {
@@ -9646,6 +9707,59 @@ var Pagination = exports.Pagination = function (_Extends2) {
     return Pagination;
 }(_main_component.Extends);
 
+var BusketButton = exports.BusketButton = function (_Extends3) {
+    _inherits(BusketButton, _Extends3);
+
+    function BusketButton(props) {
+        _classCallCheck(this, BusketButton);
+
+        var _this3 = _possibleConstructorReturn(this, (BusketButton.__proto__ || Object.getPrototypeOf(BusketButton)).call(this, props));
+
+        _this3.addToBusket = _this3.addToBusket.bind(_this3);
+        _this3.state.inputs = props.inputs;
+        _this3.updateQuantity = _this3.updateQuantity.bind(_this3);
+
+        return _this3;
+    }
+
+    _createClass(BusketButton, [{
+        key: 'addToBusket',
+        value: function addToBusket() {
+            var mas = [];
+            for (input in this.state.inputs) {
+                mas.push(input + "=" + this.state.inputs[input]);
+            }
+        }
+    }, {
+        key: 'updateQuantity',
+        value: function updateQuantity(event) {
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+            // Разрешаем выделение: Ctrl+A
+            event.keyCode == 65 && event.ctrlKey === true ||
+            // Разрешаем клавиши навигации: home, end, left, right
+            event.keyCode >= 35 && event.keyCode <= 39 || event.keyCode == 190) {
+
+                var quantity = event.target.value;
+                this.state.inputs.Quantity = quantity;
+            } else {
+                if ((event.keyCode < 48 || event.keyCode > 90) && (event.keyCode < 96 || event.keyCode > 105)) {
+                    event.preventDefault();
+                } else {
+                    var quantity = event.target.value;
+                    this.state.inputs.Quantity = quantity;
+                }
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { className: 'btn-group btn-group-xs' }, React.createElement('input', { type: 'text', name: '#', onKeyUp: this.updateQuantity, 'data-toggle': 'tooltip', className: 'btn btn-default', style: { width: "3em" } }), React.createElement('a', { href: '#', onClick: this.addToBusket, 'data-toggle': 'tooltip', title: 'Edit', className: 'btn btn-default' }, React.createElement('i', { className: 'gi gi-shopping_cart' })));
+        }
+    }]);
+
+    return BusketButton;
+}(_main_component.Extends);
+
 /***/ }),
 
 /***/ "./app/sidebar.js":
@@ -9720,9 +9834,10 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 //var $=require('jquery'); 
 //var jQuery=require('jquery');
 window.jQuery = _jquery2.default;
+window.$ = _jquery2.default;
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 window.moment = moment;
-window.$ = _jquery2.default;
+
 var Li = __webpack_require__(/*! ./sidebar_li.js */ "./app/sidebar_li.js");
 //var Sidebar_nav =require('./sidebar_nav.js');
 
@@ -9771,7 +9886,7 @@ var Sidebar = exports.Sidebar = function (_Extends) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })));
+      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })), React.createElement(_sidebar_userinfo.Sidebar_usersettings, null));
     }
   }]);
 
@@ -9977,7 +10092,13 @@ var Search_form = function (_Extends2) {
                 return;
             }
             var data = "ItemCode=" + itemCode + "";
-            this.makeRequest("POST", "/ws/searchItems.php", false, data);
+
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/searchItems.php", false, data);
+            Prom.then(function (responseText) {
+                window.objectReg['Search_table'].setState({ dataRecieved: responseText });
+            });
+
+            ;
             // alert(this.state.dataRecieved);
 
 
@@ -10315,6 +10436,25 @@ var Sidebar_userinfo = exports.Sidebar_userinfo = function (_React$Component) {
     }]);
 
     return Sidebar_userinfo;
+}(React.Component);
+
+var Sidebar_usersettings = exports.Sidebar_usersettings = function (_React$Component2) {
+    _inherits(Sidebar_usersettings, _React$Component2);
+
+    function Sidebar_usersettings(props) {
+        _classCallCheck(this, Sidebar_usersettings);
+
+        return _possibleConstructorReturn(this, (Sidebar_usersettings.__proto__ || Object.getPrototypeOf(Sidebar_usersettings)).call(this, props));
+    }
+
+    _createClass(Sidebar_usersettings, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { id: 'modal-user-settings', className: 'modal fade', tabindex: '-1', role: 'dialog', 'aria-hidden': 'true' }, React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header text-center' }, React.createElement('h2', { className: 'modal-title' }, React.createElement('i', { className: 'fa fa-pencil' }), React.createElement('font', null, React.createElement('font', null, " \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438")))), React.createElement('div', { className: 'modal-body' }, React.createElement('form', { action: 'index.html', method: 'post', enctype: 'multipart/form-data', className: 'form-horizontal form-bordered', onsubmit: 'return false;' }, React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0417\u0430\u0433\u0430\u043B\u044C\u043D\u0430 \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F"))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label' }, React.createElement('font', null, React.createElement('font', null, "\u0418\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('p', { className: 'form-control-static' }, React.createElement('font', null, React.createElement('font', null, '??????????'))))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-email' }, React.createElement('font', null, React.createElement('font', null, "\u0415\u043B. \u0430\u0434\u0440\u0435\u0441\u0430"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'email', id: 'user-settings-email', name: 'user-settings-email', className: 'form-control', value: 'admin@example.com' }))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-notifications' }, React.createElement('font', null, React.createElement('font', null, "\u041F\u043E\u0432\u0456\u0434\u043E\u043C\u043B\u0435\u043D\u043D\u044F \u043D\u0430 \u0435\u043B\u0435\u043A\u0442\u043E\u0440\u043D\u043D\u0443 \u043F\u043E\u0448\u0442\u0443"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('label', { className: 'switch switch-primary' }, React.createElement('input', { type: 'checkbox', id: 'user-settings-notifications', name: 'user-settings-notifications', value: '1', checked: '' }), React.createElement('span', null))))), React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0417\u043C\u0456\u043D\u0430 \u043F\u0430\u0440\u043E\u043B\u044E"))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', id: 'user-settings-password', name: 'user-settings-password', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C..." }))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-repassword' }, React.createElement('font', null, React.createElement('font', null, "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0456\u0442\u044C \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', id: 'user-settings-repassword', name: 'user-settings-repassword', className: 'form-control', placeholder: "...\u043F\u043E\u0432\u0442\u043E\u0440\u0456\u0442\u044C \u0440\u0430\u0437\u043E\u0447\u043E\u043A!" })))), React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'submit', className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u0437\u043C\u0456\u043D\u0438"))))))))));
+        }
+    }]);
+
+    return Sidebar_usersettings;
 }(React.Component);
 
 /***/ }),

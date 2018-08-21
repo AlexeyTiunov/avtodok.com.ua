@@ -5,9 +5,10 @@ import jQuery from 'jquery';
 //var $=require('jquery'); 
 //var jQuery=require('jquery');
 window.jQuery=jQuery;
+window.$=jQuery;  
 var moment=require('moment');
 window.moment=moment;
-window.$=jQuery;  
+
 var Li= require("./sidebar_li.js");
 //var Sidebar_nav =require('./sidebar_nav.js');
 import {Sidebar_nav} from './sidebar_nav.js';
@@ -15,6 +16,7 @@ import {items as ITEMS }from './sidebar_nav.js';
 import {Sidebar_header} from './sidebar_header.js'
 import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
+import {Sidebar_usersettings} from './sidebar_userinfo.js' 
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
 import {Search_table} from './search_content.js'   
@@ -78,6 +80,7 @@ export class Sidebar  extends Extends
                      <div id='sidebar-content' className='sidebar-content'>
                         <Sidebar_brand/>    
                         <Sidebar_userinfo/> 
+                        
                         <Sidebar_nav items={ITEMS}/>      
            
                      </div>  
@@ -86,7 +89,8 @@ export class Sidebar  extends Extends
                    <div id="main-container"> 
                      <Sidebar_header parentMod={this}/>
                      <Page_content parentMod={this}/>
-                   </div>
+                   </div> 
+                   <Sidebar_usersettings/>   
                   </div>
                   
                   

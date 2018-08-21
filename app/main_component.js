@@ -129,6 +129,38 @@ export class Extends extends React.Component
          
          
      }
+     makeRequestToRecieveData(method,url,type,data)
+     {   
+         thisO=this; 
+        var Pro= new Promise((resolve,reject)=>{
+            thisO.xhr.open(method,url,type);
+            thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            thisO.xhr.onreadystatechange = function()
+            {
+                if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
+                {
+                    resolve(thisO.xhr.responseText);
+                   
+                }else
+                {
+                    reject("ERROR");
+                }
+                
+            }
+            this.xhr.send(data);    
+             
+             
+         })
+         
+         
+         
+       
+         
+      // thisO.setState({dataRecieved:null});  
+        
+       return Pro  
+         
+     }
      
     
 }

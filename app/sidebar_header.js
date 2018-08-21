@@ -85,7 +85,15 @@ class Search_form extends Extends
            return;  
          }
          var data="ItemCode="+itemCode+"";
-         this.makeRequest("POST","/ws/searchItems.php",false,data);
+        
+         var Prom=this.makeRequestToRecieveData("POST","/ws/searchItems.php",false,data)
+         Prom.then(
+         (responseText)=>{window.objectReg['Search_table'].setState({dataRecieved:responseText})}
+         );
+         
+         
+         
+         ;
          // alert(this.state.dataRecieved);
          
          

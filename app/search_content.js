@@ -1,8 +1,13 @@
 var ReactDOM = require('react-dom');
 var React = require('react'); 
-import {Extends} from './main_component.js'
-
-
+import {Extends} from './main_component.js';
+//import $ from  './js/vendor/jquery-1.11.1.min.js';
+import $ from 'jquery';
+import jQuery from 'jquery';
+window.jQuery=jQuery;
+window.$=jQuery;  
+require ('bootstrap/dist/js/bootstrap.js');
+require ('bootstrap/dist/css/bootstrap.min.css');
 
 
 
@@ -24,7 +29,7 @@ function getMapForSearchData()
    
  
   var mapForSearchData={
-  BrandCode:{functionToHandle:sFunction,className:null,makeHiddenInner:true,value:null},
+  BrandCode:{functionToHandle:sFunction,className:null,makeHiddenInner:true,value:null,inputVal:null},
   BrandName:{functionToHandle:sFunction,className:null,value:null},
   ItemCode:{functionToHandle:sFunction,className:null},
   Caption:{functionToHandle:sFunction,className:"hidden-xs sorting",value:null},
@@ -38,11 +43,18 @@ function getMapForSearchData()
   Currency:{functionToHandle:sFunction,className:null,value:null},
   ReturnableParts:{functionToHandle:sFunction,dontShow:true,className:null,value:null},//
   Price:{functionToHandle:{formatNumber},params:["",".","3"] ,dontShow:true, className:null,value:null}, // 
-  PriceUSD:{functionToHandle:{convertSum,sFunction},params:["","",gProperty("Price")],className:null,value:null}, 
-  } 
+  PriceUSD:{functionToHandle:{convertSum,sFunction},params:["","",gProperty("Price")],className:null,value:null},
+  Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null}, 
+  }
+   
   for (item in mapForSearchData)
   {
-    mapForSearchData[item].__proto__=mapForSearchData;  
+    mapForSearchData[item].__proto__=mapForSearchData;
+    Object.defineProperty(mapForSearchData[item],"toString",{enumerable:true,writable:true,value:()=>{return item}, });                                     
+                                                      
+    
+    
+                                                       
   }
   
   
@@ -81,7 +93,8 @@ function sFunction(value)   //obj = (for example ) BrandCode --{}
 {
   if (this.makeHiddenInner)
   {
-    const a= (<input type='hidden' value={value} />);
+    const a= (<input type='hidden' name={this.toString()} value={value} />);
+    this.inputValue=value; 
     this.value=a;      
   }
   else
@@ -202,6 +215,31 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
      summ=sum.bind(this)();
      this.value=summ;
  }
+ function makeButtonAction()
+ {
+     if (this.prototype)
+     {
+         obj=this.prototype; 
+     } else
+     {
+         obj=this.__proto__;
+     }
+     
+     var mas={};
+     for (item in obj)
+     {
+         if (obj[item] && obj[item].makeHiddenInner)
+         {
+           //const a= (<input type='hidden' value={value} />); 
+          // var a = obj[item].toString()+"="+obj[item].inputValue;  
+           mas[obj[item].toString()]=obj[item].inputValue; 
+             
+         } 
+     }
+     const b =<BusketButton  inputs={mas}/> ;
+     this.value= b;
+ }
+ 
 export class Search_table extends Extends
 {
     
@@ -461,3 +499,74 @@ export class Pagination extends Extends
     
     
 }
+
+export class BusketButton extends Extends
+{
+    constructor(props) 
+   {
+      super(props);
+      this.addToBusket=this.addToBusket.bind(this);
+      this.state.inputs=props.inputs;
+      this.updateQuantity=this.updateQuantity.bind(this);
+       
+   }
+   addToBusket()
+   {
+       var mas=[];
+       for (input in this.state.inputs)
+       {
+           mas.push(input+"="+this.state.inputs[input]);
+       }
+       
+       
+       
+   }
+   updateQuantity(event)
+   {
+      if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+             // Разрешаем выделение: Ctrl+A
+            (event.keyCode == 65 && event.ctrlKey === true) ||
+             // Разрешаем клавиши навигации: home, end, left, right
+            (event.keyCode >= 35 && event.keyCode <= 39) ||
+            event.keyCode == 190
+            ) 
+            {
+                
+                var quantity=event.target.value;
+               this.state.inputs.Quantity=quantity; 
+            }
+       else
+       {
+            if ((event.keyCode < 48 || event.keyCode > 90) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                event.preventDefault();
+              
+                            
+            } else
+            {
+                 var quantity=event.target.value;
+               this.state.inputs.Quantity=quantity; 
+                
+            }
+            
+           
+       }
+       
+   }
+   render()
+   {
+       return (
+                 <div className="btn-group btn-group-xs">
+                  <input type="text" name="#" onKeyUp={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default" style={{width:"3em"}} ></input>
+                  <a href="#" onClick={this.addToBusket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
+                 </div>
+       
+       
+               )
+       
+       
+       
+   } 
+    
+    
+    
+} 

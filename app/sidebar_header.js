@@ -7,6 +7,7 @@ window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
 import {Search_table} from './search_content.js' 
+import {Basket_items} from './basket_items.js'   
  debugger;  
 
 
@@ -133,7 +134,73 @@ class Search_form extends Extends
      )}
     
 }
-
+ export class Basket extends Extends
+ {
+     
+     constructor(props) 
+     {  
+       super(props); 
+       
+       this.state.partsQuantity=0;
+       this.state.getBasketPartsQuantity=false;      
+         
+         
+     } 
+     getBasketPartsQuantity()
+     {
+        var findMySelf=this.findMySelf(this.constructor.name);
+       // thisO=findMySelf();
+       // if  (thisO==undefined) return;
+        updateMyself= function(responseText)
+        {
+           this.setState({partsQuantity:responseText}); 
+        }.bind(this);
+       
+        var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
+       Prom.then(
+         (responseText)=>{findMySelf().setState({partsQuantity:responseText})}
+         ); 
+      // Prom.then(updateMyself); 
+         
+     }
+     ////////////////////////////////////////////
+     
+     componentDidMount() 
+     {
+        super.componentDidMount();
+        this.getBasketPartsQuantity();
+         
+         
+     }
+     componentDidUpdate(prevProps, prevState)
+     {
+         super.componentDidUpdate(prevProps, prevState)
+          //this.getBasketPartsQuantity();  
+         
+     }
+     render()
+     {
+         if (this.state.getBasketPartsQuantity===true)
+         {
+           this.getBasketPartsQuantity();
+           this.state.getBasketPartsQuantity=false;  
+         }
+         // 
+        return ( <a href="#" data-toggle="modal" data-target="#Basket_items">
+                 <img src="/app/img/placeholders/basket/avatar.png" alt="аватар"/>
+                 <span className="label label-primary label-indicator animation-floating">
+                   <font><font>{this.state.partsQuantity}</font></font>
+                 </span>
+                 </a>
+         
+          
+           
+            
+               ) 
+         
+         
+     }
+ }
 
 
 export class Sidebar_header  extends Extends
@@ -157,6 +224,13 @@ export class Sidebar_header  extends Extends
       return ( <header className="navbar navbar-inverse navbar-fixed-top ">
                  <Sidebar_control_button parentMod={this.props.parentMod}/>
                  <Search_form/>
+                 
+                 <ul className="nav navbar-nav-custom pull-right">
+                    <li>
+                       <Basket/> 
+                      
+                    </li>                 
+                 </ul>
       
                </header>
              )

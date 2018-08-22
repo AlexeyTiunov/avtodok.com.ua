@@ -29,10 +29,10 @@ function getMapForSearchData()
    
  
   var mapForSearchData={
-  BrandCode:{functionToHandle:sFunction,className:null,makeHiddenInner:true,value:null,inputVal:null},
+  BrandCode:{functionToHandle:sFunction,className:null,dontShow:true,makeHiddenInner:true,value:null,inputVal:null},
   BrandName:{functionToHandle:sFunction,className:null,value:null},
-  ItemCode:{functionToHandle:sFunction,className:null},
-  Caption:{functionToHandle:sFunction,className:"hidden-xs sorting",value:null},
+  ItemCode:{functionToHandle:sFunction,makeHiddenInner:true,className:null},
+  Caption:{functionToHandle:sFunction,makeHiddenInner:true,className:"hidden-xs sorting",value:null},
   DeliveryDays:{functionToHandle:{formatNumber,sFunction},params:["",".","0"],className:"sorting",value:null},
   Quantity:{functionToHandle:sFunction,className:"sorting",value:null},
   RegionFullName:{functionToHandle:sFunction,className:null,value:null},
@@ -40,10 +40,10 @@ function getMapForSearchData()
   RegionCode:{functionToHandle:sFunction,dontShow:true,className:null,makeHiddenInner:true,value:null}, //
   PercentSupp:{functionToHandle:{addPercentSign,wrapperA,sFunction},className:null,wrapperClassName:"label label-success",value:null},  
   Weight:{functionToHandle:sFunction,className:null,value:null},
-  Currency:{functionToHandle:sFunction,className:null,value:null},
-  ReturnableParts:{functionToHandle:sFunction,dontShow:true,className:null,value:null},//
+  Currency:{functionToHandle:sFunction,makeHiddenInner:true,className:null,value:null},
+  ReturnableParts:{functionToHandle:sFunction,dontShow:true,makeHiddenInner:true,className:null,value:null},//
   Price:{functionToHandle:{formatNumber},params:["",".","3"] ,dontShow:true, className:null,value:null}, // 
-  PriceUSD:{functionToHandle:{convertSum,sFunction},params:["","",gProperty("Price")],className:null,value:null},
+  PriceUSD:{functionToHandle:{convertSum,sFunction},params:["","",gProperty("Price")],makeHiddenInner:true,className:null,value:null},
   Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null}, 
   }
    
@@ -93,12 +93,12 @@ function sFunction(value)   //obj = (for example ) BrandCode --{}
 {
   if (this.makeHiddenInner)
   {
-    const a= (<input type='hidden' name={this.toString()} value={value} />);
+   // const a= (<input type='hidden' name={this.toString()} value={value} />);
     this.inputValue=value; 
-    this.value=a;      
+   // this.value=a;      
   }
-  else
-  {
+  //else
+ // {
      
                 
       
@@ -111,7 +111,7 @@ function sFunction(value)   //obj = (for example ) BrandCode --{}
                            
  
              
-  } 
+ // } 
   
   
 }
@@ -507,6 +507,7 @@ export class BusketButton extends Extends
       super(props);
       this.addToBusket=this.addToBusket.bind(this);
       this.state.inputs=props.inputs;
+      this.state.inputs.Quantity=1;
       this.updateQuantity=this.updateQuantity.bind(this);
        
    }
@@ -518,6 +519,18 @@ export class BusketButton extends Extends
            mas.push(input+"="+this.state.inputs[input]);
        }
        
+      var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&'));
+      
+      Pro.then(function(data){
+        alert(data) ; 
+        obj=window.objectReg["Basket"];
+        obj.setState({getBasketPartsQuantity:true});  
+      }
+     );
+      
+      
+      
+    
        
        
    }

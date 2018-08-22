@@ -1,5 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react'); 
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import $ from 'jquery';
 import jQuery from 'jquery';
 //var $=require('jquery'); 
@@ -19,7 +21,9 @@ import {Sidebar_userinfo} from './sidebar_userinfo.js'
 import {Sidebar_usersettings} from './sidebar_userinfo.js' 
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
-import {Search_table} from './search_content.js'   
+import {Search_table} from './search_content.js'
+
+import {Basket_items} from './basket_items.js'  
 
  
 import './css/plugins.css'; 
@@ -87,10 +91,12 @@ export class Sidebar  extends Extends
                     </div>
                    </div>
                    <div id="main-container"> 
+                      <div id='link'></div>
                      <Sidebar_header parentMod={this}/>
                      <Page_content parentMod={this}/>
                    </div> 
-                   <Sidebar_usersettings/>   
+                   <Sidebar_usersettings/> 
+                   <Basket_items/>  
                   </div>
                   
                   
@@ -105,10 +111,22 @@ export class Sidebar  extends Extends
 }
  debugger
  var body=document.getElementsByTagName("body"); 
-ReactDOM.render(
-<Sidebar/>,
+   ReactDOM.render(
+     <Sidebar/>,
    body[0]
 
 )
+
+ ReactDOM.render(
+      <Router>
+            <Switch>
+                
+                <Route path="/about" component={Page_content} />                 
+            </Switch>
+        </Router>,
+   document.getElementById("link")
+
+)
+
  debugger
  //require ('./js/app.js');     

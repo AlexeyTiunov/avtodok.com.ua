@@ -18,6 +18,7 @@ export class Extends extends React.Component
          
                      };
          this.xhr = new XMLHttpRequest();
+         
          //this.objectReg={};
   
         
@@ -161,6 +162,14 @@ export class Extends extends React.Component
        return Pro  
          
      }
-     
+     findMySelf(name)
+     {
+         fms= function()
+         {
+           return window.objectReg[name];  
+         }
+         return fms;
+            
+     }
     
 }

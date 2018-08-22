@@ -33,7 +33,7 @@ export class Page_content  extends Extends
      {
          return (<div id="page-content" style={ {'min-height': '977px'} } > 
          
-                  
+                   <div></div>
                   {this.state.renderIN}
          
                 </div> )

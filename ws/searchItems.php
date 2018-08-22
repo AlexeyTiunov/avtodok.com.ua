@@ -13,6 +13,7 @@
   //// 
   //var_dump($_POST);
   //die();
+  if (!isset($_POST['ItemCode'])) $_POST['ItemCode']=$_GET['ItemCode'];
   
 function GetUserID_1CByID( $ID )
 {

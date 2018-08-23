@@ -37,6 +37,23 @@ function GetBasketItemProperty( $basketID, $propertyCode )
    return $res;
 
 }
+function GetBasketItemProperties( $basketID )
+{
+   global $DB;
+   $res =Array();
+
+   $sql = "SELECT * FROM b_sale_basket_props ";
+   $sql .= " WHERE BASKET_ID='".$basketID."'";   
+  //$sql .= " AND CODE='".$propertyCode."'";
+   $rRes = $DB->Query($sql);   
+   while ($arRes = $rRes->Fetch())
+   {
+     $res[$arRes["CODE"]]=$arRes["VALUE"];  
+   }
+   
+   return $res;
+
+}
 function GetOrderShippingDocument($OrderCode)
 {    require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');
      CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');  

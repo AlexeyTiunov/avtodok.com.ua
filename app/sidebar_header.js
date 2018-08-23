@@ -134,7 +134,7 @@ class Search_form extends Extends
      )}
     
 }
- export class Basket extends Extends
+ export class Basket_icon extends Extends
  {
      
      constructor(props) 
@@ -227,7 +227,7 @@ export class Sidebar_header  extends Extends
                  
                  <ul className="nav navbar-nav-custom pull-right">
                     <li>
-                       <Basket/> 
+                       <Basket_icon/> 
                       
                     </li>                 
                  </ul>

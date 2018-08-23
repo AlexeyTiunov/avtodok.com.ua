@@ -23,7 +23,8 @@ import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
 import {Search_table} from './search_content.js'
 
-import {Basket_items} from './basket_items.js'  
+import {Basket_items_forModal} from './basket_items.js' 
+import {Basket_items} from './basket_items.js' 
 
  
 import './css/plugins.css'; 
@@ -96,7 +97,7 @@ export class Sidebar  extends Extends
                      <Page_content parentMod={this}/>
                    </div> 
                    <Sidebar_usersettings/> 
-                   <Basket_items/>  
+                   <Basket_items_forModal/>  
                   </div>
                   
                   
@@ -121,7 +122,7 @@ export class Sidebar  extends Extends
       <Router>
             <Switch>
                 
-                <Route path="/about" component={Page_content} />                 
+                <Route path="/about" component={Basket_items} />                 
             </Switch>
         </Router>,
    document.getElementById("link")

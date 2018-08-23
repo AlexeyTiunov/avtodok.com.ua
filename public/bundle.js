@@ -157,22 +157,44 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.Basket_items = undefined;
+exports.Basket_items_forModal = exports.Basket = exports.Basket_items = undefined;
 
 var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
 }();
+
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+};
 
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
@@ -181,21 +203,21 @@ var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main
 var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
 
 function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
 function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
@@ -206,23 +228,139 @@ window.$ = jQuery;
 var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
 
-var Basket_items = exports.Basket_items = function (_Extends) {
-  _inherits(Basket_items, _Extends);
-
-  function Basket_items(props) {
-    _classCallCheck(this, Basket_items);
-
-    return _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
-  }
-
-  _createClass(Basket_items, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement('div', { id: 'Basket_items', 'class': 'modal fade', role: 'dialog' }, React.createElement('div', { 'class': 'modal-dialog' }, React.createElement('div', { 'class': 'modal-content' }, React.createElement('div', { 'class': 'modal-header' }), React.createElement('div', { 'class': 'modal-body' }), React.createElement('div', { 'class': 'modal-footer' }))));
+function makeConfigurationCall(mapArray) {
+    for (i = 0; i < mapArray.length; i++) {
+        obj = mapArray[i];
+        for (func in obj.functionToHandle) {
+            func.apply(obj, obj.params);
+        }
     }
-  }]);
+}
+function createMapsArray(data) {
+    var standMap = getMapObject();
+    var map = {};
+    var mapArray = [];
+    for (i in data) {
+        itemsObject = data[i];
+        for (item in itemsObject) {
+            map[item] = {};
+            if (_typeof(itemsObject[item]) == "object") {
+                for (subItem in itemsObject[item]) {
+                    if (standMap[subItem]) {
+                        Object.defineProperty(map[item], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
+                        Object.defineProperty(map[item], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
+                    } else {
+                        Object.defineProperty(map[item], "functionToHandle", { value: null, enumerable: true, writable: true });
+                        Object.defineProperty(map[item], "params", { value: [], enumerable: true, writable: true });
+                    }
+                    Object.defineProperty(map[item], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
+                }
+            } else {
 
-  return Basket_items;
+                if (standMap[item]) {
+                    Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
+                    Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
+                } else {
+                    Object.defineProperty(map[item], "functionToHandle", { value: [], enumerable: true, writable: true });
+                }
+                Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
+            }
+
+            mapArray.push(map[item]);
+        }
+    }
+    return mapArray;
+}
+function getMapObject() {
+
+    var mapObject = {
+        BrandCode: { functions: { sFunc: sFunc }, params: ["1", "2"] },
+        ItemCode: { functions: { sFunc: sFunc }, params: [] },
+        Caption: { functions: { sFunc: sFunc }, params: [] },
+        Quantity: { functions: { sFunc: sFunc }, params: [] },
+        Price: { functions: { sFunc: sFunc }, params: [] },
+        Sum: {},
+        PriceUSD: {},
+        SumUSD: {},
+        Props: {}
+
+    };
+    return mapObject;
+}
+function sFunc() {}
+
+var Basket_items = exports.Basket_items = function (_Extends) {
+    _inherits(Basket_items, _Extends);
+
+    function Basket_items(props) {
+        _classCallCheck(this, Basket_items);
+
+        return _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
+    }
+
+    _createClass(Basket_items, [{
+        key: 'getBasketItems',
+        value: function getBasketItems() {
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/Basket.php", false, "");
+            Prom.then(function (responseText) {
+                data = JSON.parse(responseText);
+                makeConfigurationCall(createMapsArray(data));
+            });
+        }
+        ////////////////////////////////
+
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidMount', this).call(this);
+            this.getBasketItems();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { 'class': 'table-responsive' }, React.createElement('table', { 'class': 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")))));
+        }
+    }]);
+
+    return Basket_items;
+}(_main_component.Extends);
+
+var Basket = exports.Basket = function (_Extends2) {
+    _inherits(Basket, _Extends2);
+
+    function Basket(props) {
+        _classCallCheck(this, Basket);
+
+        return _possibleConstructorReturn(this, (Basket.__proto__ || Object.getPrototypeOf(Basket)).call(this, props));
+    }
+
+    _createClass(Basket, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { className: 'block full' }, React.createElement('div', { 'class': 'row block-section' }));
+        }
+    }]);
+
+    return Basket;
+}(_main_component.Extends);
+
+var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends3) {
+    _inherits(Basket_items_forModal, _Extends3);
+
+    function Basket_items_forModal(props) {
+        _classCallCheck(this, Basket_items_forModal);
+
+        return _possibleConstructorReturn(this, (Basket_items_forModal.__proto__ || Object.getPrototypeOf(Basket_items_forModal)).call(this, props));
+    }
+
+    _createClass(Basket_items_forModal, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { id: 'Basket_items', className: 'modal fade', role: 'dialog' }, React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }), React.createElement('div', { className: 'modal-footer' }))));
+        }
+    }]);
+
+    return Basket_items_forModal;
 }(_main_component.Extends);
 
 /***/ }),
@@ -9989,7 +10127,7 @@ var Sidebar = exports.Sidebar = function (_Extends) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement('div', { id: 'link' }), React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })), React.createElement(_sidebar_userinfo.Sidebar_usersettings, null), React.createElement(_basket_items.Basket_items, null));
+      return React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement('div', { id: 'link' }), React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })), React.createElement(_sidebar_userinfo.Sidebar_usersettings, null), React.createElement(_basket_items.Basket_items_forModal, null));
     }
   }]);
 
@@ -10000,7 +10138,7 @@ debugger;
 var body = document.getElementsByTagName("body");
 ReactDOM.render(React.createElement(Sidebar, null), body[0]);
 
-ReactDOM.render(React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/about', component: _page_content.Page_content }))), document.getElementById("link"));
+ReactDOM.render(React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/about', component: _basket_items.Basket_items }))), document.getElementById("link"));
 
 debugger;
 //require ('./js/app.js');
@@ -10084,7 +10222,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Sidebar_header = exports.Basket = undefined;
+exports.Sidebar_header = exports.Basket_icon = undefined;
 
 var _get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
@@ -10267,13 +10405,13 @@ var Search_form = function (_Extends2) {
   return Search_form;
 }(_main_component.Extends);
 
-var Basket = exports.Basket = function (_Extends3) {
-  _inherits(Basket, _Extends3);
+var Basket_icon = exports.Basket_icon = function (_Extends3) {
+  _inherits(Basket_icon, _Extends3);
 
-  function Basket(props) {
-    _classCallCheck(this, Basket);
+  function Basket_icon(props) {
+    _classCallCheck(this, Basket_icon);
 
-    var _this3 = _possibleConstructorReturn(this, (Basket.__proto__ || Object.getPrototypeOf(Basket)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (Basket_icon.__proto__ || Object.getPrototypeOf(Basket_icon)).call(this, props));
 
     _this3.state.partsQuantity = 0;
     _this3.state.getBasketPartsQuantity = false;
@@ -10281,7 +10419,7 @@ var Basket = exports.Basket = function (_Extends3) {
     return _this3;
   }
 
-  _createClass(Basket, [{
+  _createClass(Basket_icon, [{
     key: 'getBasketPartsQuantity',
     value: function getBasketPartsQuantity() {
       var findMySelf = this.findMySelf(this.constructor.name);
@@ -10302,13 +10440,13 @@ var Basket = exports.Basket = function (_Extends3) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      _get(Basket.prototype.__proto__ || Object.getPrototypeOf(Basket.prototype), 'componentDidMount', this).call(this);
+      _get(Basket_icon.prototype.__proto__ || Object.getPrototypeOf(Basket_icon.prototype), 'componentDidMount', this).call(this);
       this.getBasketPartsQuantity();
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      _get(Basket.prototype.__proto__ || Object.getPrototypeOf(Basket.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+      _get(Basket_icon.prototype.__proto__ || Object.getPrototypeOf(Basket_icon.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
       //this.getBasketPartsQuantity();  
     }
   }, {
@@ -10323,7 +10461,7 @@ var Basket = exports.Basket = function (_Extends3) {
     }
   }]);
 
-  return Basket;
+  return Basket_icon;
 }(_main_component.Extends);
 
 var Sidebar_header = exports.Sidebar_header = function (_Extends4) {
@@ -10347,7 +10485,7 @@ var Sidebar_header = exports.Sidebar_header = function (_Extends4) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, React.createElement(Sidebar_control_button, { parentMod: this.props.parentMod }), React.createElement(Search_form, null), React.createElement('ul', { className: 'nav navbar-nav-custom pull-right' }, React.createElement('li', null, React.createElement(Basket, null))));
+      return React.createElement('header', { className: 'navbar navbar-inverse navbar-fixed-top ' }, React.createElement(Sidebar_control_button, { parentMod: this.props.parentMod }), React.createElement(Search_form, null), React.createElement('ul', { className: 'nav navbar-nav-custom pull-right' }, React.createElement('li', null, React.createElement(Basket_icon, null))));
     }
   }]);
 

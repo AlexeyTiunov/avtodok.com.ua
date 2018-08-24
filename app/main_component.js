@@ -34,14 +34,14 @@ export class Extends extends React.Component
      
      componentDidMount() 
      {
-         debugger;
+        // debugger;
        window.objectReg[this.constructor.name]=this;   
          
          
      }
      componentWillUnmount()
      {
-         debugger;
+        // debugger;
       delete window.objectReg[this.constructor.name];  
          
      }

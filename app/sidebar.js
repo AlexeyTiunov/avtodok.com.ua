@@ -24,7 +24,7 @@ import {Extends} from './main_component.js'
 import {Search_table} from './search_content.js'
 
 import {Basket_items_forModal} from './basket_items.js' 
-import {Basket_items} from './basket_items.js' 
+import {Basket} from './basket_items.js' 
 
  
 import './css/plugins.css'; 
@@ -110,7 +110,7 @@ export class Sidebar  extends Extends
     
     
 }
- debugger
+ //debugger
  var body=document.getElementsByTagName("body"); 
    ReactDOM.render(
      <Sidebar/>,
@@ -122,12 +122,12 @@ export class Sidebar  extends Extends
       <Router>
             <Switch>
                 
-                <Route path="/about" component={Basket_items} />                 
+                <Route path="/about" component={Basket} />                 
             </Switch>
         </Router>,
    document.getElementById("link")
 
 )
 
- debugger
+ //debugger
  //require ('./js/app.js');     

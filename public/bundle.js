@@ -160,40 +160,40 @@ module.exports = function(module) {
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.Basket_items_forModal = exports.Basket = exports.Basket_items = undefined;
+exports.Basket_items_forModal = exports.Basket = exports.Common_td = exports.BrandCode_td = exports.Basket_items = undefined;
 
 var _createClass = function () {
-    function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-        }
-    }return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-    };
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
 }();
 
 var _get = function get(object, property, receiver) {
-    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-        var parent = Object.getPrototypeOf(object);if (parent === null) {
-            return undefined;
-        } else {
-            return get(parent, property, receiver);
-        }
-    } else if ("value" in desc) {
-        return desc.value;
+  if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);if (parent === null) {
+      return undefined;
     } else {
-        var getter = desc.get;if (getter === undefined) {
-            return undefined;
-        }return getter.call(receiver);
+      return get(parent, property, receiver);
     }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;if (getter === undefined) {
+      return undefined;
+    }return getter.call(receiver);
+  }
 };
 
 var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 };
 
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
@@ -203,21 +203,21 @@ var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main
 var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
 
 function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
 }
 
 function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
@@ -228,139 +228,277 @@ window.$ = jQuery;
 var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
 
-function makeConfigurationCall(mapArray) {
-    for (i = 0; i < mapArray.length; i++) {
-        obj = mapArray[i];
-        for (func in obj.functionToHandle) {
-            func.apply(obj, obj.params);
-        }
+function makeConfigurationApply(mapArray) {
+  for (i = 0; i < mapArray.length; i++) {
+    obj = mapArray[i];
+    for (item in mapArray[i]) {
+      for (func in mapArray[i][item].functionToHandle) {
+        mapArray[i][item].functionToHandle[func].apply(obj, obj.params);
+      }
     }
+  }
+}
+function makeConfigurationCall(mapArray) {
+  for (i = 0; i < mapArray.length; i++) {
+    obj = mapArray[i];
+    for (item in obj) {
+      var j = 0;
+      for (func in obj[item].functionToHandle) {
+        obj[item].functionToHandle[func].call(obj[item], obj[item].params[j]);
+
+        j++;
+      }
+    }
+  }
 }
 function createMapsArray(data) {
-    var standMap = getMapObject();
-    var map = {};
-    var mapArray = [];
-    for (i in data) {
-        itemsObject = data[i];
-        for (item in itemsObject) {
-            map[item] = {};
-            if (_typeof(itemsObject[item]) == "object") {
-                for (subItem in itemsObject[item]) {
-                    if (standMap[subItem]) {
-                        Object.defineProperty(map[item], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
-                        Object.defineProperty(map[item], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
-                    } else {
-                        Object.defineProperty(map[item], "functionToHandle", { value: null, enumerable: true, writable: true });
-                        Object.defineProperty(map[item], "params", { value: [], enumerable: true, writable: true });
-                    }
-                    Object.defineProperty(map[item], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
-                }
-            } else {
+  var standMap = getMapObject();
+  var map = {};
+  var mapArray = [];
+  for (i in data) {
+    itemsObject = data[i];
+    for (item in itemsObject) {
+      // map[item]={};
+      if (_typeof(itemsObject[item]) == "object") {
 
-                if (standMap[item]) {
-                    Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
-                    Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
-                } else {
-                    Object.defineProperty(map[item], "functionToHandle", { value: [], enumerable: true, writable: true });
-                }
-                Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
+        for (subItem in itemsObject[item]) {
+          if (standMap[subItem]) {
+            map[subItem] = {};
+            Object.defineProperty(map[subItem], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
+            Object.defineProperty(map[subItem], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
+            Object.defineProperty(map[subItem], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
+            // mapArray.push(map[subItem]);   
+          } else {
+              // Object.defineProperty(map[subItem],"functionToHandle",{value:null,enumerable:true,writable:true});
+              //Object.defineProperty(map[subItem],"params",{value:[],enumerable:true,writable:true});  
             }
-
-            mapArray.push(map[item]);
         }
+      } else {
+
+        if (standMap[item]) {
+          map[item] = {};
+          Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
+          Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
+          Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
+          // mapArray.push(map[item]);
+        } else {
+            // Object.defineProperty(map[item],"functionToHandle",{value:[],enumerable:true,writable:true});  
+          }
+      }
     }
-    return mapArray;
+    mapArray.push(map);
+  }
+  return makeCorrectDirection(standMap, mapArray);
 }
 function getMapObject() {
 
-    var mapObject = {
-        BrandCode: { functions: { sFunc: sFunc }, params: ["1", "2"] },
-        ItemCode: { functions: { sFunc: sFunc }, params: [] },
-        Caption: { functions: { sFunc: sFunc }, params: [] },
-        Quantity: { functions: { sFunc: sFunc }, params: [] },
-        Price: { functions: { sFunc: sFunc }, params: [] },
-        Sum: {},
-        PriceUSD: {},
-        SumUSD: {},
-        Props: {}
+  var mapObject = {
+    BrandCode: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
+    ItemCode: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
+    Caption: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Название", React.createElement(Common_td, null)] },
+    Quantity: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Кол-во", React.createElement(Common_td, null)] },
+    DeliveryDays: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Срок Поставки", React.createElement(Common_td, null)] },
+    PRICE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Цена", React.createElement(Common_td, null)] },
+    Sum: {},
+    PriceUSD: {},
+    SumUSD: {},
+    Props: {}
 
-    };
-    return mapObject;
+  };
+  return mapObject;
+}
+
+function makeCorrectDirection(mapObject, mapArray) {
+  var newMapArray = [];
+  for (i = 0; i < mapArray.length; i++) {
+    var newObj = {};
+    for (item in mapObject) {
+      //var newObj={};
+      if (mapArray[i][item]) newObj[item] = mapArray[i][item];
+    }
+    newMapArray.push(newObj);
+  }
+  for (i = 0; i < newMapArray.length; i++) {
+    for (item in newMapArray[i]) {
+      if (newMapArray[i][item].prototype) {
+        newMapArray[i][item].prototype = newMapArray[i];
+      } else {
+        newMapArray[i][item].__proto__ = newMapArray[i];
+      }
+    }
+  }
+
+  return newMapArray;
 }
 function sFunc() {}
+function defineColumnName(name) {
+  Object.defineProperty(this, "Name", { value: name, enumerable: true, writable: true });
+}
+function defineTd(TD) {
+  // TDD = new TD.type( {val:this.fValue} );
+  TDD = React.createElement(TD.type, this.__proto__, null);
+  Object.defineProperty(this, "TD", { value: TDD, enumerable: true, writable: true });
+}
 
 var Basket_items = exports.Basket_items = function (_Extends) {
-    _inherits(Basket_items, _Extends);
+  _inherits(Basket_items, _Extends);
 
-    function Basket_items(props) {
-        _classCallCheck(this, Basket_items);
+  function Basket_items(props) {
+    _classCallCheck(this, Basket_items);
 
-        return _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
+
+    _this.state.mapArray = [];
+
+    return _this;
+  }
+
+  _createClass(Basket_items, [{
+    key: 'getBasketItems',
+    value: function getBasketItems() {
+      var findMySelf = this.findMySelf(this.constructor.name);
+      var Prom = this.makeRequestToRecieveData("POST", "/ws/Basket.php", false, "");
+      Prom.then(function (responseText) {
+
+        data = JSON.parse(responseText);
+        var mapArray = createMapsArray(data);
+        makeConfigurationCall(mapArray);
+        //findMySelf().state.mapArray=mapArray;
+        findMySelf().setState({ mapArray: mapArray });
+      });
     }
+    ////////////////////////////////
 
-    _createClass(Basket_items, [{
-        key: 'getBasketItems',
-        value: function getBasketItems() {
-            var Prom = this.makeRequestToRecieveData("POST", "/ws/Basket.php", false, "");
-            Prom.then(function (responseText) {
-                data = JSON.parse(responseText);
-                makeConfigurationCall(createMapsArray(data));
-            });
-        }
-        ////////////////////////////////
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidMount', this).call(this);
+      this.getBasketItems();
+      // this.setState({mapArray:this.state.mapArray});
+    }
+  }, {
+    key: 'render',
+    value: function render() {
 
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidMount', this).call(this);
-            this.getBasketItems();
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return React.createElement('div', { 'class': 'table-responsive' }, React.createElement('table', { 'class': 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")))));
-        }
-    }]);
+      var tableHeadO = React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")));
+      var names = this.state.mapArray.map(function (tr) {
+        var mas = [];
+        for (th in tr) {
 
-    return Basket_items;
+          mas.push(React.createElement('th', { className: 'text-center' }, tr[th].Name));
+        }
+
+        return mas;
+
+        //return <th className="text-center">{item.Name}</th> 
+      })[0];
+      var tableHead = React.createElement('thead', null, React.createElement('tr', null, names));
+      var rows = this.state.mapArray.map(function (tr) {
+        var mas = [];
+        for (td in tr) {
+
+          mas.push(tr[td].TD);
+        }
+
+        return mas;
+
+        //return <th className="text-center">{item.Name}</th> 
+      });
+
+      var tableBody = rows.map(function (item) {
+        return React.createElement('tr', null, item);
+      });
+
+      return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody)));
+    }
+  }]);
+
+  return Basket_items;
 }(_main_component.Extends);
 
-var Basket = exports.Basket = function (_Extends2) {
-    _inherits(Basket, _Extends2);
+var BrandCode_td = exports.BrandCode_td = function (_Extends2) {
+  _inherits(BrandCode_td, _Extends2);
 
-    function Basket(props) {
-        _classCallCheck(this, Basket);
+  function BrandCode_td(props) {
+    _classCallCheck(this, BrandCode_td);
 
-        return _possibleConstructorReturn(this, (Basket.__proto__ || Object.getPrototypeOf(Basket)).call(this, props));
+    //this.state.brandName=this.props.brandName;
+    // this.state.deliveryDays=this.props.deliveryDays; 
+    var _this2 = _possibleConstructorReturn(this, (BrandCode_td.__proto__ || Object.getPrototypeOf(BrandCode_td)).call(this, props));
+
+    _this2.state = _this2.props;
+    return _this2;
+  }
+
+  _createClass(BrandCode_td, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('td', null, React.createElement('h4', null, this.state.BrandCode.fValue), React.createElement('span', { className: 'label label-info' }, React.createElement('i', { className: 'fa fa-clock-o' }), this.props.DeliveryDays.fValue));
     }
+  }]);
 
-    _createClass(Basket, [{
-        key: 'render',
-        value: function render() {
-            return React.createElement('div', { className: 'block full' }, React.createElement('div', { 'class': 'row block-section' }));
-        }
-    }]);
-
-    return Basket;
+  return BrandCode_td;
 }(_main_component.Extends);
 
-var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends3) {
-    _inherits(Basket_items_forModal, _Extends3);
+var Common_td = exports.Common_td = function (_Extends3) {
+  _inherits(Common_td, _Extends3);
 
-    function Basket_items_forModal(props) {
-        _classCallCheck(this, Basket_items_forModal);
+  function Common_td(props) {
+    _classCallCheck(this, Common_td);
 
-        return _possibleConstructorReturn(this, (Basket_items_forModal.__proto__ || Object.getPrototypeOf(Basket_items_forModal)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+    _this3.state = _this3.props;
+
+    return _this3;
+  }
+
+  _createClass(Common_td, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('td', { className: 'text-center' }, this.state.fValue);
     }
+  }]);
 
-    _createClass(Basket_items_forModal, [{
-        key: 'render',
-        value: function render() {
-            return React.createElement('div', { id: 'Basket_items', className: 'modal fade', role: 'dialog' }, React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }), React.createElement('div', { className: 'modal-footer' }))));
-        }
-    }]);
+  return Common_td;
+}(_main_component.Extends);
 
-    return Basket_items_forModal;
+var Basket = exports.Basket = function (_Extends4) {
+  _inherits(Basket, _Extends4);
+
+  function Basket(props) {
+    _classCallCheck(this, Basket);
+
+    return _possibleConstructorReturn(this, (Basket.__proto__ || Object.getPrototypeOf(Basket)).call(this, props));
+  }
+
+  _createClass(Basket, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { className: 'block full' }, React.createElement('div', { 'class': 'row block-section' }), React.createElement(Basket_items, null));
+    }
+  }]);
+
+  return Basket;
+}(_main_component.Extends);
+
+var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends5) {
+  _inherits(Basket_items_forModal, _Extends5);
+
+  function Basket_items_forModal(props) {
+    _classCallCheck(this, Basket_items_forModal);
+
+    return _possibleConstructorReturn(this, (Basket_items_forModal.__proto__ || Object.getPrototypeOf(Basket_items_forModal)).call(this, props));
+  }
+
+  _createClass(Basket_items_forModal, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { id: 'Basket_items', className: 'modal fade', role: 'dialog' }, React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }), React.createElement('div', { className: 'modal-footer' }))));
+    }
+  }]);
+
+  return Basket_items_forModal;
 }(_main_component.Extends);
 
 /***/ }),
@@ -9289,13 +9427,13 @@ var Extends = exports.Extends = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            debugger;
+            // debugger;
             window.objectReg[this.constructor.name] = this;
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            debugger;
+            // debugger;
             delete window.objectReg[this.constructor.name];
         }
 
@@ -10133,14 +10271,15 @@ var Sidebar = exports.Sidebar = function (_Extends) {
 
   return Sidebar;
 }(_main_component.Extends);
+//debugger
 
-debugger;
+
 var body = document.getElementsByTagName("body");
 ReactDOM.render(React.createElement(Sidebar, null), body[0]);
 
-ReactDOM.render(React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/about', component: _basket_items.Basket_items }))), document.getElementById("link"));
+ReactDOM.render(React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/about', component: _basket_items.Basket }))), document.getElementById("link"));
 
-debugger;
+//debugger
 //require ('./js/app.js');
 
 /***/ }),
@@ -10284,7 +10423,8 @@ window.$ = jQuery;
 var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
 
-debugger;
+//debugger;  
+
 
 var Sidebar_control_button = function (_Extends) {
   _inherits(Sidebar_control_button, _Extends);
@@ -10616,7 +10756,8 @@ function _inherits(subClass, superClass) {
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Li = __webpack_require__(/*! ./sidebar_li.js */ "./app/sidebar_li.js");
-debugger;
+//debugger
+
 
 /*
     props.items;
@@ -10645,7 +10786,8 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
     _createClass(Sidebar_nav, [{
         key: 'render',
         value: function render() {
-            debugger;
+            // debugger  
+
 
             var b = this.state.items.map(function (item) {
                 if (item.hasOwnProperty("href") && item.href != null) {

@@ -1,7 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 var Li= require("./sidebar_li.js");
-debugger
+//debugger
 
 
   /*
@@ -71,7 +71,7 @@ export class Sidebar_nav  extends React.Component
      
      render()
      {
-        debugger  
+       // debugger  
         
         
         const b=this.state.items.map(

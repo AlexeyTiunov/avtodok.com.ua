@@ -8,7 +8,7 @@ var App=require('./js/app.js');
 //import {App} from './js/app.js';
 import {Search_table} from './search_content.js' 
 import {Basket_items} from './basket_items.js'   
- debugger;  
+ //debugger;  
 
 
 class Sidebar_control_button extends Extends

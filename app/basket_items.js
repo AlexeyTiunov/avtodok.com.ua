@@ -50,13 +50,14 @@ function makeConfigurationCall(mapArray)
 function createMapsArray(data)
 {
     var standMap=getMapObject();
-    var map={};
+   
     var mapArray=[];
     for (i in data)
-    {
+    {    var map={};
          itemsObject=data[i];
          for (item in itemsObject)
          {   
+               
             // map[item]={};
             if (typeof itemsObject[item]=="object" ) 
             {
@@ -68,7 +69,8 @@ function createMapsArray(data)
                      map[subItem]={};  
                      Object.defineProperty(map[subItem],"functionToHandle",{value:standMap[subItem].functions,enumerable:true,writable:true});
                      Object.defineProperty(map[subItem],"params",{value:standMap[subItem].params,enumerable:true,writable:true}); 
-                     Object.defineProperty(map[subItem],"fValue",{value:itemsObject[item][subItem],enumerable:true,writable:true}); 
+                     Object.defineProperty(map[subItem],"fValue",{value:itemsObject[item][subItem],enumerable:true,writable:true});
+                     Object.defineProperty(map[subItem],"nValue",{value:subItem,enumerable:true,writable:true});  
                     // mapArray.push(map[subItem]);   
                     }
                     else
@@ -88,6 +90,7 @@ function createMapsArray(data)
                  Object.defineProperty(map[item],"functionToHandle",{value:standMap[item].functions,enumerable:true,writable:true});
                  Object.defineProperty(map[item],"params",{value:standMap[item].params,enumerable:true,writable:true}); 
                  Object.defineProperty(map[item],"fValue",{value:itemsObject[item],enumerable:true,writable:true});
+                  Object.defineProperty(map[item],"nValue",{value:item,enumerable:true,writable:true});
                 // mapArray.push(map[item]);
                 }
                 else
@@ -119,11 +122,11 @@ function getMapObject()
     
     var mapObject=
     {
-      BrandCode:{functions:{sFunc,defineColumnName,defineTd},params: ["1","Бренд",<BrandCode_td/>] },
-      ItemCode:{functions:{sFunc,defineColumnName,defineTd},params:["1","Номер",<Common_td />]},      
+      BrandName:{functions:{sFunc,defineColumnName,defineTd},params: ["1","Бренд",<BrandCode_td/>] },
+      ItemCodeTamplate:{functions:{sFunc,defineColumnName,defineTd},params:["1","Номер",<Common_td />]},      
       Caption:{functions:{sFunc,defineColumnName,defineTd},params:["1","Название",<Common_td />]},
-      Quantity:{functions:{sFunc,defineColumnName,defineTd},params:["1","Кол-во",<Common_td />]},
-      DeliveryDays:{functions:{sFunc,defineColumnName,defineTd},params:["1","Срок Поставки",<Common_td/>]},
+      QUANTITY:{functions:{sFunc,defineColumnName,defineTd},params:["1","Кол-во",<Quantity_td />]},
+      DeliveryDays:{functions:{sFunc},params:["1","Срок Поставки"]},
       PRICE:{functions:{sFunc,defineColumnName,defineTd},params:["1","Цена",<Common_td />]},
       Sum:{},
       PriceUSD:{},
@@ -185,7 +188,8 @@ function defineColumnName(name)
 function defineTd(TD)
 {
    // TDD = new TD.type( {val:this.fValue} );
-   TDD=React.createElement(TD.type,this.__proto__,null);
+   TDD=React.createElement(TD.type,{proto:this.__proto__,NAME:this.nValue},null);
+   
     Object.defineProperty(this,"TD",{value:TDD,enumerable:true,writable:true});
 }
 
@@ -248,8 +252,8 @@ export class Basket_items extends Extends
                                var mas=[];
                              for (th in tr)
                              {
-                                
-                                mas.push(<th className="text-center">{tr[th].Name}</th>)
+                                if (tr[th].Name)
+                                mas.push(<th className="text-center">{tr[th].Name}</th>);
                              } 
                               
                              return mas;
@@ -318,8 +322,8 @@ export class BrandCode_td extends Extends
      render()
      {
         return ( <td>
-                   <h4>{this.state.BrandCode.fValue}</h4>
-                   <span className="label label-info"><i className="fa fa-clock-o"></i>{this.props.DeliveryDays.fValue}</span>
+                   <h4>{this.state.proto[this.state.NAME].fValue}</h4>
+                   <span className="label label-info"><i className="fa fa-clock-o"></i>{this.state.proto.DeliveryDays.fValue}</span>
                  </td>
         
           
@@ -329,6 +333,25 @@ export class BrandCode_td extends Extends
          
          
      }
+    
+}
+export class Quantity_td extends Extends
+{
+      constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+    render()  
+    {
+        return (<td className="text-center"><strong>x <span className="badge">{this.state.proto[this.state.NAME].fValue}</span></strong></td>
+        
+         
+          
+          
+                )
+    }
     
 }
 export class Common_td extends Extends
@@ -343,7 +366,7 @@ export class Common_td extends Extends
      render()
      {
        return(
-                   <td className="text-center">{this.state.fValue}</td> 
+                   <td className="text-center">{this.state.proto[this.state.NAME].fValue}</td> 
         
         
          

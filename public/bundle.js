@@ -162,7 +162,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Basket_items_forModal = exports.Basket = exports.Common_td = exports.BrandCode_td = exports.Basket_items = undefined;
+exports.Basket_items_forModal = exports.Basket = exports.Common_td = exports.Quantity_td = exports.BrandCode_td = exports.Basket_items = undefined;
 
 var _createClass = function () {
   function defineProperties(target, props) {
@@ -253,11 +253,13 @@ function makeConfigurationCall(mapArray) {
 }
 function createMapsArray(data) {
   var standMap = getMapObject();
-  var map = {};
+
   var mapArray = [];
   for (i in data) {
+    var map = {};
     itemsObject = data[i];
     for (item in itemsObject) {
+
       // map[item]={};
       if (_typeof(itemsObject[item]) == "object") {
 
@@ -267,6 +269,7 @@ function createMapsArray(data) {
             Object.defineProperty(map[subItem], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
             Object.defineProperty(map[subItem], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
             Object.defineProperty(map[subItem], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
+            Object.defineProperty(map[subItem], "nValue", { value: subItem, enumerable: true, writable: true });
             // mapArray.push(map[subItem]);   
           } else {
               // Object.defineProperty(map[subItem],"functionToHandle",{value:null,enumerable:true,writable:true});
@@ -280,6 +283,7 @@ function createMapsArray(data) {
           Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
           Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
           Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
+          Object.defineProperty(map[item], "nValue", { value: item, enumerable: true, writable: true });
           // mapArray.push(map[item]);
         } else {
             // Object.defineProperty(map[item],"functionToHandle",{value:[],enumerable:true,writable:true});  
@@ -293,11 +297,11 @@ function createMapsArray(data) {
 function getMapObject() {
 
   var mapObject = {
-    BrandCode: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
-    ItemCode: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
+    BrandName: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
+    ItemCodeTamplate: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
     Caption: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Название", React.createElement(Common_td, null)] },
-    Quantity: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Кол-во", React.createElement(Common_td, null)] },
-    DeliveryDays: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Срок Поставки", React.createElement(Common_td, null)] },
+    QUANTITY: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Кол-во", React.createElement(Quantity_td, null)] },
+    DeliveryDays: { functions: { sFunc: sFunc }, params: ["1", "Срок Поставки"] },
     PRICE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Цена", React.createElement(Common_td, null)] },
     Sum: {},
     PriceUSD: {},
@@ -336,7 +340,8 @@ function defineColumnName(name) {
 }
 function defineTd(TD) {
   // TDD = new TD.type( {val:this.fValue} );
-  TDD = React.createElement(TD.type, this.__proto__, null);
+  TDD = React.createElement(TD.type, { proto: this.__proto__, NAME: this.nValue }, null);
+
   Object.defineProperty(this, "TD", { value: TDD, enumerable: true, writable: true });
 }
 
@@ -384,8 +389,7 @@ var Basket_items = exports.Basket_items = function (_Extends) {
       var names = this.state.mapArray.map(function (tr) {
         var mas = [];
         for (th in tr) {
-
-          mas.push(React.createElement('th', { className: 'text-center' }, tr[th].Name));
+          if (tr[th].Name) mas.push(React.createElement('th', { className: 'text-center' }, tr[th].Name));
         }
 
         return mas;
@@ -433,38 +437,61 @@ var BrandCode_td = exports.BrandCode_td = function (_Extends2) {
   _createClass(BrandCode_td, [{
     key: 'render',
     value: function render() {
-      return React.createElement('td', null, React.createElement('h4', null, this.state.BrandCode.fValue), React.createElement('span', { className: 'label label-info' }, React.createElement('i', { className: 'fa fa-clock-o' }), this.props.DeliveryDays.fValue));
+      return React.createElement('td', null, React.createElement('h4', null, this.state.proto[this.state.NAME].fValue), React.createElement('span', { className: 'label label-info' }, React.createElement('i', { className: 'fa fa-clock-o' }), this.state.proto.DeliveryDays.fValue));
     }
   }]);
 
   return BrandCode_td;
 }(_main_component.Extends);
 
-var Common_td = exports.Common_td = function (_Extends3) {
-  _inherits(Common_td, _Extends3);
+var Quantity_td = exports.Quantity_td = function (_Extends3) {
+  _inherits(Quantity_td, _Extends3);
 
-  function Common_td(props) {
-    _classCallCheck(this, Common_td);
+  function Quantity_td(props) {
+    _classCallCheck(this, Quantity_td);
 
-    var _this3 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (Quantity_td.__proto__ || Object.getPrototypeOf(Quantity_td)).call(this, props));
 
     _this3.state = _this3.props;
 
     return _this3;
   }
 
+  _createClass(Quantity_td, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('td', { className: 'text-center' }, React.createElement('strong', null, 'x ', React.createElement('span', { className: 'badge' }, this.state.proto[this.state.NAME].fValue)));
+    }
+  }]);
+
+  return Quantity_td;
+}(_main_component.Extends);
+
+var Common_td = exports.Common_td = function (_Extends4) {
+  _inherits(Common_td, _Extends4);
+
+  function Common_td(props) {
+    _classCallCheck(this, Common_td);
+
+    var _this4 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+    _this4.state = _this4.props;
+
+    return _this4;
+  }
+
   _createClass(Common_td, [{
     key: 'render',
     value: function render() {
-      return React.createElement('td', { className: 'text-center' }, this.state.fValue);
+      return React.createElement('td', { className: 'text-center' }, this.state.proto[this.state.NAME].fValue);
     }
   }]);
 
   return Common_td;
 }(_main_component.Extends);
 
-var Basket = exports.Basket = function (_Extends4) {
-  _inherits(Basket, _Extends4);
+var Basket = exports.Basket = function (_Extends5) {
+  _inherits(Basket, _Extends5);
 
   function Basket(props) {
     _classCallCheck(this, Basket);
@@ -482,8 +509,8 @@ var Basket = exports.Basket = function (_Extends4) {
   return Basket;
 }(_main_component.Extends);
 
-var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends5) {
-  _inherits(Basket_items_forModal, _Extends5);
+var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends6) {
+  _inherits(Basket_items_forModal, _Extends6);
 
   function Basket_items_forModal(props) {
     _classCallCheck(this, Basket_items_forModal);

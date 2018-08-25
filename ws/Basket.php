@@ -163,6 +163,7 @@ function showDeliveryMethod($deliveryMethod,$nameCheckedItem,$basketID)
              $i = 0;
 
             $arRegions = GetAllRegionsProperties2();
+            $arBrands=GetAllBrandsNameFromID();
            // var_dump($arRegions);
             if( $dbBasketItems->SelectedRowsCount() > 0 )
             {
@@ -185,6 +186,7 @@ function showDeliveryMethod($deliveryMethod,$nameCheckedItem,$basketID)
                        //GetBasketItemProperty( $arItems["ID"], "ItemCode" )
                        $objTStr = new TemplatedString( $BasketItemProperties["ItemCode"] );
                        $brandID = GetBrandCodeByCHR( $BasketItemProperties["Brand"] );
+                       $BasketItemProperties["BrandName"]=$arBrands[$brandID];
                        $BasketItemProperties["BrandCode"]=$BasketItemProperties["Brand"];
                        $objTStr->SetTemplate( $brandID );
                        $itemCode = $objTStr->GetTemplated();

@@ -118,8 +118,7 @@ class Search_form extends Extends
    //////////////////////////////////////////   
      componentDidUpdate(prevProps, prevState)
      {
-          debugger; 
-       alert(this.state.dataRecieved);  
+          
      }
      
      

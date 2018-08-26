@@ -10552,10 +10552,7 @@ var Search_form = function (_Extends2) {
 
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      debugger;
-      alert(this.state.dataRecieved);
-    }
+    value: function componentDidUpdate(prevProps, prevState) {}
   }, {
     key: 'render',
     value: function render() {

@@ -52,7 +52,7 @@ export function handleData(jsonData,standMap)
                var j=0;
             for (func in obj[item].functionToHandle)
             {
-               if (typeof obj[item].params[j]=="array")
+               if ( obj[item].params[j] instanceof Array)
                {
                    obj[item].functionToHandle[func].apply(obj[item],obj[item].params[j]);  
                } 
@@ -178,12 +178,60 @@ export function handleData(jsonData,standMap)
             
          return  newMapArray;  
     }
-          
+    //////////////////////////////////////////////////////////////////
+    
+   this.formatNumber=function (pointDelimeter,quantityAfterPoint)
+    {
+        if ((pointDelimeter!="." && pointDelimeter!=",") ||(pointDelimeter==".") )
+        {
+             pointDelimeter=".";
+             var pattern=/ \,/;
+             this.fValue =this.fValue.replace(pattern,pointDelimeter);
+             
+        } else
+        {
+             pointDelimeter=",";
+             var pattern=/ \./;
+             this.fValue =this.fValue.replace(pattern,pointDelimeter);
+            
+        }
+        
+        if (quantityAfterPoint==null || quantityAfterPoint==undefined)
+        {
+              quantityAfterPoint="2";
+        }
+        var pattern= new RegExp("^([0-9]*?)(\.|\,{1})([0-9]{"+quantityAfterPoint+"})([0-9]*)$");
+       // var pattern= /^([0-9]*?)(\.|\,{1})([0-9]{2})([0-9]*)$/;
+        if (pattern.test(this.fValue))
+        {
+            if (quantityAfterPoint=="0")
+            this.fValue =this.fValue.replace(pattern,'$1');
+            else
+          this.fValue =this.fValue.replace(pattern,'$1$2$3');
+            
+        } else
+        {
+          this.fValue=this.fValue;  
+        }
+        
+        
+    }
+    this.addSuffix=function (suffix)
+    {
+        if (suffix==undefined) suffix="";
+        this.fValue=this.fValue+suffix;
+        
+    }      
     ////////////////////////////////////////////////////////////////// 
+      
+      if (jsonData!=undefined && jsonData!=null)
+      {
+          
       
          data=JSON.parse(jsonData);
          this.mapArray=createMapsArray(data);                   
-         makeConfigurationCall(this.mapArray);
+         makeConfigurationCallApply(this.mapArray);
+      }
          
     
     

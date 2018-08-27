@@ -157,7 +157,7 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -190,15 +190,11 @@ var _get = function get(object, property, receiver) {
   }
 };
 
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-};
-
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
 
 var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
 
@@ -211,12 +207,12 @@ function _classCallCheck(instance, Constructor) {
 function _possibleConstructorReturn(self, call) {
   if (!self) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
@@ -228,80 +224,18 @@ window.$ = jQuery;
 var App = __webpack_require__(/*! ./js/app.js */ "./app/js/app.js");
 //import {App} from './js/app.js';
 
-function makeConfigurationApply(mapArray) {
-  for (i = 0; i < mapArray.length; i++) {
-    obj = mapArray[i];
-    for (item in mapArray[i]) {
-      for (func in mapArray[i][item].functionToHandle) {
-        mapArray[i][item].functionToHandle[func].apply(obj, obj.params);
-      }
-    }
-  }
-}
-function makeConfigurationCall(mapArray) {
-  for (i = 0; i < mapArray.length; i++) {
-    obj = mapArray[i];
-    for (item in obj) {
-      var j = 0;
-      for (func in obj[item].functionToHandle) {
-        obj[item].functionToHandle[func].call(obj[item], obj[item].params[j]);
 
-        j++;
-      }
-    }
-  }
-}
-function createMapsArray(data) {
-  var standMap = getMapObject();
-
-  var mapArray = [];
-  for (i in data) {
-    var map = {};
-    itemsObject = data[i];
-    for (item in itemsObject) {
-
-      // map[item]={};
-      if (_typeof(itemsObject[item]) == "object") {
-
-        for (subItem in itemsObject[item]) {
-          if (standMap[subItem]) {
-            map[subItem] = {};
-            Object.defineProperty(map[subItem], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
-            Object.defineProperty(map[subItem], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
-            Object.defineProperty(map[subItem], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
-            Object.defineProperty(map[subItem], "nValue", { value: subItem, enumerable: true, writable: true });
-            // mapArray.push(map[subItem]);   
-          } else {
-              // Object.defineProperty(map[subItem],"functionToHandle",{value:null,enumerable:true,writable:true});
-              //Object.defineProperty(map[subItem],"params",{value:[],enumerable:true,writable:true});  
-            }
-        }
-      } else {
-
-        if (standMap[item]) {
-          map[item] = {};
-          Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
-          Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
-          Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
-          Object.defineProperty(map[item], "nValue", { value: item, enumerable: true, writable: true });
-          // mapArray.push(map[item]);
-        } else {
-            // Object.defineProperty(map[item],"functionToHandle",{value:[],enumerable:true,writable:true});  
-          }
-      }
-    }
-    mapArray.push(map);
-  }
-  return makeCorrectDirection(standMap, mapArray);
-}
 function getMapObject() {
 
+  dataConvert = new _data_convert.handleData(null, null);
+  var formatNumber = dataConvert.formatNumber;
+  var addSuffix = dataConvert.addSuffix;
   var mapObject = {
     BrandName: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
     ItemCodeTamplate: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
     Caption: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Название", React.createElement(Common_td, null)] },
     QUANTITY: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Кол-во", React.createElement(Quantity_td, null)] },
-    DeliveryDays: { functions: { sFunc: sFunc }, params: ["1", "Срок Поставки"] },
+    DeliveryDays: { functions: { sFunc: sFunc, formatNumber: formatNumber, addSuffix: addSuffix }, params: ["Срок Поставки", [".", "0"], " дні"] },
     PRICE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Цена", React.createElement(Common_td, null)] },
     Sum: {},
     PriceUSD: {},
@@ -312,28 +246,6 @@ function getMapObject() {
   return mapObject;
 }
 
-function makeCorrectDirection(mapObject, mapArray) {
-  var newMapArray = [];
-  for (i = 0; i < mapArray.length; i++) {
-    var newObj = {};
-    for (item in mapObject) {
-      //var newObj={};
-      if (mapArray[i][item]) newObj[item] = mapArray[i][item];
-    }
-    newMapArray.push(newObj);
-  }
-  for (i = 0; i < newMapArray.length; i++) {
-    for (item in newMapArray[i]) {
-      if (newMapArray[i][item].prototype) {
-        newMapArray[i][item].prototype = newMapArray[i];
-      } else {
-        newMapArray[i][item].__proto__ = newMapArray[i];
-      }
-    }
-  }
-
-  return newMapArray;
-}
 function sFunc() {}
 function defineColumnName(name) {
   Object.defineProperty(this, "Name", { value: name, enumerable: true, writable: true });
@@ -363,13 +275,23 @@ var Basket_items = exports.Basket_items = function (_Extends) {
     value: function getBasketItems() {
       var findMySelf = this.findMySelf(this.constructor.name);
       var Prom = this.makeRequestToRecieveData("POST", "/ws/Basket.php", false, "");
+      /* Prom.then( function(responseText)
+             {
+                 
+               data=JSON.parse(responseText);
+               var mapArray=createMapsArray(data);                   
+               makeConfigurationCall(mapArray);
+               //findMySelf().state.mapArray=mapArray;
+               findMySelf().setState({mapArray:mapArray});
+            
+             }
+       
+       ); */
+
       Prom.then(function (responseText) {
 
-        data = JSON.parse(responseText);
-        var mapArray = createMapsArray(data);
-        makeConfigurationCall(mapArray);
-        //findMySelf().state.mapArray=mapArray;
-        findMySelf().setState({ mapArray: mapArray });
+        handleDT = new _data_convert.handleData(responseText, getMapObject());
+        findMySelf().setState({ mapArray: handleDT.mapArray });
       });
     }
     ////////////////////////////////
@@ -878,6 +800,176 @@ var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addS
 if(content.locals) module.exports = content.locals;
 
 if(false) {}
+
+/***/ }),
+
+/***/ "./app/data_convert.js":
+/*!*****************************!*\
+  !*** ./app/data_convert.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+};
+
+exports.handleData = handleData;
+function handleData(jsonData, standMap) {
+  //////////////////////////////////////////////   
+  function makeConfigurationApply(mapArray) {
+    for (i = 0; i < mapArray.length; i++) {
+      obj = mapArray[i];
+      for (item in mapArray[i]) {
+        for (func in mapArray[i][item].functionToHandle) {
+          mapArray[i][item].functionToHandle[func].apply(obj, obj.params);
+        }
+      }
+    }
+  }
+
+  function makeConfigurationCall(mapArray) {
+    for (i = 0; i < mapArray.length; i++) {
+      obj = mapArray[i];
+      for (item in obj) {
+        var j = 0;
+        for (func in obj[item].functionToHandle) {
+          obj[item].functionToHandle[func].call(obj[item], obj[item].params[j]);
+
+          j++;
+        }
+      }
+    }
+  }
+  function makeConfigurationCallApply(mapArray) {
+    for (i = 0; i < mapArray.length; i++) {
+      obj = mapArray[i];
+      for (item in obj) {
+        var j = 0;
+        for (func in obj[item].functionToHandle) {
+          if (obj[item].params[j] instanceof Array) {
+            obj[item].functionToHandle[func].apply(obj[item], obj[item].params[j]);
+          }
+          {
+            obj[item].functionToHandle[func].call(obj[item], obj[item].params[j]);
+          }
+          j++;
+        }
+      }
+    }
+  }
+
+  function createMapsArray(data) {
+    //  var standMap=standMap;
+
+    var mapArray = [];
+    for (i in data) {
+      var map = {};
+      itemsObject = data[i];
+      for (item in itemsObject) {
+
+        // map[item]={};
+        if (_typeof(itemsObject[item]) == "object") {
+
+          for (subItem in itemsObject[item]) {
+            if (standMap[subItem]) {
+              map[subItem] = {};
+              Object.defineProperty(map[subItem], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
+              Object.defineProperty(map[subItem], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
+              Object.defineProperty(map[subItem], "fValue", { value: itemsObject[item][subItem], enumerable: true, writable: true });
+              Object.defineProperty(map[subItem], "nValue", { value: subItem, enumerable: true, writable: true });
+              // mapArray.push(map[subItem]);   
+            } else {
+                // Object.defineProperty(map[subItem],"functionToHandle",{value:null,enumerable:true,writable:true});
+                //Object.defineProperty(map[subItem],"params",{value:[],enumerable:true,writable:true});  
+              }
+          }
+        } else {
+
+          if (standMap[item]) {
+            map[item] = {};
+            Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
+            Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
+            Object.defineProperty(map[item], "fValue", { value: itemsObject[item], enumerable: true, writable: true });
+            Object.defineProperty(map[item], "nValue", { value: item, enumerable: true, writable: true });
+            // mapArray.push(map[item]);
+          } else {
+              // Object.defineProperty(map[item],"functionToHandle",{value:[],enumerable:true,writable:true});  
+            }
+        }
+      }
+      mapArray.push(map);
+    }
+    return makeCorrectDirection(standMap, mapArray);
+  }
+
+  function makeCorrectDirection(mapObject, mapArray) {
+    var newMapArray = [];
+    for (i = 0; i < mapArray.length; i++) {
+      var newObj = {};
+      for (item in mapObject) {
+        //var newObj={};
+        if (mapArray[i][item]) newObj[item] = mapArray[i][item];
+      }
+      newMapArray.push(newObj);
+    }
+    for (i = 0; i < newMapArray.length; i++) {
+      for (item in newMapArray[i]) {
+        if (newMapArray[i][item].prototype) {
+          newMapArray[i][item].prototype = newMapArray[i];
+        } else {
+          newMapArray[i][item].__proto__ = newMapArray[i];
+        }
+      }
+    }
+
+    return newMapArray;
+  }
+  //////////////////////////////////////////////////////////////////
+
+  this.formatNumber = function (pointDelimeter, quantityAfterPoint) {
+    if (pointDelimeter != "." && pointDelimeter != "," || pointDelimeter == ".") {
+      pointDelimeter = ".";
+      var pattern = / \,/;
+      this.fValue = this.fValue.replace(pattern, pointDelimeter);
+    } else {
+      pointDelimeter = ",";
+      var pattern = / \./;
+      this.fValue = this.fValue.replace(pattern, pointDelimeter);
+    }
+
+    if (quantityAfterPoint == null || quantityAfterPoint == undefined) {
+      quantityAfterPoint = "2";
+    }
+    var pattern = new RegExp("^([0-9]*?)(\.|\,{1})([0-9]{" + quantityAfterPoint + "})([0-9]*)$");
+    // var pattern= /^([0-9]*?)(\.|\,{1})([0-9]{2})([0-9]*)$/;
+    if (pattern.test(this.fValue)) {
+      if (quantityAfterPoint == "0") this.fValue = this.fValue.replace(pattern, '$1');else this.fValue = this.fValue.replace(pattern, '$1$2$3');
+    } else {
+      this.fValue = this.fValue;
+    }
+  };
+  this.addSuffix = function (suffix) {
+    if (suffix == undefined) suffix = "";
+    this.fValue = this.fValue + suffix;
+  };
+  ////////////////////////////////////////////////////////////////// 
+
+  if (jsonData != undefined && jsonData != null) {
+
+    data = JSON.parse(jsonData);
+    this.mapArray = createMapsArray(data);
+    makeConfigurationCallApply(this.mapArray);
+  }
+}
 
 /***/ }),
 

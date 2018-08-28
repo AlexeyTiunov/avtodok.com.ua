@@ -162,7 +162,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Basket_items_forModal = exports.Basket = exports.Delete_td = exports.Common_td = exports.Quantity_td = exports.BrandCode_td = exports.Basket_items = undefined;
+exports.Basket_items_forModal = exports.Basket = exports.Basket_order_button = exports.Basket_info = exports.Basket_header = exports.Delete_td = exports.Common_td = exports.Quantity_td = exports.BrandCode_td = exports.Basket_items = undefined;
 
 var _createClass = function () {
   function defineProperties(target, props) {
@@ -197,6 +197,8 @@ var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main
 var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
 
 var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -235,9 +237,9 @@ function getMapObject() {
     BrandName: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
     ItemCodeTamplate: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
     Caption: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Название", React.createElement(Common_td, null)] },
-    QUANTITY: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Кол-во", React.createElement(Quantity_td, null)] },
+    QUANTITY: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, formatNumber: formatNumber, defineTd: defineTd }, params: ["1", "Кол-во", [".", "0"], React.createElement(Quantity_td, null)] },
     DeliveryDays: { functions: { sFunc: sFunc, formatNumber: formatNumber, addSuffix: addSuffix }, params: ["Срок Поставки", [".", "0"], " дні"] },
-    PRICE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Цена", React.createElement(Common_td, null)] },
+    PRICE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, formatNumber: formatNumber, defineTd: defineTd }, params: ["1", "Цена", [".", "2"], React.createElement(Common_td, null)] },
     Sum: {},
     PriceUSD: {},
     SumUSD: {},
@@ -268,7 +270,6 @@ var Basket_items = exports.Basket_items = function (_Extends) {
     var _this = _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
 
     _this.state.mapArray = [];
-    _this.state.responceData = "";
 
     return _this;
   }
@@ -309,10 +310,7 @@ var Basket_items = exports.Basket_items = function (_Extends) {
   }, {
     key: 'render',
     value: function render() {
-      if (this.state.responceData != "") {
-        handleDT = new _data_convert.handleData(this.state.responceData, getMapObject());
-        this.state.mapArray = handleDT.mapArray;
-      }
+
       var tableHeadO = React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")));
       var names = this.state.mapArray.map(function (tr) {
         var mas = [];
@@ -325,6 +323,11 @@ var Basket_items = exports.Basket_items = function (_Extends) {
         //return <th className="text-center">{item.Name}</th> 
       })[0];
       var tableHead = React.createElement('thead', null, React.createElement('tr', null, names));
+      var summ = 0;
+      for (i = 0; i < this.state.mapArray.length; i++) {
+        summ += Number(this.state.mapArray[i].QUANTITY.fValue) * Number(this.state.mapArray[i].PRICE.fValue);
+      }
+
       var rows = this.state.mapArray.map(function (tr) {
         var mas = [];
         for (td in tr) {
@@ -341,9 +344,11 @@ var Basket_items = exports.Basket_items = function (_Extends) {
         return React.createElement('tr', { key: item[6].props.proto.ID.fValue }, item);
       });
 
+      var tableFooter = React.createElement('tr', { className: 'active' }, React.createElement('td', { colspan: '4', className: 'text-right' }, React.createElement('span', { className: 'h4' }, "\u0421\u0443\u043C\u0430 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F")), React.createElement('td', { className: 'text-right' }, React.createElement('span', { className: 'h3' }, React.createElement('span', { className: 'label label-primary' }, summ))));
+
       this.state.mapArray = [];
 
-      return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody)));
+      return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody, tableFooter)));
     }
   }]);
 
@@ -450,7 +455,7 @@ var Delete_td = exports.Delete_td = function (_Extends5) {
       Pro.then(function (data) {
         alert(data);
         obj = window.objectReg["Basket_items"];
-        obj.setState({ responceData: data });
+        obj.getBasketItems();
         obj = window.objectReg["Basket_icon"];
         obj.setState({ getBasketPartsQuantity: true });
         //obj.setState({getBasketPartsQuantity:true});  
@@ -466,8 +471,93 @@ var Delete_td = exports.Delete_td = function (_Extends5) {
   return Delete_td;
 }(_main_component.Extends);
 
-var Basket = exports.Basket = function (_Extends6) {
-  _inherits(Basket, _Extends6);
+var Basket_header = exports.Basket_header = function (_Extends6) {
+  _inherits(Basket_header, _Extends6);
+
+  function Basket_header(props) {
+    _classCallCheck(this, Basket_header);
+
+    return _possibleConstructorReturn(this, (Basket_header.__proto__ || Object.getPrototypeOf(Basket_header)).call(this, props));
+  }
+
+  _createClass(Basket_header, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { className: 'block-title' }, React.createElement('div', { className: 'block-options pull-right' }, React.createElement('a', { href: 'javascript:void(0)', className: 'btn btn-sm btn-alt btn-default', 'data-toggle': 'tooltip', title: "\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0432\u0441\u0435" }, React.createElement('i', { className: 'fa fa-times' }))), React.createElement('h2', null, React.createElement('strong', null, "\u041A\u043E\u0440\u0437\u0438\u043D\u0430")));
+    }
+  }]);
+
+  return Basket_header;
+}(_main_component.Extends);
+
+var Basket_info = exports.Basket_info = function (_Extends7) {
+  _inherits(Basket_info, _Extends7);
+
+  function Basket_info(props) {
+    _classCallCheck(this, Basket_info);
+
+    var _this7 = _possibleConstructorReturn(this, (Basket_info.__proto__ || Object.getPrototypeOf(Basket_info)).call(this, props));
+
+    _this7.onselect = _this7.onselect.bind(_this7);
+    _this7.defineFirstState();
+
+    return _this7;
+  }
+
+  _createClass(Basket_info, [{
+    key: 'defineFirstState',
+    value: function defineFirstState() {
+      this.state.DELIVERY = "N";
+      this.state.PAYS = "N";
+    }
+  }, {
+    key: 'onselect',
+    value: function onselect(e) {
+      this.state[e.target.name] = e.target.value;
+      this.updateBasketOrderButton();
+    }
+  }, {
+    key: 'updateBasketOrderButton',
+    value: function updateBasketOrderButton() {
+      Uobject = window.objectReg['Basket_order_button'];
+      Uobject.setState({ DELIVERY: this.state.DELIVERY, PAYS: this.state.PAYS });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { 'class': 'row block-section' }, React.createElement('div', { className: 'col-sm-4 text-left' }, React.createElement('hr', null), React.createElement('h2', null, React.createElement('strong', null, "\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430")), React.createElement('div', { className: 'form-group' }, React.createElement('div', { className: 'radio' }, React.createElement('label', { 'for': 'example-radio1' }, React.createElement('input', { onChange: this.onselect, name: 'DELIVERY', value: 'Y', type: 'radio' }), " \u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430")), React.createElement('div', { className: 'radio' }, React.createElement('label', { 'for': 'example-radio2' }, React.createElement('input', { onChange: this.onselect, name: 'DELIVERY', value: 'N', type: 'radio' }), "\u0421\u0430\u043C\u043E\u0432\u0438\u0432\u0456\u0437")))), React.createElement('div', { className: 'col-sm-4 text-left' }, React.createElement('hr', null), React.createElement('h2', null, React.createElement('strong', null, "\u041E\u043F\u043B\u0430\u0442\u0430")), React.createElement('div', { className: 'form-group' }, React.createElement('div', { className: 'radio' }, React.createElement('label', { 'for': 'example-radio1' }, React.createElement('input', { onChange: this.onselect, name: 'PAYS', value: 'N', type: 'radio' }), " \u0413\u043E\u0442\u0456\u0432\u043A\u0430")), React.createElement('div', { className: 'radio' }, React.createElement('label', { 'for': 'example-radio2' }, React.createElement('input', { onChange: this.onselect, name: 'PAYS', value: 'Y', type: 'radio' }), "\u0411\u0435\u0437\u0433\u043E\u0442\u0456\u0432\u043A\u0430")))));
+    }
+  }]);
+
+  return Basket_info;
+}(_main_component.Extends);
+
+var Basket_order_button = exports.Basket_order_button = function (_Extends8) {
+  _inherits(Basket_order_button, _Extends8);
+
+  function Basket_order_button(props) {
+    _classCallCheck(this, Basket_order_button);
+
+    //Uobject=window.objectReg['Basket_info'];
+    var _this8 = _possibleConstructorReturn(this, (Basket_order_button.__proto__ || Object.getPrototypeOf(Basket_order_button)).call(this, props));
+
+    _this8.state.DELIVERY = "N";
+    _this8.state.PAYS = "N";
+    return _this8;
+  }
+
+  _createClass(Basket_order_button, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { className: 'clearfix' }, React.createElement('div', { className: 'btn-group pull-right' }, React.createElement(_reactRouterDom.Link, { className: 'btn btn-primary', to: '/Order_basket/' + this.state.DELIVERY + '/' + this.state.PAYS }, React.createElement('i', { 'class': 'fa fa-angle-right' }), " \u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0438 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F"), React.createElement('a', { href: 'javascript:void(0)', className: 'btn btn-primary' }, ' ', React.createElement('i', { 'class': 'fa fa-angle-right' }), " \u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0438 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F ")));
+    }
+  }]);
+
+  return Basket_order_button;
+}(_main_component.Extends);
+
+var Basket = exports.Basket = function (_Extends9) {
+  _inherits(Basket, _Extends9);
 
   function Basket(props) {
     _classCallCheck(this, Basket);
@@ -478,15 +568,25 @@ var Basket = exports.Basket = function (_Extends6) {
   _createClass(Basket, [{
     key: 'render',
     value: function render() {
-      return React.createElement('div', { className: 'block full' }, React.createElement('div', { 'class': 'row block-section' }), React.createElement(Basket_items, null));
+      return React.createElement('div', { className: 'block full' }, React.createElement(Basket_header, null), React.createElement(Basket_info, null), React.createElement('div', { 'class': 'row block-section' }), React.createElement(Basket_items, null), React.createElement(Basket_order_button, null));
     }
+    //////////////////////////////////////
+
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _get(Basket.prototype.__proto__ || Object.getPrototypeOf(Basket.prototype), 'componentDidMount', this).call(this);
+      document.title = "Basket";
+    }
+    ///////////////////////////////////// 
+
   }]);
 
   return Basket;
 }(_main_component.Extends);
 
-var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends7) {
-  _inherits(Basket_items_forModal, _Extends7);
+var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends10) {
+  _inherits(Basket_items_forModal, _Extends10);
 
   function Basket_items_forModal(props) {
     _classCallCheck(this, Basket_items_forModal);
@@ -9624,6 +9724,15 @@ var Extends = exports.Extends = function (_React$Component) {
         ///////////////////////////////////////////////////////////////////// 
 
     }, {
+        key: 'makePostDataFromState',
+        value: function makePostDataFromState() {
+            var mas = [];
+            for (item in this.state) {
+                mas.push(item + "=" + this.state[item]);
+            }
+            return mas.join("&");
+        }
+    }, {
         key: 'childUpdate',
         value: function childUpdate(obj, renderIN) {
             try {
@@ -9726,6 +9835,92 @@ var Extends = exports.Extends = function (_React$Component) {
 
 /***/ }),
 
+/***/ "./app/order_basket.js":
+/*!*****************************!*\
+  !*** ./app/order_basket.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Order_basket = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var Order_basket = exports.Order_basket = function (_Extends) {
+    _inherits(Order_basket, _Extends);
+
+    function Order_basket(props) {
+        _classCallCheck(this, Order_basket);
+
+        var _this = _possibleConstructorReturn(this, (Order_basket.__proto__ || Object.getPrototypeOf(Order_basket)).call(this, props));
+
+        _this.state = _this.props.match;
+
+        return _this;
+    }
+
+    _createClass(Order_basket, [{
+        key: 'orderBusket',
+        value: function orderBusket() {
+
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/autodoc/process_order.php", false, this.makePostDataFromState());
+
+            Prom.then(function (data) {
+
+                alert(data);
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            this.orderBusket();
+            return React.createElement('div', { 'class': 'block full' }, this.props.match.params.DELIVERY);
+        }
+    }]);
+
+    return Order_basket;
+}(_main_component.Extends);
+
+/***/ }),
+
 /***/ "./app/page_content.js":
 /*!*****************************!*\
   !*** ./app/page_content.js ***!
@@ -9770,6 +9965,12 @@ var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main
 
 var _search_content = __webpack_require__(/*! ./search_content.js */ "./app/search_content.js");
 
+var _basket_items = __webpack_require__(/*! ./basket_items.js */ "./app/basket_items.js");
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./app/order_basket.js");
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -9797,9 +9998,13 @@ var Page_content = exports.Page_content = function (_Extends) {
   function Page_content(props) {
     _classCallCheck(this, Page_content);
 
-    return _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
     //this.state={renderIN:""};
-    //this.state={parentMod:props.parentMod};  
+    //this.state={parentMod:props.parentMod}; 
+    var _this = _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+
+    _this.state.defineRoutes = true;
+
+    return _this;
   }
 
   _createClass(Page_content, [{
@@ -9817,9 +10022,19 @@ var Page_content = exports.Page_content = function (_Extends) {
       _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
     }
   }, {
+    key: 'defineRoutes',
+    value: function defineRoutes(defRoutes) {
+      if (defRoutes) {
+        return React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/basket', component: _basket_items.Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: _order_basket.Order_basket })));
+      } else {
+        return React.createElement('div', null);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, React.createElement('div', null), this.state.renderIN);
+      var routes = this.defineRoutes(this.state.defineRoutes);
+      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, routes, this.state.renderIN);
     }
   }]);
 
@@ -10461,8 +10676,11 @@ var Sidebar = exports.Sidebar = function (_Extends) {
 var body = document.getElementsByTagName("body");
 ReactDOM.render(React.createElement(Sidebar, null), body[0]);
 
-ReactDOM.render(React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/about', component: _basket_items.Basket }))), document.getElementById("link"));
+ReactDOM.render(React.createElement('a', null), document.getElementById("link"));
 
+window.getWorkPage = function () {
+  return window.objectReg['Page_content'];
+};
 //debugger
 //require ('./js/app.js');
 
@@ -10669,8 +10887,8 @@ var Search_form = function (_Extends2) {
             event.preventDefault();
             return;
         } */
-      Uobject = window.objectReg['Page_content'];
-      Uobject.setState({ renderIN: React.createElement(_search_content.Search_table, null) });
+      // Uobject=window.objectReg['Page_content'];
+      getWorkPage().setState({ renderIN: React.createElement(_search_content.Search_table, null), defineRoutes: false });
 
       var itemCode = event.target.value;
       if (itemCode == "") {
@@ -10777,8 +10995,8 @@ var Basket_icon = exports.Basket_icon = function (_Extends3) {
         this.getBasketPartsQuantity();
         this.state.getBasketPartsQuantity = false;
       }
-      // 
-      return React.createElement('a', { href: '#', 'data-toggle': 'modal', 'data-target': '#Basket_items' }, React.createElement('img', { src: '/app/img/placeholders/basket/avatar.png', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }), React.createElement('span', { className: 'label label-primary label-indicator animation-floating' }, React.createElement('font', null, React.createElement('font', null, this.state.partsQuantity))));
+      //   data-toggle="modal" data-target="#Basket_items"
+      return React.createElement('a', { href: '/basket' }, React.createElement('img', { src: '/app/img/placeholders/basket/avatar.png', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }), React.createElement('span', { className: 'label label-primary label-indicator animation-floating' }, React.createElement('font', null, React.createElement('font', null, this.state.partsQuantity))));
     }
   }]);
 

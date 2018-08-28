@@ -76,8 +76,8 @@ class Search_form extends Extends
              event.preventDefault();
              return;
          } */
-         Uobject=window.objectReg['Page_content'];
-         Uobject.setState({renderIN:<Search_table/>});
+        // Uobject=window.objectReg['Page_content'];
+         getWorkPage().setState({renderIN:<Search_table/>,defineRoutes:false});
          
          var itemCode=event.target.value;
          if (itemCode=="") 
@@ -184,13 +184,14 @@ class Search_form extends Extends
            this.getBasketPartsQuantity();
            this.state.getBasketPartsQuantity=false;  
          }
-         // 
-        return ( <a href="#" data-toggle="modal" data-target="#Basket_items">
+         //   data-toggle="modal" data-target="#Basket_items"
+        return (
+               <a href="/basket" >
                  <img src="/app/img/placeholders/basket/avatar.png" alt="аватар"/>
                  <span className="label label-primary label-indicator animation-floating">
                    <font><font>{this.state.partsQuantity}</font></font>
                  </span>
-                 </a>
+               </a>
          
           
            

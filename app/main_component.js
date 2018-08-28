@@ -47,7 +47,15 @@ export class Extends extends React.Component
      }
      
     ///////////////////////////////////////////////////////////////////// 
-     
+      makePostDataFromState()
+      {
+          var mas=[];
+          for (item in this.state)
+          {
+            mas.push(item+"="+this.state[item])  
+          }
+          return mas.join("&");
+      }
       childUpdate(obj,renderIN)
      {
          try

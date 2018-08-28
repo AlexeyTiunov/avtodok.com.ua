@@ -98,6 +98,7 @@ export class Sidebar  extends Extends
                    </div> 
                    <Sidebar_usersettings/> 
                    <Basket_items_forModal/>  
+                    
                   </div>
                   
                   
@@ -112,22 +113,22 @@ export class Sidebar  extends Extends
 }
  //debugger
  var body=document.getElementsByTagName("body"); 
-   ReactDOM.render(
+   ReactDOM.render(   
      <Sidebar/>,
    body[0]
 
 )
 
  ReactDOM.render(
-      <Router>
-            <Switch>
-                
-                <Route path="/about" component={Basket} />                 
-            </Switch>
-        </Router>,
+      <a></a>,
    document.getElementById("link")
 
 )
 
+window.getWorkPage= function ()
+{
+    return window.objectReg['Page_content'];
+    
+}
  //debugger
  //require ('./js/app.js');     

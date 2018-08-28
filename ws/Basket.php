@@ -74,7 +74,8 @@ function showDeliveryMethod($deliveryMethod,$nameCheckedItem,$basketID)
 }
  
   $checkChangeQuantity=true;
-  
+  #var_dump($_POST);
+  #var_dump($_REQUEST);
   if (CModule::IncludeModule("sale")&& CModule::IncludeModule('iblock') )
   {
       
@@ -145,6 +146,8 @@ function showDeliveryMethod($deliveryMethod,$nameCheckedItem,$basketID)
                    }
               
               
+             
+            }
               $dbBasketItems = CSaleBasket::GetList(
                 array(
                         "ID" => "ASC"
@@ -159,7 +162,8 @@ function showDeliveryMethod($deliveryMethod,$nameCheckedItem,$basketID)
                 array("ID", "PRODUCT_ID","NAME", "QUANTITY",
                       "CAN_BUY", "PRICE", "NOTES")
             );
-            }
+            
+            
              $i = 0;
 
             $arRegions = GetAllRegionsProperties2();

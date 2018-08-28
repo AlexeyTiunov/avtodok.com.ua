@@ -11,7 +11,7 @@
   $_SESSION['GLUSERMASS'] =$USER->GetUserGroupArray(); 
   
   //// 
-  //var_dump($_POST);
+  //var_dump($_REQUEST);
   //die();
   if (!isset($_POST['ItemCode'])) $_POST['ItemCode']=$_GET['ItemCode'];
   
@@ -70,7 +70,7 @@ function GetUserID_1CByID( $ID )
                  //  разруливаем ситуации с новым поиском и пересчетом текущих результаттов ( сортировка, пересчет цен в валюту и т.п.
       } else
       {
-        $_REQUEST["ICODE"]=$_POST['ItemCode']  ; 
+        //$_REQUEST["ICODE"]=$_POST['ItemCode']  ; 
          //  Приводим к стандартному виду ( верхний регистр, удалены "левые символы" )
          $_REQUEST["ICODE"] = preg_replace("/[^A-Za-z0-9]*/i", "",$_REQUEST["ICODE"]);       
          

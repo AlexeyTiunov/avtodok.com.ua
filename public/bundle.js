@@ -162,7 +162,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Basket_items_forModal = exports.Basket = exports.Common_td = exports.Quantity_td = exports.BrandCode_td = exports.Basket_items = undefined;
+exports.Basket_items_forModal = exports.Basket = exports.Delete_td = exports.Common_td = exports.Quantity_td = exports.BrandCode_td = exports.Basket_items = undefined;
 
 var _createClass = function () {
   function defineProperties(target, props) {
@@ -231,6 +231,7 @@ function getMapObject() {
   var formatNumber = dataConvert.formatNumber;
   var addSuffix = dataConvert.addSuffix;
   var mapObject = {
+    ID: { functions: { sFunc: sFunc }, params: [] },
     BrandName: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Бренд", React.createElement(BrandCode_td, null)] },
     ItemCodeTamplate: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Номер", React.createElement(Common_td, null)] },
     Caption: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Название", React.createElement(Common_td, null)] },
@@ -240,7 +241,8 @@ function getMapObject() {
     Sum: {},
     PriceUSD: {},
     SumUSD: {},
-    Props: {}
+    Props: {},
+    DELETE: { functions: { sFunc: sFunc, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["1", "Удалить", React.createElement(Delete_td, null)], addNew: true }
 
   };
   return mapObject;
@@ -266,6 +268,7 @@ var Basket_items = exports.Basket_items = function (_Extends) {
     var _this = _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
 
     _this.state.mapArray = [];
+    _this.state.responceData = "";
 
     return _this;
   }
@@ -306,7 +309,10 @@ var Basket_items = exports.Basket_items = function (_Extends) {
   }, {
     key: 'render',
     value: function render() {
-
+      if (this.state.responceData != "") {
+        handleDT = new _data_convert.handleData(this.state.responceData, getMapObject());
+        this.state.mapArray = handleDT.mapArray;
+      }
       var tableHeadO = React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")));
       var names = this.state.mapArray.map(function (tr) {
         var mas = [];
@@ -332,8 +338,10 @@ var Basket_items = exports.Basket_items = function (_Extends) {
       });
 
       var tableBody = rows.map(function (item) {
-        return React.createElement('tr', null, item);
+        return React.createElement('tr', { key: item[6].props.proto.ID.fValue }, item);
       });
+
+      this.state.mapArray = [];
 
       return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody)));
     }
@@ -412,8 +420,54 @@ var Common_td = exports.Common_td = function (_Extends4) {
   return Common_td;
 }(_main_component.Extends);
 
-var Basket = exports.Basket = function (_Extends5) {
-  _inherits(Basket, _Extends5);
+var Delete_td = exports.Delete_td = function (_Extends5) {
+  _inherits(Delete_td, _Extends5);
+
+  function Delete_td(props) {
+    _classCallCheck(this, Delete_td);
+
+    var _this5 = _possibleConstructorReturn(this, (Delete_td.__proto__ || Object.getPrototypeOf(Delete_td)).call(this, props));
+
+    _this5.state = _this5.props;
+    _this5.deletefromBusket = _this5.deletefromBusket.bind(_this5);
+    return _this5;
+  }
+
+  _createClass(Delete_td, [{
+    key: 'deletefromBusket',
+    value: function deletefromBusket(e) {
+
+      var inputsNodeList = e.target.offsetParent.getElementsByTagName("input");
+      var mas = [];
+      mas.push("BasketRefresh=Y");
+      for (i = 0; i < inputsNodeList.length; i++) {
+        mas.push(inputsNodeList[i].name + "=" + inputsNodeList[i].value);
+      }
+
+      //var data=par.childNodes[1].name+"="+par.childNodes[1].value;
+      var Pro = this.makeRequestToRecieveData("POST", "/ws/Basket.php", false, mas.join('&'));
+
+      Pro.then(function (data) {
+        alert(data);
+        obj = window.objectReg["Basket_items"];
+        obj.setState({ responceData: data });
+        obj = window.objectReg["Basket_icon"];
+        obj.setState({ getBasketPartsQuantity: true });
+        //obj.setState({getBasketPartsQuantity:true});  
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement('td', { className: 'text-center' }, React.createElement('strong', null, React.createElement('span', { onClick: this.deletefromBusket, className: 'badge' }, 'x')), React.createElement('input', { type: 'hidden', name: "DELETE_" + this.state.proto.ID.fValue, value: 'Y' }));
+    }
+  }]);
+
+  return Delete_td;
+}(_main_component.Extends);
+
+var Basket = exports.Basket = function (_Extends6) {
+  _inherits(Basket, _Extends6);
 
   function Basket(props) {
     _classCallCheck(this, Basket);
@@ -431,8 +485,8 @@ var Basket = exports.Basket = function (_Extends5) {
   return Basket;
 }(_main_component.Extends);
 
-var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends6) {
-  _inherits(Basket_items_forModal, _Extends6);
+var Basket_items_forModal = exports.Basket_items_forModal = function (_Extends7) {
+  _inherits(Basket_items_forModal, _Extends7);
 
   function Basket_items_forModal(props) {
     _classCallCheck(this, Basket_items_forModal);
@@ -908,6 +962,7 @@ function handleData(jsonData, standMap) {
       }
       mapArray.push(map);
     }
+
     return makeCorrectDirection(standMap, mapArray);
   }
 
@@ -917,7 +972,17 @@ function handleData(jsonData, standMap) {
       var newObj = {};
       for (item in mapObject) {
         //var newObj={};
-        if (mapArray[i][item]) newObj[item] = mapArray[i][item];
+        if (mapArray[i][item]) {
+          newObj[item] = mapArray[i][item];
+        } else {
+          if (mapObject[item].addNew) {
+            newObj[item] = {};
+            Object.defineProperty(newObj[item], "functionToHandle", { value: mapObject[item].functions, enumerable: true, writable: true });
+            Object.defineProperty(newObj[item], "params", { value: mapObject[item].params, enumerable: true, writable: true });
+            Object.defineProperty(newObj[item], "fValue", { value: null, enumerable: true, writable: true });
+            Object.defineProperty(newObj[item], "nValue", { value: null, enumerable: true, writable: true });
+          }
+        }
       }
       newMapArray.push(newObj);
     }
@@ -10220,7 +10285,7 @@ var BusketButton = exports.BusketButton = function (_Extends3) {
 
             Pro.then(function (data) {
                 alert(data);
-                obj = window.objectReg["Basket"];
+                obj = window.objectReg["Basket_icon"];
                 obj.setState({ getBasketPartsQuantity: true });
             });
         }

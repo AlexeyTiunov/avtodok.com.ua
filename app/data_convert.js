@@ -138,6 +138,8 @@ export function handleData(jsonData,standMap)
              mapArray.push(map); 
             
         }
+        
+        
        return  makeCorrectDirection(standMap,mapArray); 
         
     }
@@ -152,7 +154,22 @@ export function handleData(jsonData,standMap)
             {
                //var newObj={};
                if (mapArray[i][item])
-               newObj[item]=mapArray[i][item]; 
+               {
+                 newObj[item]=mapArray[i][item];   
+               }else
+               {
+                   if (mapObject[item].addNew)
+                   {
+                    newObj[item]={};
+                    Object.defineProperty(newObj[item],"functionToHandle",{value:mapObject[item].functions,enumerable:true,writable:true});
+                    Object.defineProperty(newObj[item],"params",{value:mapObject[item].params,enumerable:true,writable:true});   
+                    Object.defineProperty(newObj[item],"fValue",{value:null,enumerable:true,writable:true});
+                    Object.defineProperty(newObj[item],"nValue",{value:null,enumerable:true,writable:true}); 
+                   } 
+                   
+                   
+               }
+               
                  
                
                 

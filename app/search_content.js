@@ -523,7 +523,7 @@ export class BusketButton extends Extends
       
       Pro.then(function(data){
         alert(data) ; 
-        obj=window.objectReg["Basket"];
+        obj=window.objectReg["Basket_icon"];
         obj.setState({getBasketPartsQuantity:true});  
       }
      );

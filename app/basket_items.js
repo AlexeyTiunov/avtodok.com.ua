@@ -30,7 +30,7 @@ function getMapObject()
       PriceUSD:{},
       SumUSD:{},
       Props:{},
-      DELETE:{functions:{sFunc,defineColumnName,defineTd},params:["1","Удалить",<Delete_td />]},
+      DELETE:{functions:{sFunc,defineColumnName,defineTd},params:["1","Удалить",<Delete_td />],addNew:true},
         
         
         
@@ -63,6 +63,7 @@ export class Basket_items extends Extends
      {  
         super(props); 
         this.state.mapArray=[];
+       
          
      } 
      getBasketItems()
@@ -101,7 +102,7 @@ export class Basket_items extends Extends
      
      render()
      {
-         
+      
        const tableHeadO= (  <thead>
                                     <tr>
                                         <th></th>
@@ -157,12 +158,12 @@ export class Basket_items extends Extends
                            });   
                
                const tableBody= rows.map(function(item){                                  
-                                  return (<tr>{item}</tr>)  
+                                  return (<tr key={item[6].props.proto.ID.fValue}>{item}</tr>)  
                                    })  
                                 
                
                
-                                
+        this.state.mapArray=[];                        
          
         return ( <div className="table-responsive">
                    <table className="table table-vcenter"> 
@@ -252,24 +253,59 @@ export class Delete_td extends Extends
      constructor(props) 
      {  
         super(props); 
-         
+         this.state=this.props;
+         this.deletefromBusket=this.deletefromBusket.bind(this); 
      } 
+     
+     deletefromBusket(e)
+   {
+      
+      var inputsNodeList=e.target.offsetParent.getElementsByTagName("input");
+      var mas=[];
+      mas.push("BasketRefresh=Y");
+      for (i=0;i<inputsNodeList.length;i++)
+      {
+         mas.push(inputsNodeList[i].name+"="+inputsNodeList[i].value);  
+          
+      }
+      
+      
+      
+      //var data=par.childNodes[1].name+"="+par.childNodes[1].value;
+      var Pro=this.makeRequestToRecieveData("POST","/ws/Basket.php",false,mas.join('&'));
+      
+      Pro.then(function(data){
+        alert(data) ; 
+        obj=window.objectReg["Basket_items"];
+        obj.getBasketItems();
+         obj=window.objectReg["Basket_icon"];
+        obj.setState({getBasketPartsQuantity:true});  
+        //obj.setState({getBasketPartsQuantity:true});  
+      } 
+     ); 
+      
+      
+      
+    
+       
+       
+   }
      
      render()
      {
          return (
          
-                 return (<td className="text-center">
+                  <td className="text-center">
                    <strong>
-                     <span className="badge">x</span>
+                     <span  onClick={this.deletefromBusket} className="badge">x</span>
                    </strong>
-                   <input type='hidden' name={"DELETE_"+this.state.proto.ID.fValue}/>
-                   </td>
+                   <input type='hidden' name={"DELETE_"+this.state.proto.ID.fValue} value='Y'/>
+                   </td> )
         
            
            
             
-                 )
+                 
          
      }
     

@@ -361,14 +361,20 @@ while($arOrder = $dbOrder->GetNext())
         $arBasket["ISRETURNABLE"]=GetBasketItemProperty( $arBasket["ID"], "IsReturnable" ); 
         $arBasket["DELIVERYMETHODTOUA"]=GetBasketItemProperty( $arBasket["ID"], "DeliveryMethodToUA" );
         
-		$arOBasket[] = $arBasket;
+		
+        $arOBasket[] = $arBasket;
+      #  var_dump($arOrder);
+        #$arBasket["ORDER"]=$arOrder;
+        $arResult["ORDERS"]["BASKET_ITEMS"][]=$arBasket;
+        
 	}
 
-	$arResult["ORDERS"][] = Array(
-			"ORDER" =>$arOrder,
-			"BASKET_ITEMS" =>$arOBasket,
-		);
+	#$arResult["ORDERS"][] = Array(
+	#		"ORDER" =>$arOrder,
+	#		"BASKET_ITEMS" =>$arOBasket,
+	#	);
 }
-
-$this->IncludeComponentTemplate();
+ echo (json_encode($arResult["ORDERS"]["BASKET_ITEMS"] ,JSON_UNESCAPED_UNICODE));
+#var_dump($arResult["ORDERS"]); 
+#$this->IncludeComponentTemplate();
 ?>

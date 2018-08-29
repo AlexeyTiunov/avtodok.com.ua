@@ -11,6 +11,7 @@ entryArray.push('./app/js/app.js');
 //entryArray.push('./app/js/modernizr-2.7.1-respond-1.4.2.min.js');
 //entryArray.push('./app/js/request.js');    
 entryArray.push('./app/js/pages/index.js');
+entryArray.push('./app/js/pages/tablesDatatables.js');
 entryArray.push('./app/css/main.css');
 entryArray.push('./app/css/themes.css');
 entryArray.push('./app/css/themes/fire.css'); 

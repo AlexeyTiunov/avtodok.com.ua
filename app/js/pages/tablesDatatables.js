@@ -3,7 +3,7 @@
  *  Author     : pixelcave
  *  Description: Custom javascript code used in Tables Datatables page
  */
-
+import {App} from '../app.js';   
 var TablesDatatables = function() {
 
     return {
@@ -23,3 +23,4 @@ var TablesDatatables = function() {
         }
     };
 }();
+$(function(){ TablesDatatables.init(); });

@@ -1,3 +1,6 @@
+ var ReactDOM = require('react-dom');
+var React = require('react'); 
+
 export function handleData(jsonData,standMap)
  {
   //////////////////////////////////////////////   
@@ -238,7 +241,31 @@ export function handleData(jsonData,standMap)
         if (suffix==undefined) suffix="";
         this.fValue=this.fValue+suffix;
         
-    }      
+    }  
+    
+  this.defineColumnName=function (name)
+  {
+        Object.defineProperty(this,"Name",{value:name,enumerable:true,writable:true});
+  }  
+  
+ this.defineTd=function (TD)
+ {
+   // TDD = new TD.type( {val:this.fValue} );
+   TDD=React.createElement(TD.type,{proto:this.__proto__,NAME:this.nValue},null);
+   
+    Object.defineProperty(this,"TD",{value:TDD,enumerable:true,writable:true});
+ }  
+ 
+ this.parceDate= function()
+ {
+   var pattern="^([0-9]{2})(\.{1})([0-9]{2})(\.{1})([0-9]{4}).*$";  
+  regExp= new RegExp (pattern);
+  var dat=this.fValue.replace(regExp,"$5-$3-$1");   
+  if (isNaN(Date.parse(dat)))    
+  return; 
+   var date = new Date(Date.parse(dat));  
+   this.fValue=date.toLocaleDateString("ru");  
+ }
     ////////////////////////////////////////////////////////////////// 
       
       if (jsonData!=undefined && jsonData!=null)

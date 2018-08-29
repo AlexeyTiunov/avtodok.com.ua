@@ -962,7 +962,7 @@ if(false) {}
   !*** ./app/data_convert.js ***!
   \*****************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -977,6 +977,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 };
 
 exports.handleData = handleData;
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
 function handleData(jsonData, standMap) {
   //////////////////////////////////////////////   
   function makeConfigurationApply(mapArray) {
@@ -1125,6 +1128,26 @@ function handleData(jsonData, standMap) {
   this.addSuffix = function (suffix) {
     if (suffix == undefined) suffix = "";
     this.fValue = this.fValue + suffix;
+  };
+
+  this.defineColumnName = function (name) {
+    Object.defineProperty(this, "Name", { value: name, enumerable: true, writable: true });
+  };
+
+  this.defineTd = function (TD) {
+    // TDD = new TD.type( {val:this.fValue} );
+    TDD = React.createElement(TD.type, { proto: this.__proto__, NAME: this.nValue }, null);
+
+    Object.defineProperty(this, "TD", { value: TDD, enumerable: true, writable: true });
+  };
+
+  this.parceDate = function () {
+    var pattern = "^([0-9]{2})(\.{1})([0-9]{2})(\.{1})([0-9]{4}).*$";
+    regExp = new RegExp(pattern);
+    var dat = this.fValue.replace(regExp, "$5-$3-$1");
+    if (isNaN(Date.parse(dat))) return;
+    var date = new Date(Date.parse(dat));
+    this.fValue = date.toLocaleDateString("ru");
   };
   ////////////////////////////////////////////////////////////////// 
 
@@ -2178,6 +2201,45 @@ var Index = function() {
         }
     };
 }();
+
+/***/ }),
+
+/***/ "./app/js/pages/tablesDatatables.js":
+/*!******************************************!*\
+  !*** ./app/js/pages/tablesDatatables.js ***!
+  \******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app.js */ "./app/js/app.js");
+/*
+ *  Document   : tablesDatatables.js
+ *  Author     : pixelcave
+ *  Description: Custom javascript code used in Tables Datatables page
+ */
+   
+var TablesDatatables = function() {
+
+    return {
+        init: function() {
+            /* Initialize Bootstrap Datatables Integration */
+            _app_js__WEBPACK_IMPORTED_MODULE_0__["App"].datatables();
+
+            /* Initialize Datatables */
+            $('#example-datatable').dataTable({
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1, 5 ] } ],
+                "iDisplayLength": 10,
+                "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "Всі"]]
+            });
+
+            /* Add placeholder attribute to the search input */
+            $('.dataTables_filter input').attr('placeholder', 'Пошук');
+        }
+    };
+}();
+$(function(){ TablesDatatables.init(); });
 
 /***/ }),
 
@@ -9921,6 +9983,245 @@ var Order_basket = exports.Order_basket = function (_Extends) {
 
 /***/ }),
 
+/***/ "./app/order_list.js":
+/*!***************************!*\
+  !*** ./app/order_list.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Action_td = exports.Quantity_td = exports.Common_td = exports.Order_list = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+function getMapObject() {
+
+    dataConvert = new _data_convert.handleData(null, null);
+    var formatNumber = dataConvert.formatNumber;
+    var addSuffix = dataConvert.addSuffix;
+    var defineColumnName = dataConvert.defineColumnName;
+    var defineTd = dataConvert.defineTd;
+    var parceDate = dataConvert.parceDate;
+
+    var mapObject = {
+        ORDER_ID: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Номер Заказа", React.createElement(Common_td, null)] },
+        DATE_INSERT: { functions: { parceDate: parceDate, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["", "Дата", React.createElement(Common_td, null)] },
+        BRAND: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Бренд", React.createElement(Common_td, null)] },
+        REGIONCODE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Регион", React.createElement(Common_td, null)] },
+        ARTICLE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Номер", React.createElement(Common_td, null)] },
+        NAME: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Название", React.createElement(Common_td, null)] },
+        QUANTITY: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Количество", React.createElement(Common_td, null)] },
+        PRICE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Цена", React.createElement(Common_td, null)] },
+        ORDER_PRICE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Сумма", React.createElement(Common_td, null)] },
+        ITEMSTATUS: { functions: {}, params: [] },
+        action: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Действие", React.createElement(Action_td, null)], addNew: true },
+        state: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Состояние", React.createElement(Action_td, null)], addNew: true }
+
+    };
+    return mapObject;
+}
+
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\   
+
+var Order_list = exports.Order_list = function (_Extends) {
+    _inherits(Order_list, _Extends);
+
+    function Order_list(props) {
+        _classCallCheck(this, Order_list);
+
+        var _this = _possibleConstructorReturn(this, (Order_list.__proto__ || Object.getPrototypeOf(Order_list)).call(this, props));
+
+        _this.state.mapArray = [];
+        return _this;
+    }
+
+    _createClass(Order_list, [{
+        key: 'getOrderListData',
+        value: function getOrderListData() {
+            var findMySelf = this.findMySelf(this.constructor.name);
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/order_list.php", false, this.makePostDataFromState());
+
+            Prom.then(function (responseText) {
+
+                handleDT = new _data_convert.handleData(responseText, getMapObject());
+                findMySelf().setState({ mapArray: handleDT.mapArray });
+            });
+        }
+
+        /////////////////////////////////////
+
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _get(Order_list.prototype.__proto__ || Object.getPrototypeOf(Order_list.prototype), 'componentDidMount', this).call(this);
+            this.getOrderListData();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var names = this.state.mapArray.map(function (tr) {
+                var mas = [];
+                for (th in tr) {
+                    if (tr[th].Name) mas.push(React.createElement('th', { className: 'text-center' }, tr[th].Name));
+                }
+
+                return mas;
+
+                //return <th className="text-center">{item.Name}</th> 
+            })[0];
+            var tableHead = React.createElement('thead', null, React.createElement('tr', null, names));
+
+            var rows = this.state.mapArray.map(function (tr) {
+                var mas = [];
+                for (td in tr) {
+
+                    mas.push(tr[td].TD);
+                }
+
+                return mas;
+
+                //return <th className="text-center">{item.Name}</th> 
+            });
+
+            var i = 0;
+            var tableBody = rows.map(function (item) {
+                return React.createElement('tr', { key: i++ }, item);
+            });
+
+            return React.createElement('div', { className: 'block full' }, React.createElement('div', { className: 'block-title' }, React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { id: 'example-datatable', className: 'table table-vcenter table-condensed table-bordered' }, tableHead, React.createElement('tbody', null, tableBody)))));
+        }
+    }]);
+
+    return Order_list;
+}(_main_component.Extends);
+
+var Common_td = exports.Common_td = function (_Extends2) {
+    _inherits(Common_td, _Extends2);
+
+    function Common_td(props) {
+        _classCallCheck(this, Common_td);
+
+        var _this2 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+        _this2.state = _this2.props;
+
+        return _this2;
+    }
+
+    _createClass(Common_td, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('td', { className: 'text-center' }, this.state.proto[this.state.NAME].fValue);
+        }
+    }]);
+
+    return Common_td;
+}(_main_component.Extends);
+
+var Quantity_td = exports.Quantity_td = function (_Extends3) {
+    _inherits(Quantity_td, _Extends3);
+
+    function Quantity_td(props) {
+        _classCallCheck(this, Quantity_td);
+
+        var _this3 = _possibleConstructorReturn(this, (Quantity_td.__proto__ || Object.getPrototypeOf(Quantity_td)).call(this, props));
+
+        _this3.state = _this3.props;
+
+        return _this3;
+    }
+
+    _createClass(Quantity_td, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('td', { className: 'text-center' }, this.state.proto[this.state.NAME].fValue);
+        }
+    }]);
+
+    return Quantity_td;
+}(_main_component.Extends);
+
+var Action_td = exports.Action_td = function (_Extends4) {
+    _inherits(Action_td, _Extends4);
+
+    function Action_td(props) {
+        _classCallCheck(this, Action_td);
+
+        var _this4 = _possibleConstructorReturn(this, (Action_td.__proto__ || Object.getPrototypeOf(Action_td)).call(this, props));
+
+        _this4.state = _this4.props;
+
+        return _this4;
+    }
+
+    _createClass(Action_td, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('td', { className: 'text-center' }, this.state.proto.ITEMSTATUS.fValue);
+        }
+    }]);
+
+    return Action_td;
+}(_main_component.Extends);
+
+/***/ }),
+
 /***/ "./app/page_content.js":
 /*!*****************************!*\
   !*** ./app/page_content.js ***!
@@ -9970,6 +10271,8 @@ var _basket_items = __webpack_require__(/*! ./basket_items.js */ "./app/basket_i
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
 var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./app/order_basket.js");
+
+var _order_list = __webpack_require__(/*! ./order_list.js */ "./app/order_list.js");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -10025,7 +10328,7 @@ var Page_content = exports.Page_content = function (_Extends) {
     key: 'defineRoutes',
     value: function defineRoutes(defRoutes) {
       if (defRoutes) {
-        return React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/basket', component: _basket_items.Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: _order_basket.Order_basket })));
+        return React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/basket', component: _basket_items.Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: _order_basket.Order_basket }), React.createElement(_reactRouterDom.Route, { path: '/order_list', component: _order_list.Order_list })));
       } else {
         return React.createElement('div', null);
       }
@@ -11161,11 +11464,7 @@ var Li = __webpack_require__(/*! ./sidebar_li.js */ "./app/sidebar_li.js");
 /*
     props.items;
 */
-var items = exports.items = [{ name: "Головна", href: "#", className: "", inner: null }, { name: "Особистий кабіне", href: "#", className: "sidebar-nav-menu",
-    inner: [{ name: "Замовлення", href: "cabinet_orders.html", className: "", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "", inner: null }, { name: "Головна", href: "cabinet_return.html", className: "", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "", inner: null }]
-}, { name: "Особистий кабіне", href: "#", className: "sidebar-nav-menu",
-    inner: [{ name: "Замовлення", href: "cabinet_orders.html", className: "", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "", inner: null }, { name: "Головна", href: "cabinet_return.html", className: "", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "", inner: null }]
-}, { name: "Особистий кабіне", href: "#", className: "sidebar-nav-menu",
+var items = exports.items = [{ name: "Головна", href: "#", className: "", inner: null }, { name: "Особистий кабінет", href: "#", className: "sidebar-nav-menu",
     inner: [{ name: "Замовлення", href: "cabinet_orders.html", className: "", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "", inner: null }, { name: "Головна", href: "cabinet_return.html", className: "", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "", inner: null }]
 }, { name: "Каталоги", href: "#", className: "", inner: null }, { name: "Каталог автозапчастин", href: "#", className: "", inner: null }, { name: "Каталог аксесуарів", href: "#", className: "", inner: null }, { name: "Корисне", href: null, className: "", inner: null }, { name: "Про нас", href: "", className: "", inner: null }];
 
@@ -65894,9 +66193,9 @@ module.exports = warning;
 /***/ }),
 
 /***/ 0:
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./app/sidebar_li.js ./app/sidebar.js ./app/sidebar_header.js ./app/css/plugins.css ./app/js/plugins.js ./app/js/app.js ./app/js/pages/index.js ./app/css/main.css ./app/css/themes.css ./app/css/themes/fire.css ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./app/sidebar_li.js ./app/sidebar.js ./app/sidebar_header.js ./app/css/plugins.css ./app/js/plugins.js ./app/js/app.js ./app/js/pages/index.js ./app/js/pages/tablesDatatables.js ./app/css/main.css ./app/css/themes.css ./app/css/themes/fire.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -65907,6 +66206,7 @@ __webpack_require__(/*! ./app/css/plugins.css */"./app/css/plugins.css");
 __webpack_require__(/*! ./app/js/plugins.js */"./app/js/plugins.js");
 __webpack_require__(/*! ./app/js/app.js */"./app/js/app.js");
 __webpack_require__(/*! ./app/js/pages/index.js */"./app/js/pages/index.js");
+__webpack_require__(/*! ./app/js/pages/tablesDatatables.js */"./app/js/pages/tablesDatatables.js");
 __webpack_require__(/*! ./app/css/main.css */"./app/css/main.css");
 __webpack_require__(/*! ./app/css/themes.css */"./app/css/themes.css");
 module.exports = __webpack_require__(/*! ./app/css/themes/fire.css */"./app/css/themes/fire.css");

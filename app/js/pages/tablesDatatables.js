@@ -4,7 +4,7 @@
  *  Description: Custom javascript code used in Tables Datatables page
  */
 import {App} from '../app.js';   
-var TablesDatatables = function() {
+export var TablesDatatables = function() {
 
     return {
         init: function() {
@@ -23,4 +23,4 @@ var TablesDatatables = function() {
         }
     };
 }();
-$(function(){ TablesDatatables.init(); });
+//$(function(){ TablesDatatables.init(); });

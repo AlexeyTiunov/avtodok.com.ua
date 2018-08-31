@@ -3,6 +3,7 @@ var React = require('react');
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
+import {TablesDatatables} from './js/pages/tablesDatatables.js'
 
 function getMapObject()
 {
@@ -11,6 +12,7 @@ function getMapObject()
    var formatNumber=dataConvert.formatNumber;
    var addSuffix=dataConvert.addSuffix;
    var defineColumnName=dataConvert.defineColumnName;
+   var defineColumnClass=dataConvert.defineColumnClass; 
    var defineTd=dataConvert.defineTd;
    var parceDate=dataConvert.parceDate;
    
@@ -29,7 +31,7 @@ function getMapObject()
       PRICE:{functions:{defineColumnName,defineTd},params:["Цена",<Common_td />,]}, 
       ORDER_PRICE:{functions:{defineColumnName,defineTd},params:["Сумма",<Common_td />,]},
       ITEMSTATUS:{functions:{},params:[]}, 
-      action:{functions:{defineColumnName,defineTd},params:["Действие",<Action_td />,],addNew:true},
+      action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие","hidden-xs",<Status_td />,],addNew:true},
       state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},
         
         
@@ -44,7 +46,9 @@ function getMapObject()
 
 
 
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\   
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+
+const ThemeContext = React.createContext("value");  
 
 export class Order_list extends Extends
 {
@@ -67,11 +71,16 @@ export class Order_list extends Extends
     }
     
     /////////////////////////////////////
-    
+    componentDidUpdate(prevProps, prevState)
+    {
+        super.componentDidUpdate(prevProps, prevState);
+        TablesDatatables.init();
+    }
     componentDidMount()
     {
         super.componentDidMount();
         this.getOrderListData();
+        //
     }
     render()
     {
@@ -81,7 +90,7 @@ export class Order_list extends Extends
                              for (th in tr)
                              {
                                 if (tr[th].Name)
-                                mas.push(<th className="text-center">{tr[th].Name}</th>);
+                                mas.push(<th className={"text-center"+" "+(tr[th].className!=undefined)?tr[th].className:"" }>{tr[th].Name}</th>);
                              } 
                               
                              return mas;
@@ -114,7 +123,7 @@ export class Order_list extends Extends
                                 
                           var i=0;
                const tableBody= rows.map(function(item){                                  
-                                  return (<tr key={i++}>{item}</tr>)  
+                                  return (  <ThemeContext.Provider value="dark"><tr key={i++}>{item}</tr>  </ThemeContext.Provider>)  
                                    })                  
         
         return (  <div className="block full">
@@ -169,6 +178,7 @@ export class Quantity_td extends Extends
      {  
         super(props);
         this.state=this.props;
+      
          
      } 
      render()
@@ -184,6 +194,32 @@ export class Quantity_td extends Extends
      }
     
 }
+export class Status_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+        this.bClasses={"2":"label label-primary" };
+        this.iClasses={"2":"gi gi-remove_2"};
+        this.statusNames={"2":"Отказ"};
+         
+     } 
+     render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
+     {
+       return(
+                 
+                     <td><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                                       
+                   
+         
+             )   
+         
+         
+     }
+    
+}  
 export class Action_td extends Extends
 {
     
@@ -191,19 +227,22 @@ export class Action_td extends Extends
      {  
         super(props);
         this.state=this.props;
+        this.bClasses={"2":"label label-primary" };
+        this.iClasses={"2":"gi gi-remove_2"};
+        this.statusNames={"2":"Отказ"};
          
      } 
-     render()
+     render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
        return(
-                   <td className="text-center">{this.state.proto.ITEMSTATUS.fValue}</td> 
-        
-        
+                
+                    <td><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                   
          
              )   
          
          
      }
     
-}        
+}              
 

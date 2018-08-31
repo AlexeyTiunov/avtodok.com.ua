@@ -7,7 +7,8 @@ window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
 import {Search_table} from './search_content.js' 
-import {Basket_items} from './basket_items.js'   
+import {Basket_items} from './basket_items.js' 
+import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';   
  //debugger;  
 
 
@@ -186,12 +187,12 @@ class Search_form extends Extends
          }
          //   data-toggle="modal" data-target="#Basket_items"
         return (
-               <a href="/basket" >
+               <Link to="/basket" >
                  <img src="/app/img/placeholders/basket/avatar.png" alt="аватар"/>
                  <span className="label label-primary label-indicator animation-floating">
                    <font><font>{this.state.partsQuantity}</font></font>
                  </span>
-               </a>
+               </Link>
          
           
            

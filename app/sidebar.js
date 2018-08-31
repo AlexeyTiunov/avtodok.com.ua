@@ -25,7 +25,8 @@ import {Search_table} from './search_content.js'
 
 import {Basket_items_forModal} from './basket_items.js' 
 import {Basket} from './basket_items.js' 
-
+import {Order_basket} from './order_basket.js'   
+import {Order_list} from './order_list.js'   
  
 import './css/plugins.css'; 
 
@@ -64,6 +65,7 @@ export class Sidebar  extends Extends
      {
        
      }
+     
      childUpdate(obj)
      {
          try
@@ -78,16 +80,15 @@ export class Sidebar  extends Extends
      }
      
      render()
-     {
-       return  (<div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
-                 <div id="sidebar" className="">        
-                  <div className='sidebar-scroll'> 
-                     <div id='sidebar-content' className='sidebar-content'>
+     {          
+       return (<Router>
+                <div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
+                  <div id="sidebar" className="">        
+                    <div className='sidebar-scroll'> 
+                      <div id='sidebar-content' className='sidebar-content'>                         
                         <Sidebar_brand/>    
-                        <Sidebar_userinfo/> 
-                        
-                        <Sidebar_nav items={ITEMS}/>      
-           
+                        <Sidebar_userinfo/>                         
+                        <Sidebar_nav items={ITEMS}/>          
                      </div>  
                     </div>
                    </div>
@@ -99,8 +100,8 @@ export class Sidebar  extends Extends
                    <Sidebar_usersettings/> 
                    <Basket_items_forModal/>  
                     
-                  </div>
-                  
+                </div>
+              </Router> 
                   
                   
                   )     

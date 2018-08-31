@@ -35,14 +35,14 @@ export class Page_content  extends Extends
      {
         if (defRoutes)
         { 
-         return ( <Router>
+         return ( 
                        <Switch>
                 
                          <Route path="/basket" component={Basket} />
                          <Route path="/order_basket/:DELIVERY/:PAYS" component={Order_basket} />
                          <Route path="/order_list" component={Order_list} />                 
                      </Switch>
-                   </Router>
+                  
                 )
         }else
         {

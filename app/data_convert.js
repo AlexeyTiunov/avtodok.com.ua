@@ -247,6 +247,10 @@ export function handleData(jsonData,standMap)
   {
         Object.defineProperty(this,"Name",{value:name,enumerable:true,writable:true});
   }  
+  this.defineColumnClass=function (className)
+  {
+         Object.defineProperty(this,"className",{value:className,enumerable:true,writable:true});
+  }
   
  this.defineTd=function (TD)
  {

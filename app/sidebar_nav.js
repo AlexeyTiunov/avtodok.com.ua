@@ -1,6 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 var Li= require("./sidebar_li.js");
+import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 //debugger
 
 
@@ -10,7 +11,7 @@ var Li= require("./sidebar_li.js");
 export var items = [
   {name:"Головна", href:"#", className:"" ,inner:null},  
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
-    inner:[  {name:"Замовлення", href:"cabinet_orders.html", className:"" ,inner:null},
+    inner:[  {name:"Замовлення", href:"/order_list", className:"" ,inner:null},
              {name:"Баланс", href:"cabinet_cash.html",className:"" ,inner:null},
              {name:"Історія позицій", href:"cabinet_cash.html",className:"" ,inner:null},
              {name:"Декларації", href:"cabinet_history.html",className:"" ,inner:null},
@@ -48,7 +49,11 @@ export class Sidebar_nav  extends React.Component
          
          
      } 
-     
+     componentDidCatch(error, info) 
+     {
+         console.log(error);
+         
+     }
      
      render()
      {
@@ -64,7 +69,7 @@ export class Sidebar_nav  extends React.Component
                          
                         let gg= item.inner.map(function(item_inner){
                                            
-                                           return <li><a href="cabinet_orders.html"><i className="gi gi-table sidebar-nav-icon"></i><font><font>{item_inner.name}</font></font></a></li>;
+                                           return <li><Link to={item_inner.href}><i className="gi gi-table sidebar-nav-icon"></i><font><font>{item_inner.name}</font></font></Link></li>;
                                            
                          });
                          

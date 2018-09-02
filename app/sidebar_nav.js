@@ -11,13 +11,12 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 export var items = [
   {name:"Головна", href:"#", className:"" ,inner:null},  
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
-    inner:[  {name:"Замовлення", href:"/order_list", className:"" ,inner:null},
-             {name:"Баланс", href:"cabinet_cash.html",className:"" ,inner:null},
-             {name:"Історія позицій", href:"cabinet_cash.html",className:"" ,inner:null},
-             {name:"Декларації", href:"cabinet_history.html",className:"" ,inner:null},
-             {name:"Повернення", href:"cabinet_np.html",className:"" ,inner:null},
-             {name:"Головна", href:"cabinet_return.html",className:"" ,inner:null}, 
-             {name:"Готовий до видачі", href:"cabinet_to_delivery.html",className:"" ,inner:null}, 
+    inner:[  {name:"Замовлення", href:"/order_list", className:"gi gi-table sidebar-nav-icon" ,inner:null},
+             {name:"Баланс", href:"cabinet_cash.html",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},
+             {name:"Історія позицій", href:"cabinet_cash.html",className:"gi gi-show_thumbnails_with_lines sidebar-nav-icon" ,inner:null},
+             {name:"Декларації", href:"cabinet_history.html",className:"gi gi-message_out sidebar-nav-icon" ,inner:null},
+             {name:"Повернення", href:"cabinet_np.html",className:"gi gi-unshare sidebar-nav-icon" ,inner:null},             
+             {name:"Готовий до видачі", href:"cabinet_to_delivery.html",className:"si si-dropbox sidebar-nav-icon" ,inner:null}, 
            ]
   },
   
@@ -69,7 +68,7 @@ export class Sidebar_nav  extends React.Component
                          
                         let gg= item.inner.map(function(item_inner){
                                            
-                                           return <li><Link to={item_inner.href}><i className="gi gi-table sidebar-nav-icon"></i><font><font>{item_inner.name}</font></font></Link></li>;
+                                           return <li><Link to={item_inner.href}><i className={item_inner.className}></i><font><font>{item_inner.name}</font></font></Link></li>;
                                            
                          });
                          

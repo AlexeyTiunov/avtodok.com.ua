@@ -1,4 +1,6 @@
 <?
+ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/include/autodoc_globals.php");
+  require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/sale/general/export.autodoc.php");
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 global $rateCurrency;
 if (!CModule::IncludeModule("sale"))
@@ -67,8 +69,8 @@ if($arOrder = $dbOrder->GetNext())
     
 	if($arUser = $dbUser->GetNext())
 	{
-		$arResult["USER"] = $arUser;
-		$arResult["USER_NAME"] = $arUser["NAME"].((strlen($arUser["NAME"])<=0 || strlen($arUser["LAST_NAME"])<=0) ? "" : " ").$arUser["LAST_NAME"];
+		#$arResult["USER"] = $arUser;
+		#$arResult["USER_NAME"] = $arUser["NAME"].((strlen($arUser["NAME"])<=0 || strlen($arUser["LAST_NAME"])<=0) ? "" : " ").$arUser["LAST_NAME"];
 	}
 	$arPersonType = CSalePersonType::GetByID($arOrder["PERSON_TYPE_ID"]);
 	$arResult["PERSON_TYPE"] = $arPersonType;
@@ -201,7 +203,12 @@ if($arOrder = $dbOrder->GetNext())
 			false,
 			array("ID", "DETAIL_PAGE_URL", "NAME", "NOTES", "QUANTITY", "PRICE", "CURRENCY", "PRODUCT_ID", "DISCOUNT_PRICE", "WEIGHT")
 		);
-	$arResult["BASKET"] = Array();
+	/*
+    *
+    * 
+    * 
+    $arResult["BASKET"] = Array();
+    $BASKET=Array();
 	//var_dump($rateCurrency);
 	while ($arBasket = $dbBasket->Fetch())
 	{
@@ -234,9 +241,12 @@ if($arOrder = $dbOrder->GetNext())
 		while($arBasketProps = $dbBasketProps->GetNext())
 		{
 			$arBasketTmp["PROPS"][] = $arBasketProps;
-		}
+		}  
+        $arBasketTmp["PROPS"]= GetBasketItemProperties( $arBasketTmp["ID"]);
+        
 		$arResult["BASKET"][] = $arBasketTmp;
-	}
+        $BASKET[] = $arBasketTmp;
+	}   */
 
 	$dbTaxList = CSaleOrderTax::GetList(
 			array("APPLY_ORDER" => "ASC"),
@@ -262,11 +272,60 @@ if($arOrder = $dbOrder->GetNext())
 else
 	$arResult["ERROR_MESSAGE"] = str_replace("#ID#", $ID, GetMessage("SPOD_NO_ORDER"));
  $GLOBALS["arr"]= $arResult;
-if (isset($NoTemplate) && $NoTemplate="YES")
+/*if (isset($NoTemplate) && $NoTemplate="YES")
    {
        
    }else
    {
-    $this->IncludeComponentTemplate();
-   }
+    $this->IncludeComponentTemplate();   
+    
+   } */
+   $arResult["BASKET"] = Array();
+    $BASKET=Array();
+    //var_dump($rateCurrency);
+    while ($arBasket = $dbBasket->Fetch())
+    {
+        $arBasketTmp = Array();
+        $arBasketTmp = $arBasket;
+        $arBasketTmp["QUANTITY"] = DoubleVal($arBasketTmp["QUANTITY"]);
+        $arBasketTmp["WEIGHT_FORMATED"] = DoubleVal($arBasketTmp["WEIGHT"]/$arResult["WEIGHT_KOEF"])." ".$arResult["WEIGHT_UNIT"];
+        
+        $rateKoefCurrency = ($arOrder["CURRENCY"]=="UAH")? 1:$rateCurrency[$arOrder["CURRENCY"]]/$rateCurrency[$arBasket["CURRENCY"]];
+        //var_dump($rateKoefCurrency);        
+        $arBasketTmp["PRICE_FORMATED"] = SaleFormatCurrency($arBasket["PRICE"]*$rateKoefCurrency, $arOrder["CURRENCY"]);
+        $arResult["ORDER_WEIGHT"] += $arBasket["WEIGHT"] * $arBasket["QUANTITY"];
+        if(DoubleVal($arBasketTmp["DISCOUNT_PRICE"]) > 0)
+        {
+            $arBasketTmp["DISCOUNT_PRICE_PERCENT"] = $arBasketTmp["DISCOUNT_PRICE"]*100 / ($arBasketTmp["DISCOUNT_PRICE"] + $arBasketTmp["PRICE"]);
+            $arBasketTmp["DISCOUNT_PRICE_PERCENT_FORMATED"] = roundEx($arBasketTmp["DISCOUNT_PRICE_PERCENT"], SALE_VALUE_PRECISION)."%";
+        }
+
+        $arBasketTmp["PROPS"] = Array();
+        /*$dbBasketProps = CSaleBasket::GetPropsList(
+                array("SORT" => "ASC", "ID" => "DESC"),
+                array(
+                        "BASKET_ID" => $arBasketTmp["ID"],
+                        "!CODE" => array("CATALOG.XML_ID", "PRODUCT.XML_ID")
+                    ),
+                false,
+                false,
+                array("ID", "BASKET_ID", "NAME", "VALUE", "CODE", "SORT")
+        );
+        while($arBasketProps = $dbBasketProps->GetNext())
+        {
+            $arBasketTmp["PROPS"][] = $arBasketProps;
+        }  */
+        $arBasketTmp["PROPS"]= GetBasketItemProperties( $arBasketTmp["ID"]);
+        $arBasketTmp["ORDER"]= $arResult;
+        $arBasketTmp["ORDER_ID"]= $arResult["ID"];
+        $arBasketTmp["ORDER_STATUS_ID"]=$arResult["STATUS"]["ID"];
+        $arBasketTmp["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"];
+       // $arResult["BASKET"][] = $arBasketTmp;
+        $BASKET[] = $arBasketTmp;
+    }
+   
+   
+   
+  # var_dump($BASKET);
+  echo (json_encode($BASKET ,JSON_UNESCAPED_UNICODE)); 
 ?>

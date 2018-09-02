@@ -6,6 +6,7 @@ import {Basket} from './basket_items.js'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'; 
 import {Order_basket} from './order_basket.js'
 import {Order_list} from './order_list.js'
+import {Order_detail} from './order_detail.js'  
 
 export class Page_content  extends Extends
 {
@@ -40,7 +41,8 @@ export class Page_content  extends Extends
                 
                          <Route path="/basket" component={Basket} />
                          <Route path="/order_basket/:DELIVERY/:PAYS" component={Order_basket} />
-                         <Route path="/order_list" component={Order_list} />                 
+                         <Route path="/order_list" component={Order_list} /> 
+                         <Route path="/order_detail/:id" component={Order_detail} />                                 
                      </Switch>
                   
                 )

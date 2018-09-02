@@ -21,7 +21,7 @@ function getMapObject()
     
     var mapObject=
     {
-      ORDER_ID:{functions:{defineColumnName,defineTd},params:["Номер Заказа",<Common_td />,]},
+      ORDER_ID:{functions:{defineColumnName,defineTd},params:["Номер Заказа",<Orderid_td/>,]},
       DATE_INSERT:{functions:{parceDate,defineColumnName,defineTd},params:["","Дата",<Common_td />]},
       BRAND:{functions:{defineColumnName,defineTd},params:["Бренд",<Common_td />,]}, 
       REGIONCODE:{functions:{defineColumnName,defineTd},params:["Регион",<Common_td />,]}, 
@@ -148,6 +148,25 @@ export class Order_list extends Extends
     
     
 }
+export class Orderid_td extends Extends 
+{
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+         return (
+          
+                  <td className="text-center"><Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link></td>  
+          
+          
+                )
+     }
+    
+}
 export class Common_td extends Extends
 {
     
@@ -227,9 +246,15 @@ export class Action_td extends Extends
      {  
         super(props);
         this.state=this.props;
-        this.bClasses={"2":"label label-primary" };
+        this.bClasses=window.configObject["Action_td"].bClasses
+        
+       // this.bClasses={"2":"label label-primary" };
         this.iClasses={"2":"gi gi-remove_2"};
-        this.statusNames={"2":"Отказ"};
+        this.statusNames={
+            "0":"В работе",
+            "2":"Отказ",
+            "5": "В пути",
+        };
          
      } 
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  

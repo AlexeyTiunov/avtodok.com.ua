@@ -1037,7 +1037,7 @@ function handleData(jsonData, standMap) {
         if (_typeof(itemsObject[item]) == "object") {
 
           for (subItem in itemsObject[item]) {
-            if (standMap[subItem]) {
+            if (standMap[subItem] && !standMap[subItem].ignore) {
               map[subItem] = {};
               Object.defineProperty(map[subItem], "functionToHandle", { value: standMap[subItem].functions, enumerable: true, writable: true });
               Object.defineProperty(map[subItem], "params", { value: standMap[subItem].params, enumerable: true, writable: true });
@@ -1051,7 +1051,7 @@ function handleData(jsonData, standMap) {
           }
         } else {
 
-          if (standMap[item]) {
+          if (standMap[item] && !standMap[item].ignore) {
             map[item] = {};
             Object.defineProperty(map[item], "functionToHandle", { value: standMap[item].functions, enumerable: true, writable: true });
             Object.defineProperty(map[item], "params", { value: standMap[item].params, enumerable: true, writable: true });
@@ -9987,10 +9987,10 @@ var Order_basket = exports.Order_basket = function (_Extends) {
 
 /***/ }),
 
-/***/ "./app/order_list.js":
-/*!***************************!*\
-  !*** ./app/order_list.js ***!
-  \***************************/
+/***/ "./app/order_detail.js":
+/*!*****************************!*\
+  !*** ./app/order_detail.js ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9999,7 +9999,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Action_td = exports.Status_td = exports.Quantity_td = exports.Common_td = exports.Order_list = undefined;
+exports.Common_td = exports.Order_detail = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -10068,6 +10068,172 @@ function getMapObject() {
 
     var mapObject = {
         ORDER_ID: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Номер Заказа", React.createElement(Common_td, null)] },
+        RegionCode: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Регион", React.createElement(Common_td, null)] },
+        ORDER_STATUS_NAME: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Статус", React.createElement(Common_td, null)] },
+        PRICE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Регион", React.createElement(Common_td, null)] },
+        CURRENCY: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Номер", React.createElement(Common_td, null)]
+            /* NAME:{functions:{defineColumnName,defineTd},params:["Название",<Common_td />,]},
+             QUANTITY:{functions:{defineColumnName,defineTd},params:["Количество",<Common_td/>,]},
+             PRICE:{functions:{defineColumnName,defineTd},params:["Цена",<Common_td />,]}, 
+             ORDER_PRICE:{functions:{defineColumnName,defineTd},params:["Сумма",<Common_td />,]},
+             ITEMSTATUS:{functions:{},params:[]}, 
+             action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие","hidden-xs",<Status_td />,],addNew:true},
+             state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},*/
+
+        } };
+    return mapObject;
+}
+
+var Order_detail = exports.Order_detail = function (_Extends) {
+    _inherits(Order_detail, _Extends);
+
+    function Order_detail(props) {
+        _classCallCheck(this, Order_detail);
+
+        var _this = _possibleConstructorReturn(this, (Order_detail.__proto__ || Object.getPrototypeOf(Order_detail)).call(this, props));
+
+        _this.state = _this.props.match.params;
+        _this.state.mapArray = [];
+        return _this;
+    }
+
+    _createClass(Order_detail, [{
+        key: 'getOrderDetail',
+        value: function getOrderDetail(id) {
+            var findMySelf = this.findMySelf(this.constructor.name);
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/order_detail.php", false, "ID=" + this.props.match.params.id);
+
+            Prom.then(function (responseText) {
+
+                handleDT = new _data_convert.handleData(responseText, getMapObject());
+                findMySelf().setState({ mapArray: handleDT.mapArray });
+            });
+        }
+
+        ///////////////////////////////////
+
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _get(Order_detail.prototype.__proto__ || Object.getPrototypeOf(Order_detail.prototype), 'componentDidMount', this).call(this);
+            this.getOrderDetail(this.props.match.params.id);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { className: 'block full' }, this.props.match.params.id);
+        }
+    }]);
+
+    return Order_detail;
+}(_main_component.Extends);
+
+var Common_td = exports.Common_td = function (_Extends2) {
+    _inherits(Common_td, _Extends2);
+
+    function Common_td(props) {
+        _classCallCheck(this, Common_td);
+
+        var _this2 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+        _this2.state = _this2.props;
+
+        return _this2;
+    }
+
+    _createClass(Common_td, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('td', { className: 'text-center' }, this.state.proto[this.state.NAME].fValue);
+        }
+    }]);
+
+    return Common_td;
+}(_main_component.Extends);
+
+/***/ }),
+
+/***/ "./app/order_list.js":
+/*!***************************!*\
+  !*** ./app/order_list.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Action_td = exports.Status_td = exports.Quantity_td = exports.Common_td = exports.Orderid_td = exports.Order_list = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
+
+var _tablesDatatables = __webpack_require__(/*! ./js/pages/tablesDatatables.js */ "./app/js/pages/tablesDatatables.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+function getMapObject() {
+
+    dataConvert = new _data_convert.handleData(null, null);
+    var formatNumber = dataConvert.formatNumber;
+    var addSuffix = dataConvert.addSuffix;
+    var defineColumnName = dataConvert.defineColumnName;
+    var defineColumnClass = dataConvert.defineColumnClass;
+    var defineTd = dataConvert.defineTd;
+    var parceDate = dataConvert.parceDate;
+
+    var mapObject = {
+        ORDER_ID: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Номер Заказа", React.createElement(Orderid_td, null)] },
         DATE_INSERT: { functions: { parceDate: parceDate, defineColumnName: defineColumnName, defineTd: defineTd }, params: ["", "Дата", React.createElement(Common_td, null)] },
         BRAND: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Бренд", React.createElement(Common_td, null)] },
         REGIONCODE: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Регион", React.createElement(Common_td, null)] },
@@ -10167,17 +10333,40 @@ var Order_list = exports.Order_list = function (_Extends) {
     return Order_list;
 }(_main_component.Extends);
 
-var Common_td = exports.Common_td = function (_Extends2) {
-    _inherits(Common_td, _Extends2);
+var Orderid_td = exports.Orderid_td = function (_Extends2) {
+    _inherits(Orderid_td, _Extends2);
 
-    function Common_td(props) {
-        _classCallCheck(this, Common_td);
+    function Orderid_td(props) {
+        _classCallCheck(this, Orderid_td);
 
-        var _this2 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Orderid_td.__proto__ || Object.getPrototypeOf(Orderid_td)).call(this, props));
 
         _this2.state = _this2.props;
 
         return _this2;
+    }
+
+    _createClass(Orderid_td, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement('td', { className: 'text-center' }, React.createElement(_reactRouterDom.Link, { to: "/order_detail/" + this.state.proto[this.state.NAME].fValue }, this.state.proto[this.state.NAME].fValue));
+        }
+    }]);
+
+    return Orderid_td;
+}(_main_component.Extends);
+
+var Common_td = exports.Common_td = function (_Extends3) {
+    _inherits(Common_td, _Extends3);
+
+    function Common_td(props) {
+        _classCallCheck(this, Common_td);
+
+        var _this3 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+        _this3.state = _this3.props;
+
+        return _this3;
     }
 
     _createClass(Common_td, [{
@@ -10190,17 +10379,17 @@ var Common_td = exports.Common_td = function (_Extends2) {
     return Common_td;
 }(_main_component.Extends);
 
-var Quantity_td = exports.Quantity_td = function (_Extends3) {
-    _inherits(Quantity_td, _Extends3);
+var Quantity_td = exports.Quantity_td = function (_Extends4) {
+    _inherits(Quantity_td, _Extends4);
 
     function Quantity_td(props) {
         _classCallCheck(this, Quantity_td);
 
-        var _this3 = _possibleConstructorReturn(this, (Quantity_td.__proto__ || Object.getPrototypeOf(Quantity_td)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (Quantity_td.__proto__ || Object.getPrototypeOf(Quantity_td)).call(this, props));
 
-        _this3.state = _this3.props;
+        _this4.state = _this4.props;
 
-        return _this3;
+        return _this4;
     }
 
     _createClass(Quantity_td, [{
@@ -10213,20 +10402,20 @@ var Quantity_td = exports.Quantity_td = function (_Extends3) {
     return Quantity_td;
 }(_main_component.Extends);
 
-var Status_td = exports.Status_td = function (_Extends4) {
-    _inherits(Status_td, _Extends4);
+var Status_td = exports.Status_td = function (_Extends5) {
+    _inherits(Status_td, _Extends5);
 
     function Status_td(props) {
         _classCallCheck(this, Status_td);
 
-        var _this4 = _possibleConstructorReturn(this, (Status_td.__proto__ || Object.getPrototypeOf(Status_td)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (Status_td.__proto__ || Object.getPrototypeOf(Status_td)).call(this, props));
 
-        _this4.state = _this4.props;
-        _this4.bClasses = { "2": "label label-primary" };
-        _this4.iClasses = { "2": "gi gi-remove_2" };
-        _this4.statusNames = { "2": "Отказ" };
+        _this5.state = _this5.props;
+        _this5.bClasses = { "2": "label label-primary" };
+        _this5.iClasses = { "2": "gi gi-remove_2" };
+        _this5.statusNames = { "2": "Отказ" };
 
-        return _this4;
+        return _this5;
     }
 
     _createClass(Status_td, [{
@@ -10240,20 +10429,26 @@ var Status_td = exports.Status_td = function (_Extends4) {
     return Status_td;
 }(_main_component.Extends);
 
-var Action_td = exports.Action_td = function (_Extends5) {
-    _inherits(Action_td, _Extends5);
+var Action_td = exports.Action_td = function (_Extends6) {
+    _inherits(Action_td, _Extends6);
 
     function Action_td(props) {
         _classCallCheck(this, Action_td);
 
-        var _this5 = _possibleConstructorReturn(this, (Action_td.__proto__ || Object.getPrototypeOf(Action_td)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Action_td.__proto__ || Object.getPrototypeOf(Action_td)).call(this, props));
 
-        _this5.state = _this5.props;
-        _this5.bClasses = { "2": "label label-primary" };
-        _this5.iClasses = { "2": "gi gi-remove_2" };
-        _this5.statusNames = { "2": "Отказ" };
+        _this6.state = _this6.props;
+        _this6.bClasses = window.configObject["Action_td"].bClasses;
 
-        return _this5;
+        // this.bClasses={"2":"label label-primary" };
+        _this6.iClasses = { "2": "gi gi-remove_2" };
+        _this6.statusNames = {
+            "0": "В работе",
+            "2": "Отказ",
+            "5": "В пути"
+        };
+
+        return _this6;
     }
 
     _createClass(Action_td, [{
@@ -10321,6 +10516,8 @@ var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./app/order_ba
 
 var _order_list = __webpack_require__(/*! ./order_list.js */ "./app/order_list.js");
 
+var _order_detail = __webpack_require__(/*! ./order_detail.js */ "./app/order_detail.js");
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -10375,7 +10572,7 @@ var Page_content = exports.Page_content = function (_Extends) {
     key: 'defineRoutes',
     value: function defineRoutes(defRoutes) {
       if (defRoutes) {
-        return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/basket', component: _basket_items.Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: _order_basket.Order_basket }), React.createElement(_reactRouterDom.Route, { path: '/order_list', component: _order_list.Order_list }));
+        return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { path: '/basket', component: _basket_items.Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: _order_basket.Order_basket }), React.createElement(_reactRouterDom.Route, { path: '/order_list', component: _order_list.Order_list }), React.createElement(_reactRouterDom.Route, { path: '/order_detail/:id', component: _order_detail.Order_detail }));
       } else {
         return React.createElement('div', null);
       }
@@ -11522,7 +11719,7 @@ var Li = __webpack_require__(/*! ./sidebar_li.js */ "./app/sidebar_li.js");
     props.items;
 */
 var items = exports.items = [{ name: "Головна", href: "#", className: "", inner: null }, { name: "Особистий кабінет", href: "#", className: "sidebar-nav-menu",
-    inner: [{ name: "Замовлення", href: "/order_list", className: "", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "", inner: null }, { name: "Головна", href: "cabinet_return.html", className: "", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "", inner: null }]
+    inner: [{ name: "Замовлення", href: "/order_list", className: "gi gi-table sidebar-nav-icon", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "gi gi-database_plus sidebar-nav-icon", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "gi gi-show_thumbnails_with_lines sidebar-nav-icon", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "gi gi-message_out sidebar-nav-icon", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "gi gi-unshare sidebar-nav-icon", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "si si-dropbox sidebar-nav-icon", inner: null }]
 }, { name: "Каталоги", href: "#", className: "", inner: null }, { name: "Каталог автозапчастин", href: "#", className: "", inner: null }, { name: "Каталог аксесуарів", href: "#", className: "", inner: null }, { name: "Корисне", href: null, className: "", inner: null }, { name: "Про нас", href: "", className: "", inner: null }];
 
 var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
@@ -11555,7 +11752,7 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
 
                         var gg = item.inner.map(function (item_inner) {
 
-                            return React.createElement('li', null, React.createElement(_reactRouterDom.Link, { to: item_inner.href }, React.createElement('i', { className: 'gi gi-table sidebar-nav-icon' }), React.createElement('font', null, React.createElement('font', null, item_inner.name))));
+                            return React.createElement('li', null, React.createElement(_reactRouterDom.Link, { to: item_inner.href }, React.createElement('i', { className: item_inner.className }), React.createElement('font', null, React.createElement('font', null, item_inner.name))));
                         });
 
                         var c = React.createElement('li', null, React.createElement('a', { href: item.href, className: item.className }, React.createElement('i', { className: 'fa fa-angle-left sidebar-nav-indicator' }), React.createElement('i', { className: 'gi gi-home sidebar-nav-icon' }), React.createElement('font', null, React.createElement('font', null, item.name))), React.createElement('ul', null, gg));

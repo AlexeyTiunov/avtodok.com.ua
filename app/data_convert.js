@@ -91,7 +91,7 @@ export function handleData(jsonData,standMap)
                       
                     for ( subItem in itemsObject[item])
                     {
-                     if (standMap[subItem])
+                     if (standMap[subItem] && !standMap[subItem].ignore)
                         {
                          map[subItem]={};  
                          Object.defineProperty(map[subItem],"functionToHandle",{value:standMap[subItem].functions,enumerable:true,writable:true});
@@ -111,7 +111,7 @@ export function handleData(jsonData,standMap)
                 } else
                 { 
                      
-                    if (standMap[item])
+                    if (standMap[item]&& !standMap[item].ignore)
                     {  
                      map[item]={};
                      Object.defineProperty(map[item],"functionToHandle",{value:standMap[item].functions,enumerable:true,writable:true});
@@ -269,7 +269,7 @@ export function handleData(jsonData,standMap)
   return; 
    var date = new Date(Date.parse(dat));  
    this.fValue=date.toLocaleDateString("ru");  
- }
+ } 
     ////////////////////////////////////////////////////////////////// 
       
       if (jsonData!=undefined && jsonData!=null)

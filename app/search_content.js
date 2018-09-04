@@ -506,8 +506,8 @@ export class BusketButton extends Extends
    {
       super(props);
       this.addToBusket=this.addToBusket.bind(this);
-      this.state.inputs=props.inputs;
-      this.state.inputs.Quantity=1;
+      this.state.inputs=props.inputs;     
+      this.state.Quantity=1;
       this.updateQuantity=this.updateQuantity.bind(this);
        
    }
@@ -546,7 +546,7 @@ export class BusketButton extends Extends
             {
                 
                 var quantity=event.target.value;
-               this.state.inputs.Quantity=quantity; 
+               this.setState({Quantity:quantity})  
             }
        else
        {
@@ -556,9 +556,8 @@ export class BusketButton extends Extends
                             
             } else
             {
-                 var quantity=event.target.value;
-               this.state.inputs.Quantity=quantity; 
-                
+                 var quantity=event.target.value;              
+                 this.setState({Quantity:quantity})      
             }
             
            
@@ -569,7 +568,7 @@ export class BusketButton extends Extends
    {
        return (
                  <div className="btn-group btn-group-xs">
-                  <input type="text" name="#" onKeyUp={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default" style={{width:"3em"}} ></input>
+                  <input type="text" name="#" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default" value={this.state.Quantity} style={{width:"3em"}} ></input>
                   <a href="#" onClick={this.addToBusket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                  </div>
        

@@ -96,8 +96,7 @@ export class Sidebar  extends Extends
                       <div id='link'></div>
                      <Sidebar_header parentMod={this}/>
                      <Page_content parentMod={this}/>
-                   </div> 
-                   <Sidebar_usersettings/> 
+                   </div>                   
                    <Basket_items_forModal/>  
                     
                 </div>

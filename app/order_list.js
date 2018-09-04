@@ -22,16 +22,16 @@ function getMapObject()
     var mapObject=
     {
       ORDER_ID:{functions:{defineColumnName,defineTd},params:["Номер Заказа",<Orderid_td/>,]},
-      DATE_INSERT:{functions:{parceDate,defineColumnName,defineTd},params:["","Дата",<Common_td />]},
-      BRAND:{functions:{defineColumnName,defineTd},params:["Бренд",<Common_td />,]}, 
-      REGIONCODE:{functions:{defineColumnName,defineTd},params:["Регион",<Common_td />,]}, 
-      ARTICLE:{functions:{defineColumnName,defineTd},params:["Номер",<Common_td />,]}, 
-      NAME:{functions:{defineColumnName,defineTd},params:["Название",<Common_td />,]},
-      QUANTITY:{functions:{defineColumnName,defineTd},params:["Количество",<Common_td/>,]},
-      PRICE:{functions:{defineColumnName,defineTd},params:["Цена",<Common_td />,]}, 
+      DATE_INSERT:{functions:{parceDate,defineColumnClass,defineColumnName,defineTd},params:["","hidden-xs","Дата",<Common_td />]},
+      BRAND:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Бренд","hidden-xs",<Common_td />,]}, 
+      REGIONCODE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Регион","hidden-xs",<Common_td />,]}, 
+      ARTICLE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Номер","hidden-xs",<Common_td />,]}, 
+      NAME:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Название","hidden-xs",<Common_td />,]},
+      QUANTITY:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Количество","hidden-xs",<Common_td/>,]},
+      PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","hidden-xs",<Common_td />,]}, 
       ORDER_PRICE:{functions:{defineColumnName,defineTd},params:["Сумма",<Common_td />,]},
       ITEMSTATUS:{functions:{},params:[]}, 
-      action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие","hidden-xs",<Status_td />,],addNew:true},
+      action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Status_td />,],addNew:true},
       state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},
         
         
@@ -160,7 +160,7 @@ export class Orderid_td extends Extends
      {
          return (
           
-                  <td className="text-center"><Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link></td>  
+                  <td className={this.state.proto[this.state.NAME].className+" text-center" }><Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link></td>  
           
           
                 )
@@ -179,7 +179,7 @@ export class Common_td extends Extends
      render()
      {
        return(
-                   <td className="text-center">{this.state.proto[this.state.NAME].fValue}</td> 
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> {this.state.proto[this.state.NAME].fValue}</td> 
         
         
          
@@ -203,7 +203,7 @@ export class Quantity_td extends Extends
      render()
      {
        return(
-                   <td className="text-center">{this.state.proto[this.state.NAME].fValue}</td> 
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>{this.state.proto[this.state.NAME].fValue}</td> 
         
         
          
@@ -261,7 +261,7 @@ export class Action_td extends Extends
      {
        return(
                 
-                    <td><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                    <td className={this.state.proto.action.className}><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
                    
          
              )   

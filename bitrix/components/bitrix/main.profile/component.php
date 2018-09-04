@@ -29,12 +29,13 @@ if(!($arParams['CHECK_RIGHTS'] == 'N' || $USER->CanDoOperation('edit_own_profile
 
 $strError = "";
 $arResult["ID"] = IntVal($arResult["ID"]);
-
+#var_dump($_SESSION);
+# var_dump($_REQUEST["save"]) ;
 if($_SERVER["REQUEST_METHOD"]=="POST" && (strlen($_REQUEST["save"])>0 || strlen($_REQUEST["apply"])>0) && check_bitrix_sessid())
 {
 //	echo "<pre>"; print_r($_REQUEST); echo "</pre>";
 //	exit();
-
+    
 	$bOk = false;
 	$obUser = new CUser;
 
@@ -56,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && (strlen($_REQUEST["save"])>0 || strlen(
 		"NAME"					=> $_REQUEST["NAME"],
 		"LAST_NAME"				=> $_REQUEST["LAST_NAME"],
 		"SECOND_NAME"			=> $_REQUEST["SECOND_NAME"],
-		"EMAIL"					=> $_REQUEST["EMAIL"],
+		"EMAIL"					=> $_POST["EMAIL"],
 		"LOGIN"					=> $_REQUEST["LOGIN"],
 		"PERSONAL_PROFESSION"	=> $_REQUEST["PERSONAL_PROFESSION"],
 		"PERSONAL_WWW"			=> $_REQUEST["PERSONAL_WWW"],
@@ -353,7 +354,8 @@ $arResult["COUNTRY_SELECT"] = SelectBoxFromArray("PERSONAL_COUNTRY", $arCountrie
 $arResult["COUNTRY_SELECT_WORK"] = SelectBoxFromArray("WORK_COUNTRY", $arCountries, $arResult["arUser"]["WORK_COUNTRY"], GetMessage("USER_DONT_KNOW"));
 
 $arResult["strProfileError"] = $strError;
-$arResult["BX_SESSION_CHECK"] = bitrix_sessid_post();
+#$arResult["BX_SESSION_CHECK"] = bitrix_sessid_post();
+ $arResult["BX_SESSION_CHECK"] = bitrix_sessid();
 
 $arResult["DATE_FORMAT"] = CLang::GetDateFormat("SHORT");
 
@@ -387,5 +389,12 @@ if ($arParams["SET_TITLE"] == "Y") $APPLICATION->SetTitle(GetMessage("PROFILE_DE
 
 if ($bOk) $arResult['DATA_SAVED'] = 'Y';
 
-$this->IncludeComponentTemplate();
+
+$arResult["arUser"]["GROUP_POLICY"]=$arResult["GROUP_POLICY"];
+$arResult["arUser"]["BX_SESSION_CHECK"]=$arResult["BX_SESSION_CHECK"];
+$arResult["arUser"]["ERRORS"]=$strError;
+$arRes[]=$arResult["arUser"];
+ #var_dump($arResult["arUser"]); 
+echo (json_encode($arRes,JSON_UNESCAPED_UNICODE));  
+#$this->IncludeComponentTemplate();
 ?>

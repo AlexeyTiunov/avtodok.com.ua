@@ -9,7 +9,7 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
       props.items;
   */  
 export var items = [
-  {name:"Головна", href:"#", className:"" ,inner:null},  
+  {name:"Головна", href:"#", className:"active" ,inner:null},  
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
     inner:[  {name:"Замовлення", href:"/order_list", className:"gi gi-table sidebar-nav-icon" ,inner:null},
              {name:"Баланс", href:"cabinet_cash.html",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},
@@ -89,7 +89,7 @@ export class Sidebar_nav  extends React.Component
                      }
                      {
                          const ff=  ( <li>
-                               <a  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                               <a  href={item.href}  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
                               </li> ) 
                       return ff;        
                           

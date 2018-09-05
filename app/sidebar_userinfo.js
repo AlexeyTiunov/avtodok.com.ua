@@ -21,6 +21,7 @@ function getMapObject()
     var mapObject=
     {
       ID:{functions:{},params:[]},
+      LOGIN:{functions:{},params:[]},
       NAME:{functions:{},params:[]},
       EMAIL:{functions:{},params:[]},
       PASSWORD_REQUIREMENTS:{functions:{},params:[]}, 
@@ -85,7 +86,14 @@ export class Sidebar_userinfo extends Extends
          
          
      }
-     
+     ///////////////////////////////////////
+     componentDidMount()
+     {
+         super.componentDidMount()
+      //  var elA=document.getElementById("user-settings");
+      //  window.addEventListener("load",function(){elA.click();})
+       
+     }
      
      render ()
      {
@@ -97,12 +105,15 @@ export class Sidebar_userinfo extends Extends
                                         </div>
                                         <div className="sidebar-user-name"><font><font>USER 1</font></font></div>
                                         <div className="sidebar-user-links">
-                                            <a href="cabinet_profile.html" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Профіль">
+                                            <a href="cabinet_profile.html"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Профіль">
                                                 <i className="gi gi-user"></i>
                                             </a>
                                           
                                             
                                             <Link to="/user_info"><i className="gi gi-cogwheel"></i></Link>
+                                             <a id="user-settings" data-toggle="modal" data-target="#info_message" >
+                                                <i className="gi gi-cogwheel"></i>
+                                            </a>
                                             <a href="login.html" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Вийти">
                                                 <i className="gi gi-exit"></i>
                                             </a>
@@ -124,7 +135,8 @@ export class Sidebar_usersettings extends Extends
      {  
        super(props);      
        this.state.mapArray=[]; 
-       this.state.email="";  
+       this.state.email="";
+       this.state.EMAIL="";  
        this.onInputChange=this.onInputChange.bind(this);
        this.saveUserData=this.saveUserData.bind(this);  
      } 
@@ -136,9 +148,17 @@ export class Sidebar_usersettings extends Extends
          Prom.then(function(responseText){
              
              handleDT=new handleData(responseText,getMapObject());
-             findMySelf().setState({mapArray:handleDT.mapArray});
-              findMySelf().setState({sessid:handleDT.mapArray[0].BX_SESSION_CHECK.fValue});
-              findMySelf().setState({email:handleDT.mapArray[0].EMAIL.fValue}); 
+             var state={mapArray:handleDT.mapArray,
+                        sessid:handleDT.mapArray[0].BX_SESSION_CHECK.fValue,
+                        email:handleDT.mapArray[0].EMAIL.fValue,
+                        EMAIL:handleDT.mapArray[0].EMAIL.fValue,
+                        LOGIN:handleDT.mapArray[0].LOGIN.fValue
+                       } 
+            // findMySelf().setState({mapArray:handleDT.mapArray});
+             // findMySelf().setState({sessid:handleDT.mapArray[0].BX_SESSION_CHECK.fValue});
+             // findMySelf().setState({email:handleDT.mapArray[0].EMAIL.fValue});
+             // findMySelf().setState({EMAIL:handleDT.mapArray[0].EMAIL.fValue});
+                findMySelf().setState(state);
          })  
          
      }
@@ -150,7 +170,16 @@ export class Sidebar_usersettings extends Extends
          Prom.then(function(responseText){
              
              handleDT=new handleData(responseText,getMapObject());
-             findMySelf().setState({mapArray:handleDT.mapArray}); 
+             if (handleDT.mapArray[0].ERRORS.fValue!="")
+             {
+                  findMySelf().showInforMassage("ПОМИЛКА",handleDT.mapArray[0].ERRORS.fValue)
+             }else
+             {
+                  findMySelf().showInforMassage("SUCCESS","SUCCESS");
+                  findMySelf().setState({mapArray:handleDT.mapArray}); 
+             }             
+            
+              
          })  
          
          
@@ -182,7 +211,7 @@ export class Sidebar_usersettings extends Extends
         if (this.state.mapArray.lenght=0)
         return (<div></div>);
         else; 
-        return (  <div id="modal-user-settings" className="" tabindex="-1" role="dialog" aria-hidden="true">
+        return (  <div id="modal-user-sett" className="" tabindex="-1" role="dialog" aria-hidden="true">
              <div className="modal-dialog">
                 <div className="modal-content">
                   
@@ -270,10 +299,36 @@ export class Sidebar_usersettings_modal extends Extends
          
          
      } 
-     
-     render ()
+   /*   render()
      {
-        return (  <div id="modal-user-settings" className="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+       return ( <div id="Basket_items" className="modal fade" role="dialog">
+                   <div className="modal-dialog">                     
+                     <div className="modal-content">
+                        <div className="modal-header">
+                        </div>
+                        <div className="modal-body">
+                        </div>
+                        <div className="modal-footer">
+                        </div>
+                    
+                     </div>
+                   </div>
+                   
+                   
+                  </div> 
+          
+           
+            
+              )  
+         
+         
+         
+     }    */
+    
+     
+    render ()
+     {
+        return (  <div id="modal-user-settings" className="modal fade"  role="dialog">
             <div className="modal-dialog">
                 <div className="modal-content">
                   
@@ -345,7 +400,7 @@ export class Sidebar_usersettings_modal extends Extends
                 ) 
          
          
-     }
+     }      
      
     
     

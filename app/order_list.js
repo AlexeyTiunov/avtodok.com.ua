@@ -29,7 +29,7 @@ function getMapObject()
       NAME:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Название","hidden-xs",<Common_td />,]},
       QUANTITY:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Количество","hidden-xs",<Common_td/>,]},
       PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","hidden-xs",<Common_td />,]}, 
-      ORDER_PRICE:{functions:{defineColumnName,defineTd},params:["Сумма",<Common_td />,]},
+      ORDER_PRICE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Сумма","hidden-xs",<Common_td />,]},
       ITEMSTATUS:{functions:{},params:[]}, 
       action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Status_td />,],addNew:true},
       state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},

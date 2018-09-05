@@ -29,13 +29,13 @@ if(!($arParams['CHECK_RIGHTS'] == 'N' || $USER->CanDoOperation('edit_own_profile
 
 $strError = "";
 $arResult["ID"] = IntVal($arResult["ID"]);
-#var_dump($_SESSION);
+#
 # var_dump($_REQUEST["save"]) ;
 if($_SERVER["REQUEST_METHOD"]=="POST" && (strlen($_REQUEST["save"])>0 || strlen($_REQUEST["apply"])>0) && check_bitrix_sessid())
 {
 //	echo "<pre>"; print_r($_REQUEST); echo "</pre>";
 //	exit();
-    
+    //var_dump($_SESSION);
 	$bOk = false;
 	$obUser = new CUser;
 
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && (strlen($_REQUEST["save"])>0 || strlen(
 		"NAME"					=> $_REQUEST["NAME"],
 		"LAST_NAME"				=> $_REQUEST["LAST_NAME"],
 		"SECOND_NAME"			=> $_REQUEST["SECOND_NAME"],
-		"EMAIL"					=> $_POST["EMAIL"],
+		"EMAIL"					=> $_REQUEST["EMAIL"],
 		"LOGIN"					=> $_REQUEST["LOGIN"],
 		"PERSONAL_PROFESSION"	=> $_REQUEST["PERSONAL_PROFESSION"],
 		"PERSONAL_WWW"			=> $_REQUEST["PERSONAL_WWW"],

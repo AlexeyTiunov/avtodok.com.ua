@@ -51,7 +51,7 @@ export class Extends extends React.Component
       {
           var mas=[];
           for (item in this.state)
-          {
+          { 
             mas.push(item+"="+this.state[item])  
           }
           return mas.join("&");
@@ -178,6 +178,31 @@ export class Extends extends React.Component
          }
          return fms;
             
+     }
+     
+     showInforMassage(header,message)
+     {
+         var linkA=document.getElementById("showMess");
+         if (linkA==null)
+         {
+           linkA=document.createElement("a"); 
+           linkA.setAttribute("data-toggle","modal");
+           linkA.setAttribute("data-target","#info_message");
+           linkA.id="showMess";          
+         }
+         
+        
+         
+         
+        
+         Uobject=window.objectReg["Info_message"];
+         Uobject.setState({header:header,body:message});
+         var body=document.getElementsByTagName("body")[0]; 
+         body.appendChild(linkA);
+         
+         linkA.click(); 
+         
+         
      }
     
 }

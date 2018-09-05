@@ -3595,6 +3595,26 @@ p, .table, .alert, .carousel {
 */
 /* Mobile devices, Tablets (>767px) */
 @media screen and (max-width: 550px) {
+    body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #394263;
+    font-size: 17px;
+    background-color: #222222;
+}
+.sidebar-nav a {
+    display: block;
+    color: #eaedf1;
+    padding: 0 10px;
+    min-height: 45px;
+    line-height: 35px;
+}
+.sidebar-nav ul a {
+    margin: 0;
+    font-size: 15px;
+    padding-left: 15px;
+    min-height: 42px;
+    line-height: 32px;
+}
 
 .label, .badge {
     font-weight: normal;

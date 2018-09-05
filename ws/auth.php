@@ -18,16 +18,25 @@
         
          
     }
+    
+    $cookie_login = ${COption::GetOptionString("main", "cookie_name", "BITRIX_SM")."_LOGIN"};
+    $cookie_md5pass = ${COption::GetOptionString("main", "cookie_name", "BITRIX_SM")."_UIDH"};
+    $mas=$USER->LoginByHash($cookie_login, $cookie_md5pass);
     if ($USER->isAuthorized())
     {
-       echo $_POST['LOGIN'].$USER->GetID()."done";
+        $USER->SavePasswordHash();
+       echo $cookie_login."done".$cookie_md5pass; 
        die(); 
+    } else
+    {
+        var_dump($mas);
+        echo $cookie_login."not".$cookie_md5pass; 
     }
     
-     $loginID=GetUserIDByLogin($_POST['LOGIN']); 
+   /*  $loginID=GetUserIDByLogin($_POST['LOGIN']); 
      $USER->Authorize($loginID,true);
      var_dump($_POST);
-     echo $_POST['LOGIN'].$USER->GetID()."check";
+     echo $_POST['LOGIN'].$USER->GetID()."check"; */
     
     
     

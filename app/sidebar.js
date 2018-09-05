@@ -18,7 +18,8 @@ import {items as ITEMS }from './sidebar_nav.js';
 import {Sidebar_header} from './sidebar_header.js'
 import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
-import {Sidebar_usersettings} from './sidebar_userinfo.js' 
+import {Sidebar_usersettings} from './sidebar_userinfo.js'
+import {Sidebar_usersettings_modal} from './sidebar_userinfo.js' 
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
 import {Search_table} from './search_content.js'
@@ -26,7 +27,8 @@ import {Search_table} from './search_content.js'
 import {Basket_items_forModal} from './basket_items.js' 
 import {Basket} from './basket_items.js' 
 import {Order_basket} from './order_basket.js'   
-import {Order_list} from './order_list.js'   
+import {Order_list} from './order_list.js'  
+import {Info_message} from './info_message.js'         
  
 import './css/plugins.css'; 
 
@@ -88,7 +90,8 @@ export class Sidebar  extends Extends
                       <div id='sidebar-content' className='sidebar-content'>                         
                         <Sidebar_brand/>    
                         <Sidebar_userinfo/>                         
-                        <Sidebar_nav items={ITEMS}/>          
+                        <Sidebar_nav items={ITEMS}/> 
+                       
                      </div>  
                     </div>
                    </div>
@@ -96,10 +99,12 @@ export class Sidebar  extends Extends
                       <div id='link'></div>
                      <Sidebar_header parentMod={this}/>
                      <Page_content parentMod={this}/>
-                   </div>                   
-                   <Basket_items_forModal/>  
-                    
-                </div>
+                   </div>
+                                      
+                    <Basket_items_forModal/>  
+                    <Info_message/>           
+                </div>  
+               
               </Router> 
                   
                   
@@ -113,8 +118,9 @@ export class Sidebar  extends Extends
 }
  //debugger
  var body=document.getElementsByTagName("body"); 
-   ReactDOM.render(   
-     <Sidebar/>,
+   ReactDOM.render(      
+     <Sidebar/>     
+     ,
    body[0]
 
 )

@@ -150,6 +150,196 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./app/auth.js":
+/*!*********************!*\
+  !*** ./app/auth.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Auth_need = exports.Auth_done = exports.Auth = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var Auth = exports.Auth = function (_Extends) {
+    _inherits(Auth, _Extends);
+
+    function Auth(props) {
+        _classCallCheck(this, Auth);
+
+        var _this = _possibleConstructorReturn(this, (Auth.__proto__ || Object.getPrototypeOf(Auth)).call(this, props));
+
+        _this.state.renderIn = "";
+        _this.state.isAuthed = false;
+
+        return _this;
+    }
+
+    _createClass(Auth, [{
+        key: 'auth',
+        value: function auth(request) {
+            var findMySelf = this.findMySelf(this.constructor.name);
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/auth.php", false, request);
+
+            Prom.then(function (responseText) {
+
+                if (Number(responseText) > 0) {
+                    authComp = React.createElement(Auth_done, null);
+                    isAuthed = true;
+                } else {
+                    authComp = React.createElement(Auth_need, null);
+                    isAuthed = false;
+                }
+                findMySelf().setState({ renderIn: React.createElement(authComp.type),
+                    isAuthed: isAuthed
+                });
+            });
+        }
+    }, {
+        key: 'autoAuth',
+        value: function autoAuth() {
+            this.auth("AUTO_AUTH=Y");
+        }
+    }, {
+        key: 'isAuthed',
+        value: function isAuthed() {
+
+            this.auth("CHECK_AUTH=Y");
+        }
+
+        /////////////////////////////
+
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _get(Auth.prototype.__proto__ || Object.getPrototypeOf(Auth.prototype), 'componentDidMount', this).call(this);
+            this.autoAuth();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { id: 'modal-user-auth', className: 'modal fade', role: 'dialog' }, this.state.renderIn);
+        }
+    }]);
+
+    return Auth;
+}(_main_component.Extends);
+
+var Auth_done = exports.Auth_done = function (_Extends2) {
+    _inherits(Auth_done, _Extends2);
+
+    function Auth_done(props) {
+        _classCallCheck(this, Auth_done);
+
+        var _this2 = _possibleConstructorReturn(this, (Auth_done.__proto__ || Object.getPrototypeOf(Auth_done)).call(this, props));
+
+        _this2.logOut = _this2.logOut.bind(_this2);
+
+        return _this2;
+    }
+
+    _createClass(Auth_done, [{
+        key: 'logOut',
+        value: function logOut() {
+            var findMySelf = this.findMySelf(this.constructor.name);
+            var Prom = this.makeRequestToRecieveData("POST", "/ws/auth.php", false, "LOG_OUT=Y");
+        }
+
+        ///////////////////////////////////
+
+
+    }, {
+        key: 'render',
+        value: function render() {
+
+            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }, React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'button', onClick: this.logOut, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0438\u0439\u0442\u0438")))))), React.createElement('div', { className: 'modal-footer' })));
+        }
+    }]);
+
+    return Auth_done;
+}(_main_component.Extends);
+
+var Auth_need = exports.Auth_need = function (_Extends3) {
+    _inherits(Auth_need, _Extends3);
+
+    function Auth_need(props) {
+        _classCallCheck(this, Auth_need);
+
+        var _this3 = _possibleConstructorReturn(this, (Auth_need.__proto__ || Object.getPrototypeOf(Auth_need)).call(this, props));
+
+        _this3.onInputChange = _this3.onInputChange.bind(_this3);
+        _this3.state.LOGIN = "";
+
+        return _this3;
+    }
+
+    _createClass(Auth_need, [{
+        key: 'onInputChange',
+        value: function onInputChange() {}
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header text-center' }, React.createElement('h2', { className: 'modal-title' }, React.createElement('i', { className: 'fa fa-pencil' }), React.createElement('font', null, React.createElement('font', null, " \u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))), React.createElement('div', { className: 'modal-body' }, React.createElement('form', { action: 'index.html', method: 'post', enctype: 'multipart/form-data', className: 'form-horizontal form-bordered', onsubmit: 'return false;' }, React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041B\u043E\u0433\u0438\u043D"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', onChange: this.onInputChange, id: 'user-settings-login', name: 'LOGIN', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043B\u043E\u0433\u0438\u043D..." }))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', onChange: this.onInputChange, id: 'user-settings-password', name: 'NEW_PASSWORD', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C..." })))), React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'button', onClick: this.saveUserData, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))))))));
+        }
+    }]);
+
+    return Auth_need;
+}(_main_component.Extends);
+
+/***/ }),
+
 /***/ "./app/basket_items.js":
 /*!*****************************!*\
   !*** ./app/basket_items.js ***!
@@ -10655,7 +10845,7 @@ var Page_content = exports.Page_content = function (_Extends) {
       // super.childUpdate(this,<h1>success</h1>);   
       // this.state.parentMod.childUpdate(this);
 
-      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'makeRequest', this).call(this, "POST", "/ws/auth.php", false, "LOGIN=Alex");
+      // super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
     }
   }, {
     key: 'componentDidUpdate',
@@ -11229,6 +11419,8 @@ var _order_list = __webpack_require__(/*! ./order_list.js */ "./app/order_list.j
 
 var _info_message = __webpack_require__(/*! ./info_message.js */ "./app/info_message.js");
 
+var _auth = __webpack_require__(/*! ./auth.js */ "./app/auth.js");
+
 __webpack_require__(/*! ./css/plugins.css */ "./app/css/plugins.css");
 
 function _interopRequireDefault(obj) {
@@ -11311,7 +11503,7 @@ var Sidebar = exports.Sidebar = function (_Extends) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement('div', { id: 'link' }), React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })), React.createElement(_basket_items.Basket_items_forModal, null), React.createElement(_info_message.Info_message, null)));
+      return React.createElement(_reactRouterDom.BrowserRouter, null, React.createElement('div', { id: 'page-container', className: 'header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations' }, React.createElement('div', { id: 'sidebar', className: '' }, React.createElement('div', { className: 'sidebar-scroll' }, React.createElement('div', { id: 'sidebar-content', className: 'sidebar-content' }, React.createElement(_sidebar_brand.Sidebar_brand, null), React.createElement(_sidebar_userinfo.Sidebar_userinfo, null), React.createElement(_sidebar_nav.Sidebar_nav, { items: _sidebar_nav.items })))), React.createElement('div', { id: 'main-container' }, React.createElement('div', { id: 'link' }), React.createElement(_sidebar_header.Sidebar_header, { parentMod: this }), React.createElement(_page_content.Page_content, { parentMod: this })), React.createElement(_basket_items.Basket_items_forModal, null), React.createElement(_info_message.Info_message, null), React.createElement(_auth.Auth, null)));
     }
   }]);
 
@@ -12022,7 +12214,7 @@ var Sidebar_userinfo = exports.Sidebar_userinfo = function (_Extends2) {
     }, {
         key: 'render',
         value: function render() {
-            return React.createElement('div', { className: 'sidebar-section sidebar-user clearfix' }, React.createElement('div', { className: 'sidebar-user-avatar' }, React.createElement('a', { href: '#' }, React.createElement('img', { src: '/app/img/placeholders/avatars/avatar2.jpg', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }))), React.createElement('div', { className: 'sidebar-user-name' }, React.createElement('font', null, React.createElement('font', null, 'USER 1'))), React.createElement('div', { className: 'sidebar-user-links' }, React.createElement('a', { href: 'cabinet_profile.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041F\u0440\u043E\u0444\u0456\u043B\u044C" }, React.createElement('i', { className: 'gi gi-user' })), React.createElement(_reactRouterDom.Link, { to: '/user_info' }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { id: 'user-settings', 'data-toggle': 'modal', 'data-target': '#info_message' }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { href: 'login.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u0412\u0438\u0439\u0442\u0438" }, React.createElement('i', { className: 'gi gi-exit' }))));
+            return React.createElement('div', { className: 'sidebar-section sidebar-user clearfix' }, React.createElement('div', { className: 'sidebar-user-avatar' }, React.createElement('a', { href: '#' }, React.createElement('img', { src: '/app/img/placeholders/avatars/avatar2.jpg', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }))), React.createElement('div', { className: 'sidebar-user-name' }, React.createElement('font', null, React.createElement('font', null, 'USER 1'))), React.createElement('div', { className: 'sidebar-user-links' }, React.createElement('a', { href: 'cabinet_profile.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u041F\u0440\u043E\u0444\u0456\u043B\u044C" }, React.createElement('i', { className: 'gi gi-user' })), React.createElement(_reactRouterDom.Link, { to: '/user_info' }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { id: 'user-settings', 'data-toggle': 'modal', 'data-target': '#modal-user-auth' }, React.createElement('i', { className: 'gi gi-cogwheel' })), React.createElement('a', { href: 'login.html', 'data-toggle': 'tooltip', 'data-placement': 'bottom', title: '', 'data-original-title': "\u0412\u0438\u0439\u0442\u0438" }, React.createElement('i', { className: 'gi gi-exit' }))));
         }
     }]);
 

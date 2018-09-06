@@ -18,21 +18,53 @@
         
          
     }
-    
+   if (isset($_POST["AUTO_AUTH"]) && $_POST["AUTO_AUTH"]=="Y" )
+   {
+    if ($USER->isAuthorized())
+    {
+        $USER->SavePasswordHash();
+       #echo $cookie_login."done".$cookie_md5pass; 
+       echo "1";
+       die(); 
+    }   
+       
     $cookie_login = ${COption::GetOptionString("main", "cookie_name", "BITRIX_SM")."_LOGIN"};
     $cookie_md5pass = ${COption::GetOptionString("main", "cookie_name", "BITRIX_SM")."_UIDH"};
     $mas=$USER->LoginByHash($cookie_login, $cookie_md5pass);
     if ($USER->isAuthorized())
     {
         $USER->SavePasswordHash();
-       echo $cookie_login."done".$cookie_md5pass; 
+       #echo $cookie_login."done".$cookie_md5pass; 
+       echo "1";
        die(); 
     } else
     {
-        var_dump($mas);
-        echo $cookie_login."not".$cookie_md5pass; 
+        #var_dump($mas);
+        #echo $cookie_login."not".$cookie_md5pass; 
+        echo "0";
     }
-    
+   }
+    if (isset($_POST["CHECK_AUTH"]))
+    {
+         if ($USER->isAuthorized())
+         {
+             echo "1"; 
+         } else
+         {
+             echo "0"; 
+         }
+         
+     }
+     if (isset($_POST["LOG_OUT"]))
+     {
+           if ($USER->isAuthorized())
+           {
+             $USER->Logout();  
+           }
+         
+     }
+     
+     
    /*  $loginID=GetUserIDByLogin($_POST['LOGIN']); 
      $USER->Authorize($loginID,true);
      var_dump($_POST);

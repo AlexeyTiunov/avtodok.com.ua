@@ -111,7 +111,7 @@ export class Sidebar_userinfo extends Extends
                                           
                                             
                                             <Link to="/user_info"><i className="gi gi-cogwheel"></i></Link>
-                                             <a id="user-settings" data-toggle="modal" data-target="#info_message" >
+                                             <a id="user-settings" data-toggle="modal" data-target="#modal-user-auth" >
                                                 <i className="gi gi-cogwheel"></i>
                                             </a>
                                             <a href="login.html" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Вийти">

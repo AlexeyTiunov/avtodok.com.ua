@@ -29,6 +29,7 @@ import {Basket} from './basket_items.js'
 import {Order_basket} from './order_basket.js'   
 import {Order_list} from './order_list.js'  
 import {Info_message} from './info_message.js'         
+import {Auth} from './auth.js' 
  
 import './css/plugins.css'; 
 
@@ -102,7 +103,8 @@ export class Sidebar  extends Extends
                    </div>
                                       
                     <Basket_items_forModal/>  
-                    <Info_message/>           
+                    <Info_message/>  
+                    <Auth />         
                 </div>  
                
               </Router> 

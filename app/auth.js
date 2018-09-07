@@ -41,7 +41,7 @@ export class Auth extends Extends
     }
     autoAuth()
     {
-      this.auth("AUTO_AUTH=Y"); 
+      this.auth("AUTO_AUTH=Y&CHECK_AUTH=Y"); 
     }
     
     isAuthed()
@@ -87,7 +87,10 @@ export class Auth_done extends Extends
     }
       
     ///////////////////////////////////
-   
+    componentDidMount()
+    {
+        this.updateAll();
+    }
     
     render(){
         
@@ -157,6 +160,11 @@ export class Auth_need extends Extends
          var str= `${id}` ;
          this.setState({ str:inputValue});
         
+    }
+    /////////////////////////////////////////
+     componentDidMount()
+    {
+        this.updateAll();
     } 
     render()
     {

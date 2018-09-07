@@ -62,7 +62,8 @@ export class Basket_items extends Extends
      {  
         super(props); 
         this.state.mapArray=[];
-       
+        this.state.getBasketPartsQuantity=false;
+        
          
      } 
      getBasketItems()
@@ -85,10 +86,27 @@ export class Basket_items extends Extends
          Prom.then( function (responseText){
            
              handleDT=new handleData(responseText,getMapObject());
-             findMySelf().setState({mapArray:handleDT.mapArray}); 
+             findMySelf().setState({mapArray:handleDT.mapArray,shouldComponentUpdate:true}); 
              
              
          }); 
+         
+     }
+     getBasketPartsQuantity()
+     {
+        var findMySelf=this.findMySelf(this.constructor.name);
+       // thisO=findMySelf();
+       // if  (thisO==undefined) return;
+        updateMyself= function(responseText)
+        {
+           this.setState({partsQuantity:responseText}); 
+        }.bind(this);
+       
+        var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
+       Prom.then(
+         (responseText)=>{findMySelf().setState({partsQuantity:responseText})}
+         ); 
+      // Prom.then(updateMyself); 
          
      }
      ////////////////////////////////
@@ -99,17 +117,30 @@ export class Basket_items extends Extends
       } 
       shouldComponentUpdate(nextProps, nextState)
       {
-          this.state=nextState;
-          return true;
+          if (!this.state.shouldComponentUpdate)
+          {
+              this.getBasketItems();   
+          } 
+          
+          
+          return this.state.shouldComponentUpdate;
       }
       componentWillUpdate(nextProps, nextState)
       {
-          
+           //getWorkPage().setState({renderIN:"",defineRoutes:false});
+      }
+      componentDidUpdate(prevProps, prevState)
+      {
+        super.componentDidUpdate(prevProps, prevState); 
+      }
+      componentWillMount()
+      {
+           
       }
      componentDidMount()
      {
          super.componentDidMount();
-         this.getBasketItems();
+         this.getBasketItems();       
         // this.setState({mapArray:this.state.mapArray});
      }
      
@@ -192,7 +223,7 @@ export class Basket_items extends Extends
                                      
                                    )
                
-        this.state.mapArray=[];                        
+       // this.state.mapArray=[];                        
          
         return ( <div className="table-responsive">
                    <table className="table table-vcenter"> 
@@ -470,7 +501,7 @@ export class Basket extends Extends
      {   
       // var unMount=ReactDOM.unmountComponentAtNode.bind(ReactDOM.findDOMNode(window.objectReg["Basket_items"]));   
       // unMount(document.body);
-       var unMount=ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
+       //var unMount=ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
      }
      render()
      {
@@ -506,7 +537,7 @@ export class Basket_items_forModal extends Extends
      constructor(props) 
      {  
         super(props); 
-         
+           
      } 
      
      

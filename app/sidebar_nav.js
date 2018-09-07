@@ -2,6 +2,7 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 var Li= require("./sidebar_li.js");
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {Extends} from './main_component.js' 
 //debugger
 
 
@@ -39,15 +40,19 @@ export var items = [
   
    
 
-export class Sidebar_nav  extends React.Component
+export class Sidebar_nav  extends Extends
 {
     constructor(props) 
      {  
        super(props);
        this.state={items:this.props.items};      
-         
+       this.onclick=this.onclick.bind(this);  
          
      } 
+     onclick()
+     {
+         getWorkPage().setState({renderIN:"",defineRoutes:true});
+     }
      componentDidCatch(error, info) 
      {
          console.log(error);
@@ -57,7 +62,8 @@ export class Sidebar_nav  extends React.Component
      render()
      {
        // debugger  
-        
+         var findMySelf=this.findMySelf(this.constructor.name); 
+         var self=this;
         
         const b=this.state.items.map(
              function(item){
@@ -68,7 +74,7 @@ export class Sidebar_nav  extends React.Component
                          
                         let gg= item.inner.map(function(item_inner){
                                            
-                                           return <li><Link to={item_inner.href}><i className={item_inner.className}></i><font><font>{item_inner.name}</font></font></Link></li>;
+                                           return <li><Link onClick={self.onclick} to={item_inner.href}><i className={item_inner.className}></i><font><font>{item_inner.name}</font></font></Link></li>;
                                            
                          });
                          

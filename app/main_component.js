@@ -15,8 +15,10 @@ export class Extends extends React.Component
          this.state={parentMod:Object,
                      renderIN:<div></div>,
                      dataRecieved:null,
-         
+                     justUpdate:null,
+                     shouldComponentUpdate:false
                      };
+        
          this.xhr = new XMLHttpRequest();
          
          //this.objectReg={};
@@ -45,6 +47,10 @@ export class Extends extends React.Component
       delete window.objectReg[this.constructor.name];  
          
      }
+     componentDidUpdate(prevProps, prevState)
+      {
+        this.state.shouldComponentUpdate=false;  
+      }
      
     ///////////////////////////////////////////////////////////////////// 
       makePostDataFromState()
@@ -203,6 +209,14 @@ export class Extends extends React.Component
          linkA.click(); 
          
          
+     }
+     updateAll()
+     {
+         for (item in window.objectReg )
+         {
+           if (window.objectReg[item]==this) continue; 
+            window.objectReg[item].setState({justUpdate:null});
+         }
      }
     
 }

@@ -250,7 +250,7 @@ var Auth = exports.Auth = function (_Extends) {
     }, {
         key: 'autoAuth',
         value: function autoAuth() {
-            this.auth("AUTO_AUTH=Y");
+            this.auth("AUTO_AUTH=Y&CHECK_AUTH=Y");
         }
     }, {
         key: 'isAuthed',
@@ -304,7 +304,11 @@ var Auth_done = exports.Auth_done = function (_Extends2) {
 
         ///////////////////////////////////
 
-
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.updateAll();
+        }
     }, {
         key: 'render',
         value: function render() {
@@ -352,6 +356,13 @@ var Auth_need = exports.Auth_need = function (_Extends3) {
             }
             var str = '' + id;
             this.setState({ str: inputValue });
+        }
+        /////////////////////////////////////////
+
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.updateAll();
         }
     }, {
         key: 'render',
@@ -485,6 +496,7 @@ var Basket_items = exports.Basket_items = function (_Extends) {
     var _this = _possibleConstructorReturn(this, (Basket_items.__proto__ || Object.getPrototypeOf(Basket_items)).call(this, props));
 
     _this.state.mapArray = [];
+    _this.state.getBasketPartsQuantity = false;
 
     return _this;
   }
@@ -510,8 +522,24 @@ var Basket_items = exports.Basket_items = function (_Extends) {
       Prom.then(function (responseText) {
 
         handleDT = new _data_convert.handleData(responseText, getMapObject());
-        findMySelf().setState({ mapArray: handleDT.mapArray });
+        findMySelf().setState({ mapArray: handleDT.mapArray, shouldComponentUpdate: true });
       });
+    }
+  }, {
+    key: 'getBasketPartsQuantity',
+    value: function getBasketPartsQuantity() {
+      var findMySelf = this.findMySelf(this.constructor.name);
+      // thisO=findMySelf();
+      // if  (thisO==undefined) return;
+      updateMyself = function (responseText) {
+        this.setState({ partsQuantity: responseText });
+      }.bind(this);
+
+      var Prom = this.makeRequestToRecieveData("POST", "/ws/AddToBusket.php", false, "getBasketPartsQuantity=getBasketPartsQuantity");
+      Prom.then(function (responseText) {
+        findMySelf().setState({ partsQuantity: responseText });
+      });
+      // Prom.then(updateMyself); 
     }
     ////////////////////////////////
 
@@ -523,12 +551,25 @@ var Basket_items = exports.Basket_items = function (_Extends) {
   }, {
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      this.state = nextState;
-      return true;
+      if (!this.state.shouldComponentUpdate) {
+        this.getBasketItems();
+      }
+
+      return this.state.shouldComponentUpdate;
     }
   }, {
     key: 'componentWillUpdate',
-    value: function componentWillUpdate(nextProps, nextState) {}
+    value: function componentWillUpdate(nextProps, nextState) {
+      //getWorkPage().setState({renderIN:"",defineRoutes:false});
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+    }
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {}
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
@@ -576,7 +617,7 @@ var Basket_items = exports.Basket_items = function (_Extends) {
 
       var tableFooter = React.createElement('tr', { className: 'active' }, React.createElement('td', { colspan: '4', className: 'text-right' }, React.createElement('span', { className: 'h4' }, "\u0421\u0443\u043C\u0430 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F")), React.createElement('td', { className: 'text-right' }, React.createElement('span', { className: 'h3' }, React.createElement('span', { className: 'label label-primary' }, summ))));
 
-      this.state.mapArray = [];
+      // this.state.mapArray=[];                        
 
       return React.createElement('div', { className: 'table-responsive' }, React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody, tableFooter)));
     }
@@ -803,7 +844,7 @@ var Basket = exports.Basket = function (_Extends9) {
     value: function componentWillUpdate(nextProps, nextState) {
       // var unMount=ReactDOM.unmountComponentAtNode.bind(ReactDOM.findDOMNode(window.objectReg["Basket_items"]));   
       // unMount(document.body);
-      var unMount = ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
+      //var unMount=ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
     }
   }, {
     key: 'render',
@@ -10072,9 +10113,11 @@ var Extends = exports.Extends = function (_React$Component) {
 
         _this.state = { parentMod: Object,
             renderIN: React.createElement('div', null),
-            dataRecieved: null
-
+            dataRecieved: null,
+            justUpdate: null,
+            shouldComponentUpdate: false
         };
+
         _this.xhr = new XMLHttpRequest();
 
         //this.objectReg={};
@@ -10099,6 +10142,11 @@ var Extends = exports.Extends = function (_React$Component) {
         value: function componentWillUnmount() {
             // debugger;
             delete window.objectReg[this.constructor.name];
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps, prevState) {
+            this.state.shouldComponentUpdate = false;
         }
 
         ///////////////////////////////////////////////////////////////////// 
@@ -10225,6 +10273,14 @@ var Extends = exports.Extends = function (_React$Component) {
             body.appendChild(linkA);
 
             linkA.click();
+        }
+    }, {
+        key: 'updateAll',
+        value: function updateAll() {
+            for (item in window.objectReg) {
+                if (window.objectReg[item] == this) continue;
+                window.objectReg[item].setState({ justUpdate: null });
+            }
         }
     }]);
 
@@ -11850,6 +11906,11 @@ var Basket_icon = exports.Basket_icon = function (_Extends3) {
   }
 
   _createClass(Basket_icon, [{
+    key: 'onclick',
+    value: function onclick() {
+      getWorkPage().setState({ renderIN: "", defineRoutes: true });
+    }
+  }, {
     key: 'getBasketPartsQuantity',
     value: function getBasketPartsQuantity() {
       var findMySelf = this.findMySelf(this.constructor.name);
@@ -11861,12 +11922,37 @@ var Basket_icon = exports.Basket_icon = function (_Extends3) {
 
       var Prom = this.makeRequestToRecieveData("POST", "/ws/AddToBusket.php", false, "getBasketPartsQuantity=getBasketPartsQuantity");
       Prom.then(function (responseText) {
-        findMySelf().setState({ partsQuantity: responseText });
+        findMySelf().setState({ partsQuantity: responseText, shouldComponentUpdate: true });
+      });
+      // Prom.then(updateMyself); 
+    }
+  }, {
+    key: 'getBasketPartsQuantityNUC',
+    value: function getBasketPartsQuantityNUC() {
+      var findMySelf = this.findMySelf(this.constructor.name);
+      // thisO=findMySelf();
+      // if  (thisO==undefined) return;
+      updateMyself = function (responseText) {
+        this.setState({ partsQuantity: responseText });
+      }.bind(this);
+
+      var Prom = this.makeRequestToRecieveData("POST", "/ws/AddToBusket.php", false, "getBasketPartsQuantity=getBasketPartsQuantity");
+      Prom.then(function (responseText) {
+        findMySelf().state.partsQuantity = responseText;
       });
       // Prom.then(updateMyself); 
     }
     ////////////////////////////////////////////
 
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate() {
+      if (!this.state.shouldComponentUpdate) {
+        this.getBasketPartsQuantity();
+      }
+
+      return this.state.shouldComponentUpdate;
+    }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
@@ -11887,7 +11973,7 @@ var Basket_icon = exports.Basket_icon = function (_Extends3) {
         this.state.getBasketPartsQuantity = false;
       }
       //   data-toggle="modal" data-target="#Basket_items"
-      return React.createElement(_reactRouterDom.Link, { to: '/basket' }, React.createElement('img', { src: '/app/img/placeholders/basket/avatar.png', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }), React.createElement('span', { className: 'label label-primary label-indicator animation-floating' }, React.createElement('font', null, React.createElement('font', null, this.state.partsQuantity))));
+      return React.createElement(_reactRouterDom.Link, { onClick: this.onclick, to: '/basket' }, React.createElement('img', { src: '/app/img/placeholders/basket/avatar.png', alt: "\u0430\u0432\u0430\u0442\u0430\u0440" }), React.createElement('span', { className: 'label label-primary label-indicator animation-floating' }, React.createElement('font', null, React.createElement('font', null, this.state.partsQuantity))));
     }
   }]);
 
@@ -12028,6 +12114,8 @@ var _createClass = function () {
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -12060,8 +12148,8 @@ var items = exports.items = [{ name: "Головна", href: "#", className: "ac
     inner: [{ name: "Замовлення", href: "/order_list", className: "gi gi-table sidebar-nav-icon", inner: null }, { name: "Баланс", href: "cabinet_cash.html", className: "gi gi-database_plus sidebar-nav-icon", inner: null }, { name: "Історія позицій", href: "cabinet_cash.html", className: "gi gi-show_thumbnails_with_lines sidebar-nav-icon", inner: null }, { name: "Декларації", href: "cabinet_history.html", className: "gi gi-message_out sidebar-nav-icon", inner: null }, { name: "Повернення", href: "cabinet_np.html", className: "gi gi-unshare sidebar-nav-icon", inner: null }, { name: "Готовий до видачі", href: "cabinet_to_delivery.html", className: "si si-dropbox sidebar-nav-icon", inner: null }]
 }, { name: "Каталоги", href: "#", className: "", inner: null }, { name: "Каталог автозапчастин", href: "#", className: "", inner: null }, { name: "Каталог аксесуарів", href: "#", className: "", inner: null }, { name: "Корисне", href: null, className: "", inner: null }, { name: "Про нас", href: "", className: "", inner: null }];
 
-var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
-    _inherits(Sidebar_nav, _React$Component);
+var Sidebar_nav = exports.Sidebar_nav = function (_Extends) {
+    _inherits(Sidebar_nav, _Extends);
 
     function Sidebar_nav(props) {
         _classCallCheck(this, Sidebar_nav);
@@ -12069,11 +12157,17 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Sidebar_nav.__proto__ || Object.getPrototypeOf(Sidebar_nav)).call(this, props));
 
         _this.state = { items: _this.props.items };
+        _this.onclick = _this.onclick.bind(_this);
 
         return _this;
     }
 
     _createClass(Sidebar_nav, [{
+        key: 'onclick',
+        value: function onclick() {
+            getWorkPage().setState({ renderIN: "", defineRoutes: true });
+        }
+    }, {
         key: 'componentDidCatch',
         value: function componentDidCatch(error, info) {
             console.log(error);
@@ -12082,7 +12176,8 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
         key: 'render',
         value: function render() {
             // debugger  
-
+            var findMySelf = this.findMySelf(this.constructor.name);
+            var self = this;
 
             var b = this.state.items.map(function (item) {
                 if (item.hasOwnProperty("href") && item.href != null) {
@@ -12090,7 +12185,7 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
 
                         var gg = item.inner.map(function (item_inner) {
 
-                            return React.createElement('li', null, React.createElement(_reactRouterDom.Link, { to: item_inner.href }, React.createElement('i', { className: item_inner.className }), React.createElement('font', null, React.createElement('font', null, item_inner.name))));
+                            return React.createElement('li', null, React.createElement(_reactRouterDom.Link, { onClick: self.onclick, to: item_inner.href }, React.createElement('i', { className: item_inner.className }), React.createElement('font', null, React.createElement('font', null, item_inner.name))));
                         });
 
                         var c = React.createElement('li', null, React.createElement('a', { href: item.href, className: item.className }, React.createElement('i', { className: 'fa fa-angle-left sidebar-nav-indicator' }), React.createElement('i', { className: 'gi gi-home sidebar-nav-icon' }), React.createElement('font', null, React.createElement('font', null, item.name))), React.createElement('ul', null, gg));
@@ -12128,7 +12223,7 @@ var Sidebar_nav = exports.Sidebar_nav = function (_React$Component) {
     }]);
 
     return Sidebar_nav;
-}(React.Component);
+}(_main_component.Extends);
 //module.exports = Sidebar_nav;
 
 /***/ }),

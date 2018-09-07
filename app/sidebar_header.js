@@ -146,6 +146,10 @@ class Search_form extends Extends
          
          
      } 
+     onclick()
+     {
+         getWorkPage().setState({renderIN:"",defineRoutes:true});
+     }
      getBasketPartsQuantity()
      {
         var findMySelf=this.findMySelf(this.constructor.name);
@@ -158,13 +162,39 @@ class Search_form extends Extends
        
         var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
        Prom.then(
-         (responseText)=>{findMySelf().setState({partsQuantity:responseText})}
+         (responseText)=>{findMySelf().setState({partsQuantity:responseText,shouldComponentUpdate:true})}
+         ); 
+      // Prom.then(updateMyself); 
+         
+     }
+      getBasketPartsQuantityNUC()
+     {
+        var findMySelf=this.findMySelf(this.constructor.name);
+       // thisO=findMySelf();
+       // if  (thisO==undefined) return;
+        updateMyself= function(responseText)
+        {
+           this.setState({partsQuantity:responseText}); 
+        }.bind(this);
+       
+        var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
+       Prom.then(
+         (responseText)=>{findMySelf().state.partsQuantity=responseText}
          ); 
       // Prom.then(updateMyself); 
          
      }
      ////////////////////////////////////////////
-     
+     shouldComponentUpdate()
+     {
+          if (!this.state.shouldComponentUpdate)
+          {
+              this.getBasketPartsQuantity();   
+          } 
+          
+          
+          return this.state.shouldComponentUpdate;
+     }
      componentDidMount() 
      {
         super.componentDidMount();
@@ -187,7 +217,7 @@ class Search_form extends Extends
          }
          //   data-toggle="modal" data-target="#Basket_items"
         return (
-               <Link to="/basket" >
+               <Link onClick={this.onclick} to="/basket" >
                  <img src="/app/img/placeholders/basket/avatar.png" alt="аватар"/>
                  <span className="label label-primary label-indicator animation-floating">
                    <font><font>{this.state.partsQuantity}</font></font>

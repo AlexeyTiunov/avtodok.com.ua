@@ -1,4 +1,7 @@
 <?
+    #if (isset($_POST["USER_LOGIN"])) $_REQUEST["USER_LOGIN"]=$_POST["USER_LOGIN"];
+  #  if (isset($_POST["USER_PASSWORD"])) $_REQUEST["USER_PASSWORD"]=$_POST["USER_PASSWORD"]; 
+   # var_dump($_REQUEST);
     require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');   
     global  $USER;
     function GetUserIDByLogin ($Login) 
@@ -44,7 +47,25 @@
         echo "0";
     }
    }
-    if (isset($_POST["CHECK_AUTH"]))
+    
+     if (isset($_POST["LOG_OUT"]) )
+     {
+           if ($USER->isAuthorized())
+           {
+             $USER->Logout();  
+           }
+         
+     }
+   if (isset($_REQUEST["USER_LOGIN"]))
+   {
+       if (isset($_REQUEST["USER_PASSWORD"]))
+       {
+           $USER->Login($_REQUEST["USER_LOGIN"],$_REQUEST["USER_PASSWORD"],"Y");
+           
+           
+       }
+   }  
+   if (isset($_POST["CHECK_AUTH"]) || isset($_GET["CHECK_AUTH"]))
     {
          if ($USER->isAuthorized())
          {
@@ -54,17 +75,7 @@
              echo "0"; 
          }
          
-     }
-     if (isset($_POST["LOG_OUT"]))
-     {
-           if ($USER->isAuthorized())
-           {
-             $USER->Logout();  
-           }
-         
-     }
-     
-     
+     }  
    /*  $loginID=GetUserIDByLogin($_POST['LOGIN']); 
      $USER->Authorize($loginID,true);
      var_dump($_POST);

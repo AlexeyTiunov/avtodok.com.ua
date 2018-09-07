@@ -258,6 +258,11 @@ var Auth = exports.Auth = function (_Extends) {
 
             this.auth("CHECK_AUTH=Y");
         }
+    }, {
+        key: 'logOut',
+        value: function logOut() {
+            this.auth("LOG_OUT=Y");
+        }
 
         /////////////////////////////
 
@@ -293,8 +298,8 @@ var Auth_done = exports.Auth_done = function (_Extends2) {
     _createClass(Auth_done, [{
         key: 'logOut',
         value: function logOut() {
-            var findMySelf = this.findMySelf(this.constructor.name);
-            var Prom = this.makeRequestToRecieveData("POST", "/ws/auth.php", false, "LOG_OUT=Y");
+            Uobject = window.objectReg["Auth"];
+            Uobject.auth("LOG_OUT=Y");
         }
 
         ///////////////////////////////////
@@ -304,7 +309,7 @@ var Auth_done = exports.Auth_done = function (_Extends2) {
         key: 'render',
         value: function render() {
 
-            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }, React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'button', onClick: this.logOut, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0438\u0439\u0442\u0438")))))), React.createElement('div', { className: 'modal-footer' })));
+            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header' }), React.createElement('div', { className: 'modal-body' }, React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))), React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, 'OK'))), React.createElement('button', { type: 'button', onClick: this.logOut, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0438\u0439\u0442\u0438 \u0437 \u0430\u043A\u0430\u0443\u043D\u0442\u0443")))))), React.createElement('div', { className: 'modal-footer' })));
         }
     }]);
 
@@ -320,18 +325,38 @@ var Auth_need = exports.Auth_need = function (_Extends3) {
         var _this3 = _possibleConstructorReturn(this, (Auth_need.__proto__ || Object.getPrototypeOf(Auth_need)).call(this, props));
 
         _this3.onInputChange = _this3.onInputChange.bind(_this3);
-        _this3.state.LOGIN = "";
+        _this3.state.USER_LOGIN = "";
+        _this3.state.USER_PASSWORD = "";
 
+        _this3.auth = _this3.auth.bind(_this3);
+        _this3.onInputChange = _this3.onInputChange.bind(_this3);
         return _this3;
     }
 
     _createClass(Auth_need, [{
+        key: 'auth',
+        value: function auth() {
+            Uobject = window.objectReg["Auth"];
+            Uobject.auth("USER_LOGIN=" + this.state.USER_LOGIN + "&USER_PASSWORD=" + this.state.USER_PASSWORD + "&CHECK_AUTH=Y");
+        }
+    }, {
         key: 'onInputChange',
-        value: function onInputChange() {}
+        value: function onInputChange(e) {
+            var input = e.target.name;
+            var id = e.target.id;
+            var inputValue = e.target.value;
+            this.state[input] = inputValue;
+            this.state[id] = inputValue;
+            if (this.state[input] == "") {
+                delete this.state[input];
+            }
+            var str = '' + id;
+            this.setState({ str: inputValue });
+        }
     }, {
         key: 'render',
         value: function render() {
-            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header text-center' }, React.createElement('h2', { className: 'modal-title' }, React.createElement('i', { className: 'fa fa-pencil' }), React.createElement('font', null, React.createElement('font', null, " \u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))), React.createElement('div', { className: 'modal-body' }, React.createElement('form', { action: 'index.html', method: 'post', enctype: 'multipart/form-data', className: 'form-horizontal form-bordered', onsubmit: 'return false;' }, React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041B\u043E\u0433\u0438\u043D"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', onChange: this.onInputChange, id: 'user-settings-login', name: 'LOGIN', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043B\u043E\u0433\u0438\u043D..." }))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', onChange: this.onInputChange, id: 'user-settings-password', name: 'NEW_PASSWORD', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C..." })))), React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'button', onClick: this.saveUserData, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))))))));
+            return React.createElement('div', { className: 'modal-dialog' }, React.createElement('div', { className: 'modal-content' }, React.createElement('div', { className: 'modal-header text-center' }, React.createElement('h2', { className: 'modal-title' }, React.createElement('i', { className: 'fa fa-pencil' }), React.createElement('font', null, React.createElement('font', null, " \u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))), React.createElement('div', { className: 'modal-body' }, React.createElement('form', { action: 'index.html', method: 'post', enctype: 'multipart/form-data', className: 'form-horizontal form-bordered', onsubmit: 'return false;' }, React.createElement('fieldset', null, React.createElement('legend', null, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041B\u043E\u0433\u0438\u043D"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'text', onChange: this.onInputChange, id: 'user-settings-login', name: 'USER_LOGIN', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043B\u043E\u0433\u0438\u043D..." }))), React.createElement('div', { className: 'form-group' }, React.createElement('label', { className: 'col-md-4 control-label', 'for': 'user-settings-password' }, React.createElement('font', null, React.createElement('font', null, "\u041D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C"))), React.createElement('div', { className: 'col-md-8' }, React.createElement('input', { type: 'password', onChange: this.onInputChange, id: 'user-settings-password', name: 'USER_PASSWORD', className: 'form-control', placeholder: "\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0412\u0430\u0448 \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u0440\u043E\u043B\u044C..." })))), React.createElement('div', { className: 'form-group form-actions' }, React.createElement('div', { className: 'col-xs-12 text-right' }, React.createElement('button', { type: 'button', className: 'btn btn-sm btn-default', 'data-dismiss': 'modal' }, React.createElement('font', null, React.createElement('font', null, "\u0412\u0456\u0434\u043C\u0456\u043D\u0430"))), React.createElement('button', { type: 'button', onClick: this.auth, className: 'btn btn-sm btn-primary' }, React.createElement('font', null, React.createElement('font', null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F")))))))));
         }
     }]);
 
@@ -491,6 +516,20 @@ var Basket_items = exports.Basket_items = function (_Extends) {
     ////////////////////////////////
 
   }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidUpdate', this).call(this);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      this.state = nextState;
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {}
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       _get(Basket_items.prototype.__proto__ || Object.getPrototypeOf(Basket_items.prototype), 'componentDidMount', this).call(this);
@@ -504,8 +543,9 @@ var Basket_items = exports.Basket_items = function (_Extends) {
       var tableHeadO = React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null), React.createElement('th', { 'class': 'text-center' }, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', { 'class': 'text-center' }, "\u041D\u043E\u043C\u0435\u0440 \u0437/\u0447"), React.createElement('th', { 'class': 'text-center' }, "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430"), React.createElement('th', { 'class': 'text-center' }, "\u0426\u0456\u043D\u0430 $"), React.createElement('th', { 'class': 'text-center' }, "\u0421\u0443\u043C\u0430 $")));
       var names = this.state.mapArray.map(function (tr) {
         var mas = [];
+        var i = 0;
         for (th in tr) {
-          if (tr[th].Name) mas.push(React.createElement('th', { className: 'text-center' }, tr[th].Name));
+          if (tr[th].Name) mas.push(React.createElement('th', { key: ++i, className: 'text-center' }, tr[th].Name));
         }
 
         return mas;
@@ -755,7 +795,17 @@ var Basket = exports.Basket = function (_Extends9) {
     return _possibleConstructorReturn(this, (Basket.__proto__ || Object.getPrototypeOf(Basket)).call(this, props));
   }
 
+  ///////////////////////////////////////
+
+
   _createClass(Basket, [{
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+      // var unMount=ReactDOM.unmountComponentAtNode.bind(ReactDOM.findDOMNode(window.objectReg["Basket_items"]));   
+      // unMount(document.body);
+      var unMount = ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
+    }
+  }, {
     key: 'render',
     value: function render() {
       return React.createElement('div', { className: 'block full' }, React.createElement(Basket_header, null), React.createElement(Basket_info, null), React.createElement('div', { 'class': 'row block-section' }), React.createElement(Basket_items, null), React.createElement(Basket_order_button, null));

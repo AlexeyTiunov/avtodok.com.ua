@@ -50,6 +50,10 @@ export class Auth extends Extends
       this.auth("CHECK_AUTH=Y");  
         
     }
+     logOut()
+    {
+        this.auth("LOG_OUT=Y");  
+    }
    
     /////////////////////////////
      componentDidMount()
@@ -78,8 +82,8 @@ export class Auth_done extends Extends
     
     logOut()
     {
-         var findMySelf=this.findMySelf(this.constructor.name);
-         var Prom=this.makeRequestToRecieveData("POST","/ws/auth.php",false,"LOG_OUT=Y")  
+          Uobject=window.objectReg["Auth"];
+          Uobject.auth("LOG_OUT=Y");  
     }
       
     ///////////////////////////////////
@@ -93,11 +97,13 @@ export class Auth_done extends Extends
                            <div className="modal-header">
                            </div>
                            <div className="modal-body">
-                             
+                             <fieldset>
+                                <legend><font><font>Авторизация</font></font></legend>
+                             </fieldset>
                               <div className="form-group form-actions">
                                 <div className="col-xs-12 text-right">
-                                    <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>Відміна</font></font></button>
-                                    <button type="button" onClick={this.logOut}  className="btn btn-sm btn-primary"><font><font>Вийти</font></font></button>
+                                    <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>OK</font></font></button>
+                                    <button type="button" onClick={this.logOut}  className="btn btn-sm btn-primary"><font><font>Вийти з акаунту</font></font></button>
                                  </div>                           
                                </div>
                              </div>    
@@ -122,12 +128,34 @@ export class Auth_need extends Extends
     {
         super(props);
         this.onInputChange=this.onInputChange.bind(this);
-        this.state.LOGIN="";
+        this.state.USER_LOGIN="";
+        this.state.USER_PASSWORD="";
+        
+        this.auth=this.auth.bind(this);
+        this.onInputChange=this.onInputChange.bind(this);
+    }
+    
+    auth()
+    {
+      Uobject=window.objectReg["Auth"];
+      Uobject.auth("USER_LOGIN="+this.state.USER_LOGIN+"&USER_PASSWORD="+this.state.USER_PASSWORD+"&CHECK_AUTH=Y");   
         
     }
     
-    onInputChange()
+    
+    onInputChange(e)
     {
+         var input= e.target.name
+         var id = e.target.id;
+         var inputValue=e.target.value;
+         this.state[input]=inputValue;
+         this.state[id]=inputValue;
+         if  (this.state[input]=="")
+         {
+             delete this.state[input];
+         }
+         var str= `${id}` ;
+         this.setState({ str:inputValue});
         
     } 
     render()
@@ -146,13 +174,13 @@ export class Auth_need extends Extends
                                 <div className="form-group">
                                     <label className="col-md-4 control-label" for="user-settings-password"><font><font>Логин</font></font></label>
                                     <div className="col-md-8">
-                                        <input type="password" onChange={this.onInputChange} id="user-settings-login" name="LOGIN" className="form-control" placeholder="Введіть Ваш логин..."/>
+                                        <input type="text" onChange={this.onInputChange} id="user-settings-login" name="USER_LOGIN" className="form-control" placeholder="Введіть Ваш логин..."/>
                                     </div>
                                 </div>
                                  <div className="form-group">
                                     <label className="col-md-4 control-label" for="user-settings-password"><font><font>Новий пароль</font></font></label>
                                     <div className="col-md-8">
-                                        <input type="password" onChange={this.onInputChange} id="user-settings-password" name="NEW_PASSWORD" className="form-control" placeholder="Введіть Ваш новий пароль..."/>
+                                        <input type="password" onChange={this.onInputChange} id="user-settings-password" name="USER_PASSWORD" className="form-control" placeholder="Введіть Ваш новий пароль..."/>
                                     </div>
                                 </div>
         
@@ -161,7 +189,7 @@ export class Auth_need extends Extends
                          <div className="form-group form-actions">
                                 <div className="col-xs-12 text-right">
                                     <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>Відміна</font></font></button>
-                                    <button type="button" onClick={this.saveUserData}  className="btn btn-sm btn-primary"><font><font>Авторизация</font></font></button>
+                                    <button type="button" onClick={this.auth}  className="btn btn-sm btn-primary"><font><font>Авторизация</font></font></button>
                                 </div>
                          </div>
                        </form>

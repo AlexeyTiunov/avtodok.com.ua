@@ -92,6 +92,20 @@ export class Basket_items extends Extends
          
      }
      ////////////////////////////////
+      componentDidUpdate()
+      {
+          super.componentDidUpdate();
+           
+      } 
+      shouldComponentUpdate(nextProps, nextState)
+      {
+          this.state=nextState;
+          return true;
+      }
+      componentWillUpdate(nextProps, nextState)
+      {
+          
+      }
      componentDidMount()
      {
          super.componentDidMount();
@@ -121,10 +135,11 @@ export class Basket_items extends Extends
                var names=this.state.mapArray.map(function(tr) 
                            {
                                var mas=[];
+                               var i=0;
                              for (th in tr)
                              {
                                 if (tr[th].Name)
-                                mas.push(<th className="text-center">{tr[th].Name}</th>);
+                                mas.push(<th key={++i} className="text-center">{tr[th].Name}</th>);
                              } 
                               
                              return mas;
@@ -450,6 +465,13 @@ export class Basket extends Extends
          
      } 
      
+     ///////////////////////////////////////
+     componentWillUpdate(nextProps, nextState)
+     {   
+      // var unMount=ReactDOM.unmountComponentAtNode.bind(ReactDOM.findDOMNode(window.objectReg["Basket_items"]));   
+      // unMount(document.body);
+       var unMount=ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
+     }
      render()
      {
        return ( <div className="block full"> 

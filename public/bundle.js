@@ -11038,6 +11038,14 @@ function _inherits(subClass, superClass) {
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
+function _defineProperty(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+        obj[key] = value;
+    }return obj;
+}
+
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 //import $ from  './js/vendor/jquery-1.11.1.min.js';
@@ -11048,6 +11056,8 @@ __webpack_require__(/*! bootstrap/dist/js/bootstrap.js */ "./node_modules/bootst
 __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
 
 function getMapForSearchData() {
+    var _RegionShortName;
+
     function gProperty(name) {
 
         function b() {
@@ -11058,30 +11068,44 @@ function getMapForSearchData() {
     }
 
     var mapForSearchData = {
+        Action: { functionToHandle: { makeButtonAction: makeButtonAction, sFunction: sFunction }, className: "text-center", value: null },
         BrandCode: { functionToHandle: sFunction, className: null, dontShow: true, makeHiddenInner: true, value: null, inputVal: null },
         BrandName: { functionToHandle: sFunction, className: null, value: null },
         ItemCode: { functionToHandle: sFunction, makeHiddenInner: true, className: null },
         Caption: { functionToHandle: sFunction, makeHiddenInner: true, className: "hidden-xs sorting", value: null },
         DeliveryDays: { functionToHandle: { formatNumber: formatNumber, sFunction: sFunction }, params: ["", ".", "0"], className: "sorting", value: null },
         Quantity: { functionToHandle: sFunction, className: "sorting", value: null },
-        RegionFullName: { functionToHandle: sFunction, className: null, value: null },
-        RegionShortName: { functionToHandle: sFunction, dontShow: true, className: null, makeHiddenInner: true, value: null }, //
-        RegionCode: { functionToHandle: sFunction, dontShow: true, className: null, makeHiddenInner: true, value: null }, //
-        PercentSupp: { functionToHandle: { addPercentSign: addPercentSign, wrapperA: wrapperA, sFunction: sFunction }, className: null, wrapperClassName: "label label-success", value: null },
-        Weight: { functionToHandle: sFunction, className: null, value: null },
-        Currency: { functionToHandle: sFunction, makeHiddenInner: true, className: null, value: null },
-        ReturnableParts: { functionToHandle: sFunction, dontShow: true, makeHiddenInner: true, className: null, value: null }, //
-        Price: { functionToHandle: { formatNumber: formatNumber }, params: ["", ".", "3"], dontShow: true, className: null, value: null }, // 
-        PriceUSD: { functionToHandle: { convertSum: convertSum, sFunction: sFunction }, params: ["", "", gProperty("Price")], makeHiddenInner: true, className: null, value: null },
-        Action: { functionToHandle: { makeButtonAction: makeButtonAction, sFunction: sFunction }, className: "text-center", value: null }
-    };
+        RegionFullName: { functionToHandle: sFunction, dontShow: true, className: null, value: null },
+        RegionShortName: (_RegionShortName = { functionToHandle: sFunction, dontShow: true }, _defineProperty(_RegionShortName, 'dontShow', true), _defineProperty(_RegionShortName, 'className', null), _defineProperty(_RegionShortName, 'makeHiddenInner', true), _defineProperty(_RegionShortName, 'value', null), _RegionShortName), //
+        RegionCode: { functionToHandle: sFunction, dontShow: true, className: null, makeHiddenInner: true, value: null },
+        RegionCorrectName: { functionToHandle: { getRegionName: getRegionName, sFunction: sFunction }, params: ["", gProperty("RegionFullName"), gProperty("RegionShortName")], className: null, value: null },
+        PercentSupp: { functionToHandle: { addPercentSign: addPercentSign, wrapperA: wrapperA, sFunction: sFunction }, className: "hidden-xs", wrapperClassName: "label label-success", value: null },
+        Weight: { functionToHandle: sFunction, className: "hidden-xs", value: null },
+        Currency: { functionToHandle: sFunction, makeHiddenInner: true, className: "hidden-xs", value: null },
+        ReturnableParts: { functionToHandle: sFunction, dontShow: true, makeHiddenInner: true, className: "hidden-xs", value: null }, //
+        Price: { functionToHandle: { formatNumber: formatNumber, sFunction: sFunction }, params: ["", ".", "3"], dontShow: true, makeHiddenInner: true, className: null, value: null }, // 
+        PriceUSD: { functionToHandle: { convertSum: convertSum, sFunction: sFunction }, params: ["", "", gProperty("Price")], makeHiddenInner: true, className: null, value: null
+            //Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null}, 
+        } };
 
-    for (item in mapForSearchData) {
-        mapForSearchData[item].__proto__ = mapForSearchData;
-        Object.defineProperty(mapForSearchData[item], "toString", { enumerable: true, writable: true, value: function value() {
-                return item;
+    var names = Object.keys(mapForSearchData);
+
+    for (var i = 0; i < names.length; i++) {
+        mapForSearchData[names[i]].__proto__ = mapForSearchData;
+        Object.defineProperty(mapForSearchData[names[i]], "toString", { enumerable: true, writable: true, value: function value() {
+                return names[i];
             } });
     }
+
+    /* for (item in mapForSearchData)
+     {
+       mapForSearchData[item].__proto__=mapForSearchData;
+       Object.defineProperty(mapForSearchData[item],"toString",{enumerable:true,writable:true,value:()=>{return `${item}`}, });                                     
+                                                         
+       
+       
+                                                          
+     } */
 
     return mapForSearchData;
 }
@@ -11119,9 +11143,12 @@ function sFunction(value) //obj = (for example ) BrandCode --{}
     // {
 
 
-    var a = React.createElement('td', { className: this.className }, value);
-
-    this.value = a;
+    if (!this.dontShow) {
+        var a = React.createElement('td', { className: this.className }, value);
+        this.value = a;
+    } else {
+        this.value = value;
+    }
 
     // } 
 }
@@ -11134,6 +11161,7 @@ function addPercentSign(value) {
     if (value == undefined) this.value = "100%";else this.value = value + "%";
 }
 function formatNumber(value, pointDelimeter, quantityAfterPoint) {
+
     if (pointDelimeter != "." && pointDelimeter != "," || pointDelimeter == ".") {
         pointDelimeter = ".";
         var pattern = / \,/;
@@ -11155,6 +11183,30 @@ function formatNumber(value, pointDelimeter, quantityAfterPoint) {
         this.value = value;
     }
 }
+function getRegionName(value, RigionFullNameFunc, RegionShortNameFunc) {
+    var RegionNameMap = {
+        "1": RigionFullNameFunc,
+        "2": RegionShortNameFunc,
+        "3": RegionShortNameFunc,
+        "4": RegionShortNameFunc,
+        "999": RegionShortNameFunc,
+        "998": RegionShortNameFunc,
+        "997": RegionShortNameFunc,
+        "default": RigionFullNameFunc,
+        "defaultName": "Украина"
+
+    };
+    var RegionCode = this["RegionCode"].value;
+    if (RegionNameMap[RegionCode]) {
+        this.value = RegionNameMap[RegionCode].bind(this)();
+    } else {
+        //this.value=RegionNameMap["default"].bind(this)();
+        this.value = RegionNameMap["defaultName"];
+    }
+
+    //this.value=RigionFullNameFunc.bind(this)(); 
+    // this.value=RegionCode; 
+}
 function makeConfiguration(val) {
     if (this == undefined) return;
     var config = this; //mapForSearchDataLocal.BrandCode--{}.   is <tr> </tr> 
@@ -11172,7 +11224,7 @@ function makeConfiguration(val) {
                     }
                     config.functionToHandle[func].apply(config, config.params);
                 } else {
-                    if (config.value == null) config.functionToHandle[func].call(config, dat[i][item]);else config.functionToHandle[func].call(config, config.value);
+                    if (config.value == null) config.functionToHandle[func].call(config, val);else config.functionToHandle[func].call(config, config.value);
                 }
             }
         }
@@ -11181,7 +11233,7 @@ function makeConfiguration(val) {
         func = config['functionToHandle'];
 
         if (func != null && func != undefined) {
-            func.call(config, dat[i][item]);
+            func.call(config, val);
         }
     }
 }
@@ -11197,11 +11249,11 @@ function makeButtonAction() {
     }
 
     var mas = {};
-    for (item in obj) {
+    for (var item in obj) {
         if (obj[item] && obj[item].makeHiddenInner) {
             //const a= (<input type='hidden' value={value} />); 
             // var a = obj[item].toString()+"="+obj[item].inputValue;  
-            mas[obj[item].toString()] = obj[item].inputValue;
+            mas[item] = obj[item].inputValue;
         }
     }
     var b = React.createElement(BusketButton, { inputs: mas });
@@ -11232,8 +11284,8 @@ var Search_table = exports.Search_table = function (_Extends) {
         key: 'dataSort',
         value: function dataSort(data) {
             if (data.length == 1) return;
-            for (i = 0; i < data.length; i++) {
-                for (j = 0; j < data.length - i - 1; j++) {
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data.length - i - 1; j++) {
                     if (Number(data[j].Price) > Number(data[j + 1].Price)) {
                         helpMas = data[j];
                         data[j] = data[j + 1];
@@ -11251,7 +11303,7 @@ var Search_table = exports.Search_table = function (_Extends) {
             startPagination = this.state.numberOfrow * this.state.page - this.state.numberOfrow + 1;
             endPagination = startPagination + this.state.numberOfrow - 1;
             this.state.dataQuantity = dat.length % this.state.numberOfrow > 0 ? (dat.length - dat.length % this.state.numberOfrow) / this.state.numberOfrow + 1 : dat.length / this.state.numberOfrow;
-            for (i = 0; i < dat.length; i++) {
+            for (var i = 0; i < dat.length; i++) {
                 if (i + 1 < startPagination || i + 1 > endPagination) continue;
                 var mapForSearchDataLocal = extend({}, getMapForSearchData());
                 var colorClass = "";
@@ -11342,9 +11394,11 @@ var Search_table = exports.Search_table = function (_Extends) {
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps, prevState) {
-            debugger;
+            // debugger;
             //this.state.tableBody=[];
             // this.makeDataForRender(this.state.dataRecieved);
+
+
         }
     }, {
         key: 'componentWillUpdate',
@@ -11353,7 +11407,7 @@ var Search_table = exports.Search_table = function (_Extends) {
         key: 'render',
         value: function render() {
 
-            debugger;
+            //debugger; 
             if (this.state.dataRecieved != null && this.state.dataRecieved != "") {
 
                 this.state.tableBody = [];
@@ -11361,7 +11415,7 @@ var Search_table = exports.Search_table = function (_Extends) {
             } else {
                 this.state.tableBody = [];
             }
-            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement(Pagination, { quantity: this.state.dataQuantity }), React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', null, "\u041A\u043E\u0434"), React.createElement('th', { 'class': 'hidden-xs' }, "\u041E\u043F\u0438\u0441"), React.createElement('th', { 'class': 'sorting' }, "\u0421\u0440\u043E\u043A"), React.createElement('th', null, "\u041A-\u0432\u043E"), React.createElement('th', null, "\u0420\u0435\u0433\u0456\u043E\u043D"), React.createElement('th', { className: 'hidden-xs sorting' }, "\u041D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C"), React.createElement('th', { className: 'hidden-xs' }, "\u0412\u0430\u0433\u0430"), React.createElement('th', { className: 'hidden-xs' }, '$'), React.createElement('th', { className: 'hidden-xs sorting' }, "\u0426\u0456\u043D\u0430"), React.createElement('th', { className: 'sorting' }, "\u0426\u0456\u043D\u0430 $"))), React.createElement('tbody', null, this.state.tableBody.map(function (item) {
+            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement(Pagination, { quantity: this.state.dataQuantity }), React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', { className: 'sorting' }, "\u0414\u0456\u044F"), React.createElement('th', null, "\u0411\u0440\u0435\u043D\u0434"), React.createElement('th', null, "\u041A\u043E\u0434"), React.createElement('th', { 'class': 'hidden-xs' }, "\u041E\u043F\u0438\u0441"), React.createElement('th', { 'class': 'sorting' }, "\u0421\u0440\u043E\u043A"), React.createElement('th', null, "\u041A-\u0432\u043E"), React.createElement('th', null, "\u0420\u0435\u0433\u0456\u043E\u043D"), React.createElement('th', { className: 'hidden-xs sorting' }, "\u041D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C"), React.createElement('th', { className: 'hidden-xs' }, "\u0412\u0430\u0433\u0430"), React.createElement('th', { className: 'hidden-xs' }, '$'), React.createElement('th', { className: 'sorting' }, "\u0426\u0456\u043D\u0430"))), React.createElement('tbody', null, this.state.tableBody.map(function (item) {
                 return item;
             }))), React.createElement(Pagination, { quantity: this.state.dataQuantity })));
         }

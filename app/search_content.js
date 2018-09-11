@@ -29,33 +29,43 @@ function getMapForSearchData()
    
  
   var mapForSearchData={
+  Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null},
   BrandCode:{functionToHandle:sFunction,className:null,dontShow:true,makeHiddenInner:true,value:null,inputVal:null},
   BrandName:{functionToHandle:sFunction,className:null,value:null},
   ItemCode:{functionToHandle:sFunction,makeHiddenInner:true,className:null},
   Caption:{functionToHandle:sFunction,makeHiddenInner:true,className:"hidden-xs sorting",value:null},
   DeliveryDays:{functionToHandle:{formatNumber,sFunction},params:["",".","0"],className:"sorting",value:null},
   Quantity:{functionToHandle:sFunction,className:"sorting",value:null},
-  RegionFullName:{functionToHandle:sFunction,className:null,value:null},
-  RegionShortName:{functionToHandle:sFunction,dontShow:true,className:null,makeHiddenInner:true,value:null}, //
-  RegionCode:{functionToHandle:sFunction,dontShow:true,className:null,makeHiddenInner:true,value:null}, //
-  PercentSupp:{functionToHandle:{addPercentSign,wrapperA,sFunction},className:null,wrapperClassName:"label label-success",value:null},  
-  Weight:{functionToHandle:sFunction,className:null,value:null},
-  Currency:{functionToHandle:sFunction,makeHiddenInner:true,className:null,value:null},
-  ReturnableParts:{functionToHandle:sFunction,dontShow:true,makeHiddenInner:true,className:null,value:null},//
-  Price:{functionToHandle:{formatNumber},params:["",".","3"] ,dontShow:true, className:null,value:null}, // 
+  RegionFullName:{functionToHandle:sFunction,dontShow:true,className:null,value:null},
+  RegionShortName:{functionToHandle:sFunction,dontShow:true,dontShow:true,className:null,makeHiddenInner:true,value:null}, //
+  RegionCode:{functionToHandle:sFunction,dontShow:true,className:null,makeHiddenInner:true,value:null},
+  RegionCorrectName:{functionToHandle:{getRegionName,sFunction},params:["",gProperty("RegionFullName"),gProperty("RegionShortName")],className:null,value:null},
+  PercentSupp:{functionToHandle:{addPercentSign,wrapperA,sFunction},className:"hidden-xs",wrapperClassName:"label label-success",value:null},  
+  Weight:{functionToHandle:sFunction,className:"hidden-xs",value:null},
+  Currency:{functionToHandle:sFunction,makeHiddenInner:true,className:"hidden-xs",value:null},
+  ReturnableParts:{functionToHandle:sFunction,dontShow:true,makeHiddenInner:true,className:"hidden-xs",value:null},//
+  Price:{functionToHandle:{formatNumber,sFunction},params:["",".","3"] ,dontShow:true,makeHiddenInner:true,className:null,value:null}, // 
   PriceUSD:{functionToHandle:{convertSum,sFunction},params:["","",gProperty("Price")],makeHiddenInner:true,className:null,value:null},
-  Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null}, 
+  //Action:{functionToHandle:{makeButtonAction,sFunction},className:"text-center",value:null}, 
   }
+  
+  var names=  Object.keys(mapForSearchData);
+  
+  for (var i=0;i<names.length;i++)
+  {
+     mapForSearchData[names[i]].__proto__=mapForSearchData; 
+      Object.defineProperty(mapForSearchData[names[i]],"toString",{enumerable:true,writable:true,value:()=>{return names[i]}, }); 
+  } 
    
-  for (item in mapForSearchData)
+ /* for (item in mapForSearchData)
   {
     mapForSearchData[item].__proto__=mapForSearchData;
-    Object.defineProperty(mapForSearchData[item],"toString",{enumerable:true,writable:true,value:()=>{return item}, });                                     
+    Object.defineProperty(mapForSearchData[item],"toString",{enumerable:true,writable:true,value:()=>{return `${item}`}, });                                     
                                                       
     
     
                                                        
-  }
+  } */
   
   
   return mapForSearchData;  
@@ -101,13 +111,19 @@ function sFunction(value)   //obj = (for example ) BrandCode --{}
  // {
      
                 
-      
+    if (!this.dontShow)
+    {  
       const a= ( <td className={this.className}>
                     {value}
-                  </td> )
+                  </td> ) 
+                  this.value=a;  
+    }
+     else
+     {
+         this.value=value; 
+     }             
                   
-                  
-      this.value=a;
+     
                            
  
              
@@ -130,6 +146,7 @@ function addPercentSign(value)
 }
 function formatNumber(value,pointDelimeter,quantityAfterPoint)
 {
+    
     if ((pointDelimeter!="." && pointDelimeter!=",") ||(pointDelimeter==".") )
     {
          pointDelimeter=".";
@@ -164,6 +181,34 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
     
     
 }
+function getRegionName(value,RigionFullNameFunc,RegionShortNameFunc)
+{
+  var RegionNameMap={
+    "1":RigionFullNameFunc,
+    "2":RegionShortNameFunc,
+    "3":RegionShortNameFunc,
+    "4" :RegionShortNameFunc,
+    "999" :RegionShortNameFunc,
+    "998" :RegionShortNameFunc,
+    "997" :RegionShortNameFunc,
+    "default": RigionFullNameFunc,
+    "defaultName":"Украина",
+      
+  } 
+  var RegionCode=this["RegionCode"].value;
+  if (RegionNameMap[RegionCode]) 
+  {
+    this.value=RegionNameMap[RegionCode].bind(this)();   
+  }else
+  {
+   //this.value=RegionNameMap["default"].bind(this)();
+    this.value=RegionNameMap["defaultName"];  
+  }
+   
+  
+  //this.value=RigionFullNameFunc.bind(this)(); 
+   // this.value=RegionCode; 
+}
  function makeConfiguration(val)
  {
      if (this==undefined) return;
@@ -190,7 +235,7 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
                           } else
                           { 
                            if (config.value==null)   
-                           config.functionToHandle[func].call(config,dat[i][item]);
+                           config.functionToHandle[func].call(config,val);
                            else config.functionToHandle[func].call(config,config.value);
                           }
                         }
@@ -205,7 +250,7 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
                      
                      if (func!=null && func!=undefined)
                       {
-                         func.call(config,dat[i][item]);
+                         func.call(config,val);
                       }
                  }
      
@@ -226,13 +271,13 @@ function formatNumber(value,pointDelimeter,quantityAfterPoint)
      }
      
      var mas={};
-     for (item in obj)
+     for ( var item in obj)
      {
          if (obj[item] && obj[item].makeHiddenInner)
          {
            //const a= (<input type='hidden' value={value} />); 
           // var a = obj[item].toString()+"="+obj[item].inputValue;  
-           mas[obj[item].toString()]=obj[item].inputValue; 
+           mas[item]=obj[item].inputValue; 
              
          } 
      }
@@ -261,9 +306,9 @@ export class Search_table extends Extends
      dataSort(data)
      {   
          if (data.length==1) return;
-         for (i=0;i<data.length;i++)
+         for (  var i=0;i<data.length;i++)
          {
-             for (j=0;j<data.length-i-1;j++)
+             for ( var j=0;j<data.length-i-1;j++)
              {
                  if (Number(data[j].Price)>Number(data[j+1].Price))
                  {
@@ -290,7 +335,7 @@ export class Search_table extends Extends
          startPagination=(this.state.numberOfrow*this.state.page)-this.state.numberOfrow+1;
          endPagination=startPagination+this.state.numberOfrow-1;
          this.state.dataQuantity=(dat.length%this.state.numberOfrow>0)?((dat.length-(dat.length%this.state.numberOfrow))/ this.state.numberOfrow)+1:dat.length/this.state.numberOfrow;
-         for (i=0;i<dat.length;i++)
+         for ( var i=0;i<dat.length;i++)
          {
              if (i+1<startPagination || i+1>endPagination) continue
              var  mapForSearchDataLocal=extend({},getMapForSearchData());
@@ -394,7 +439,7 @@ export class Search_table extends Extends
      /////////////////////////////////////
      componentDidUpdate(prevProps, prevState)
      {
-          debugger;
+         // debugger;
         //this.state.tableBody=[];
        // this.makeDataForRender(this.state.dataRecieved);
        
@@ -409,7 +454,7 @@ export class Search_table extends Extends
      render()
      {
         
-         debugger; 
+         //debugger; 
          if (this.state.dataRecieved!=null && this.state.dataRecieved!="")
           {
              
@@ -425,7 +470,7 @@ export class Search_table extends Extends
                        <table className="table table-vcenter">
                             <thead> 
                                  <tr>
-                                        
+                                         <th className="sorting">Дія</th>  
                                         <th>Бренд</th>
                                         <th>Код</th>
                                         <th class="hidden-xs">Опис</th>
@@ -435,8 +480,8 @@ export class Search_table extends Extends
                                         <th className="hidden-xs sorting">Надійність</th>
                                         <th className="hidden-xs">Вага</th>
                                         <th className="hidden-xs">$</th>
-                                        <th className="hidden-xs sorting">Ціна</th>
-                                        <th className="sorting">Ціна $</th> 
+                                        <th className="sorting">Ціна</th>
+                                       
                                         
                                     </tr>
                              </thead> 

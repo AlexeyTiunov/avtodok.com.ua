@@ -59,7 +59,10 @@ function GetUserID_1CByID( $ID )
          
   ////  
   
-  
+  if(!isSet( $_POST['ItemCode']))
+  {
+    $_POST['ItemCode']=$_GET["ItemCode"];  
+  }    
   
    if(!isSet( $_REQUEST["ICODE"]))
       {
@@ -110,7 +113,7 @@ function GetUserID_1CByID( $ID )
      
       if(!$USER->IsAuthorized())
      {
-         //  die();
+           die();
      }       
      $UID = GetUserID_1CByID($USER->GetID());
      if(!$UID && $USER->IsAuthorized())

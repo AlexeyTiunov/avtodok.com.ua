@@ -1,13 +1,16 @@
  var path = require('path');
 
-var entryArray=[];
+var entryArray=[]; 
+entryArray.push('./app/js/detect_mobile.js');
 //entryArray.push("./app/my.jsx");
 entryArray.push("./app/sidebar_li.js");
 entryArray.push("./app/sidebar.js");
 entryArray.push("./app/sidebar_header.js"); 
-entryArray.push('./app/css/plugins.css'); 
+entryArray.push('./app/css/plugins.css');
+entryArray.push('./app/css/plugins_xs.css'); 
 entryArray.push('./app/js/plugins.js'); 
 entryArray.push('./app/js/app.js');
+
 //entryArray.push('./app/js/modernizr-2.7.1-respond-1.4.2.min.js');
 //entryArray.push('./app/js/request.js');    
 entryArray.push('./app/js/pages/index.js');

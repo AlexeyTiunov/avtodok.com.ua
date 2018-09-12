@@ -98,7 +98,7 @@ function extend(o,p)
     return o;
 }
 
-
+var ii=0;
 function sFunction(value)   //obj = (for example ) BrandCode --{}
 {
   if (this.makeHiddenInner)
@@ -113,7 +113,7 @@ function sFunction(value)   //obj = (for example ) BrandCode --{}
                 
     if (!this.dontShow)
     {  
-      const a= ( <td className={this.className}>
+      const a= ( <td  key={ii++} className={this.className}>
                     {value}
                   </td> ) 
                   this.value=a;  
@@ -428,7 +428,7 @@ export class Search_table extends Extends
                   mas.push(mapForSearchDataLocal[item].value);
                  } 
              }   
-             const b=(<tr className={colorClass} >{mas.map(function(item){return item;})} </tr>)                              
+             const b=(<tr key={ii++} className={colorClass} >{mas.map(function(item){return item;})} </tr>)                              
              this.state.tableBody.push(b); 
              //this.setState({tableBody:this.state.tableBody});
                                        
@@ -564,7 +564,7 @@ export class BusketButton extends Extends
            mas.push(input+"="+this.state.inputs[input]);
        }
        
-      var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&'));
+      var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity);
       
       Pro.then(function(data){
         alert(data) ; 
@@ -613,7 +613,8 @@ export class BusketButton extends Extends
    {
        return (
                  <div className="btn-group btn-group-xs">
-                  <input type="text" name="#" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default" value={this.state.Quantity} style={{width:"3em"}} ></input>
+                  <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={this.state.Quantity} style={{width:"3em"}} />
+                  <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
                   <a href="#" onClick={this.addToBusket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                  </div>
        
@@ -627,3 +628,100 @@ export class BusketButton extends Extends
     
     
 } 
+
+export class Select_quantity extends Extends
+{
+    constructor(props) 
+    {
+       super(props);
+       if (this.props.typeOfSelectNumber )
+       this.state.typeOfSelectNumber=this.props.typeOfSelectNumber;
+       else
+       this.state.typeOfSelectNumber="int";
+       
+        if (this.props.maxNumber )
+        this.state.maxNumber=this.props.maxNumber;
+        else
+        this.state.maxNumber=25;
+        
+        if (this.props.parentComponent)
+        {
+            this.state.parentComponent=this.props.parentComponent;  
+            this.updateQuantity=this.updateQuantity.bind(this.state.parentComponent)   
+        }         
+        else
+        {
+         this.state.parentComponent=this;      
+        }
+          
+          
+      
+       
+    }
+    updateQuantity(event)
+    {
+        try
+        {
+         this.updateQuantity(event);    
+        } catch(e)
+        {
+            
+        }
+        
+        
+    }
+     makeOptions()
+    {
+       if (this.state.typeOfSelectNumber=="int")
+       {  
+         var mas=[];
+        for (var i=1;i<=this.state.maxNumber;i++)
+        {
+          mas.push(<option key={i} value={i}>{i}</option>);  
+            
+        }
+        
+        this.state.optionsMas=mas;
+       }else if (this.state.typeOfSelectNumber=="float")
+       {
+           var mas=[];
+           for (var i=0.5;i<=this.state.maxNumber;)
+           {
+              mas.push(<option key={i} value={i}>{i}</option>);  
+              i+=0.5;
+           }
+        
+          this.state.optionsMas=mas;
+           
+       } else
+       {
+            var mas=[];
+          for (var i=1;i<=this.state.maxNumber;i++)
+          {
+           mas.push(<option key={i} value={i}>{i}</option>);  
+            
+         }
+        
+           this.state.optionsMas=mas;
+           
+       }
+        
+        
+    }
+   render()
+   {
+       this.makeOptions();
+       return(      
+            <select className="visible-xs-block" onChange={this.updateQuantity}>
+                {this.state.optionsMas.map(function(item){
+                    
+                     return item;
+                    
+                })}
+            </select>
+           
+           
+       )
+   }
+    
+}

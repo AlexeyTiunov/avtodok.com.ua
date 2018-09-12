@@ -6,7 +6,8 @@ var jQuery=require('jquery');
 window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
-import {Search_table} from './search_content.js' 
+import {Search_table} from './search_content.js'
+ 
 import {Basket_items} from './basket_items.js' 
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';   
  //debugger;  

@@ -1,7 +1,7 @@
  var ReactDOM = require('react-dom');
 var React = require('react'); 
 
-export function handleData(jsonData,standMap,jsonSubDataName=undefined)
+export function handleData(jsonData,standMap=undefined,jsonSubDataName=undefined)
  {
   //////////////////////////////////////////////   
   function makeConfigurationApply(mapArray)
@@ -58,7 +58,7 @@ export function handleData(jsonData,standMap,jsonSubDataName=undefined)
                if ( obj[item].params[j] instanceof Array)
                {
                    obj[item].functionToHandle[func].apply(obj[item],obj[item].params[j]);  
-               } 
+               } else
                {
                    obj[item].functionToHandle[func].call(obj[item],obj[item].params[j]);
                } 
@@ -259,12 +259,12 @@ export function handleData(jsonData,standMap,jsonSubDataName=undefined)
    
     Object.defineProperty(this,"TD",{value:TDD,enumerable:true,writable:true});
  } 
-this.defineTh=function (TH)
+this.defineTh=function (TH,caption)
  {
    // TDD = new TD.type( {val:this.fValue} );
-   THH=React.createElement(TH.type,{proto:this.__proto__,NAME:this.nValue},null);
+   THH=React.createElement(TH.type,{proto:this.__proto__,NAME:this.nValue,caption:caption},null);
    
-    Object.defineProperty(this,"TНН",{value:THH,enumerable:true,writable:true});
+    Object.defineProperty(this,"THH",{value:THH,enumerable:true,writable:true});
  }  
   
  
@@ -282,14 +282,24 @@ this.defineTh=function (TH)
       
       if (jsonData!=undefined && jsonData!=null)
       {
-          
+         if (standMap==undefined)
+         {
+            data=JSON.parse(jsonData);
+            if (jsonSubDataName!=undefined)
+             this.mapArray=data[jsonSubDataName];
+            else
+            this.mapArray=data;    
+         } else
+         {  
+        
       
-         data=JSON.parse(jsonData);
-         if (jsonSubDataName==undefined)
-          this.mapArray=createMapsArray(data); 
-         else
+           data=JSON.parse(jsonData);
+           if (jsonSubDataName==undefined)
+           this.mapArray=createMapsArray(data); 
+          else
           this.mapArray=createMapsArray(data[jsonSubDataName]);                  
-         makeConfigurationCallApply(this.mapArray);
+          makeConfigurationCallApply(this.mapArray); 
+         } 
       }
          
     

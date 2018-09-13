@@ -1327,8 +1327,7 @@ function handleData(jsonData, standMap) {
         for (func in obj[item].functionToHandle) {
           if (obj[item].params[j] instanceof Array) {
             obj[item].functionToHandle[func].apply(obj[item], obj[item].params[j]);
-          }
-          {
+          } else {
             obj[item].functionToHandle[func].call(obj[item], obj[item].params[j]);
           }
           j++;
@@ -1456,11 +1455,11 @@ function handleData(jsonData, standMap) {
 
     Object.defineProperty(this, "TD", { value: TDD, enumerable: true, writable: true });
   };
-  this.defineTh = function (TH) {
+  this.defineTh = function (TH, caption) {
     // TDD = new TD.type( {val:this.fValue} );
-    THH = React.createElement(TH.type, { proto: this.__proto__, NAME: this.nValue }, null);
+    THH = React.createElement(TH.type, { proto: this.__proto__, NAME: this.nValue, caption: caption }, null);
 
-    Object.defineProperty(this, "TНН", { value: THH, enumerable: true, writable: true });
+    Object.defineProperty(this, "THH", { value: THH, enumerable: true, writable: true });
   };
 
   this.parceDate = function () {
@@ -2479,6 +2478,7 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
     || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) 
   window.isMobile = true;
 
+   window.isMobile = true;   
 
 /***/ }),
 
@@ -11678,7 +11678,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Select_quantity = exports.Action_td = exports.Region_td = exports.Percentsupp_td = exports.Brandname_td = exports.Common_td = exports.Pagination = exports.Search_table_v2 = undefined;
+exports.Select_quantity = exports.Action_td = exports.Region_td = exports.Percentsupp_td = exports.Brandname_td = exports.Common_td = exports.Common_th = exports.Pagination = exports.Search_table_v2 = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -11743,10 +11743,11 @@ function getMapObject() {
     var defineColumnName = dataConvert.defineColumnName;
     var defineColumnClass = dataConvert.defineColumnClass;
     var defineTd = dataConvert.defineTd;
+    var defineTh = dataConvert.defineTh;
     var parceDate = dataConvert.parceDate;
 
     var mapObject = {
-        Action: { functions: { defineColumnName: defineColumnName, defineTd: defineTd }, params: ["Действие", React.createElement(Action_td, null)], addNew: true },
+        Action: { functions: { defineColumnName: defineColumnName, defineTd: defineTd, defineTh: defineTh }, params: ["Действие", React.createElement(Action_td, null), [React.createElement(Common_th, null), "Действие/Заказать"]], addNew: true },
         BrandCode: { functions: {}, params: [] },
         BrandName: { functions: { defineColumnName: defineColumnName, defineColumnClass: defineColumnClass, defineTd: defineTd }, params: [" ", "", React.createElement(Brandname_td, null)] },
         ItemCode: { functions: {}, params: [] },
@@ -11756,7 +11757,7 @@ function getMapObject() {
         RegionFullName: { functions: {}, params: [] },
         RegionShortName: { functions: {}, params: [] },
         RegionCode: { functions: {}, params: [] },
-        RegionCorrectName: { functions: { defineColumnName: defineColumnName, defineColumnClass: defineColumnClass, defineTd: defineTd }, params: [" ", "", React.createElement(Region_td, null)], addNew: true },
+        RegionCorrectName: { functions: { defineColumnName: defineColumnName, defineColumnClass: defineColumnClass, defineTd: defineTd, defineTh: defineTh }, params: [" ", "", React.createElement(Region_td, null), [React.createElement(Common_th, null), "Регион/Дни"]], addNew: true },
         PercentSupp: { functions: {}, params: [] },
         Weight: { functions: {}, params: [] },
         Currency: { functions: {}, params: [] },
@@ -11828,7 +11829,7 @@ var Search_table_v2 = exports.Search_table_v2 = function (_Extends) {
                 this.getSearchData();
             }
 
-            return this.state.shouldComponentUpdate;
+            return nextState.shouldComponentUpdate;
         }
     }, {
         key: 'componentDidUpdate',
@@ -11847,18 +11848,31 @@ var Search_table_v2 = exports.Search_table_v2 = function (_Extends) {
             if (this.state.mapArray.length == 0) {
                 return React.createElement('div', null);
             }
+            /*  var names=this.state.mapArray.map(function(tr) 
+                                {
+                                    var mas=[];
+                                  for (th in tr)
+                                  {
+                                     if (tr[th].Name)
+                                     mas.push(<th className={"text-center"+" "+(tr[th].className!=undefined)?tr[th].className:"" }>{tr[th].Name}</th>);
+                                  } 
+                                   
+                                  return mas;
+                                   
+                                  //return <th className="text-center">{item.Name}</th> 
+                                })[0]; */
             var names = this.state.mapArray.map(function (tr) {
+
                 var mas = [];
                 for (th in tr) {
-                    if (tr[th].Name) mas.push(React.createElement('th', { className:  true ? tr[th].className : undefined }, tr[th].Name));
+                    if (tr[th].THH) mas.push(tr[th].THH);
                 }
-
                 return mas;
-
-                //return <th className="text-center">{item.Name}</th> 
             })[0];
 
-            var tableHead = React.createElement('thead', null, React.createElement('tr', null, names));
+            var tableHead = React.createElement('tr', null, names.map(function (item) {
+                return item;
+            }));
 
             var rows = this.state.mapArray.map(function (tr) {
                 var mas = [];
@@ -11877,7 +11891,7 @@ var Search_table_v2 = exports.Search_table_v2 = function (_Extends) {
                 return React.createElement('tr', { key: i++ }, item);
             });
 
-            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement(Pagination, { quantity: this.state.dataQuantity }), React.createElement('table', { className: 'table table-vcenter' }, tableHead, React.createElement('tbody', null, tableBody)), React.createElement(Pagination, { quantity: this.state.dataQuantity })));
+            return React.createElement('div', { 'class': 'block' }, React.createElement('div', { className: 'table-responsive' }, React.createElement(Pagination, { quantity: this.state.dataQuantity }), React.createElement('table', { className: 'table table-vcenter' }, React.createElement('thead', null, tableHead), React.createElement('tbody', null, tableBody)), React.createElement(Pagination, { quantity: this.state.dataQuantity })));
         }
     }]);
 
@@ -11922,17 +11936,59 @@ var Pagination = exports.Pagination = function (_Extends2) {
     return Pagination;
 }(_main_component.Extends);
 
-var Common_td = exports.Common_td = function (_Extends3) {
-    _inherits(Common_td, _Extends3);
+var Common_th = exports.Common_th = function (_Extends3) {
+    _inherits(Common_th, _Extends3);
 
-    function Common_td(props) {
-        _classCallCheck(this, Common_td);
+    function Common_th(props) {
+        _classCallCheck(this, Common_th);
 
-        var _this3 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Common_th.__proto__ || Object.getPrototypeOf(Common_th)).call(this, props));
 
         _this3.state = _this3.props;
 
         return _this3;
+    }
+
+    _createClass(Common_th, [{
+        key: 'renderCaption',
+        value: function renderCaption() {
+            if (!this.state.caption) {
+                return "";
+            } else {
+                return this.state.caption.split(/\//);
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var caption = this.renderCaption();
+            if (caption instanceof Array) {
+                var a = React.createElement('th', null, caption.map(function (item) {
+
+                    return React.createElement('span', null, React.createElement('span', null, item), ' ', React.createElement('br', null));
+                }));
+                return a;
+            } else {
+                var _a = React.createElement('th', null, this.state.caption);
+                return _a;
+            }
+        }
+    }]);
+
+    return Common_th;
+}(_main_component.Extends);
+
+var Common_td = exports.Common_td = function (_Extends4) {
+    _inherits(Common_td, _Extends4);
+
+    function Common_td(props) {
+        _classCallCheck(this, Common_td);
+
+        var _this4 = _possibleConstructorReturn(this, (Common_td.__proto__ || Object.getPrototypeOf(Common_td)).call(this, props));
+
+        _this4.state = _this4.props;
+
+        return _this4;
     }
 
     _createClass(Common_td, [{
@@ -11945,17 +12001,17 @@ var Common_td = exports.Common_td = function (_Extends3) {
     return Common_td;
 }(_main_component.Extends);
 
-var Brandname_td = exports.Brandname_td = function (_Extends4) {
-    _inherits(Brandname_td, _Extends4);
+var Brandname_td = exports.Brandname_td = function (_Extends5) {
+    _inherits(Brandname_td, _Extends5);
 
     function Brandname_td(props) {
         _classCallCheck(this, Brandname_td);
 
-        var _this4 = _possibleConstructorReturn(this, (Brandname_td.__proto__ || Object.getPrototypeOf(Brandname_td)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (Brandname_td.__proto__ || Object.getPrototypeOf(Brandname_td)).call(this, props));
 
-        _this4.state = _this4.props;
+        _this5.state = _this5.props;
 
-        return _this4;
+        return _this5;
     }
 
     _createClass(Brandname_td, [{
@@ -11968,17 +12024,17 @@ var Brandname_td = exports.Brandname_td = function (_Extends4) {
     return Brandname_td;
 }(_main_component.Extends);
 
-var Percentsupp_td = exports.Percentsupp_td = function (_Extends5) {
-    _inherits(Percentsupp_td, _Extends5);
+var Percentsupp_td = exports.Percentsupp_td = function (_Extends6) {
+    _inherits(Percentsupp_td, _Extends6);
 
     function Percentsupp_td(props) {
         _classCallCheck(this, Percentsupp_td);
 
-        var _this5 = _possibleConstructorReturn(this, (Percentsupp_td.__proto__ || Object.getPrototypeOf(Percentsupp_td)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Percentsupp_td.__proto__ || Object.getPrototypeOf(Percentsupp_td)).call(this, props));
 
-        _this5.state = _this5.props.regionProps;
+        _this6.state = _this6.props.regionProps;
 
-        return _this5;
+        return _this6;
     }
 
     _createClass(Percentsupp_td, [{
@@ -12009,17 +12065,17 @@ var Percentsupp_td = exports.Percentsupp_td = function (_Extends5) {
     return Percentsupp_td;
 }(_main_component.Extends);
 
-var Region_td = exports.Region_td = function (_Extends6) {
-    _inherits(Region_td, _Extends6);
+var Region_td = exports.Region_td = function (_Extends7) {
+    _inherits(Region_td, _Extends7);
 
     function Region_td(props) {
         _classCallCheck(this, Region_td);
 
-        var _this6 = _possibleConstructorReturn(this, (Region_td.__proto__ || Object.getPrototypeOf(Region_td)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (Region_td.__proto__ || Object.getPrototypeOf(Region_td)).call(this, props));
 
-        _this6.state = _this6.props;
+        _this7.state = _this7.props;
 
-        return _this6;
+        return _this7;
     }
 
     _createClass(Region_td, [{
@@ -12049,29 +12105,29 @@ var Region_td = exports.Region_td = function (_Extends6) {
     return Region_td;
 }(_main_component.Extends);
 
-var Action_td = exports.Action_td = function (_Extends7) {
-    _inherits(Action_td, _Extends7);
+var Action_td = exports.Action_td = function (_Extends8) {
+    _inherits(Action_td, _Extends8);
 
     function Action_td(props) {
         _classCallCheck(this, Action_td);
 
-        var _this7 = _possibleConstructorReturn(this, (Action_td.__proto__ || Object.getPrototypeOf(Action_td)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (Action_td.__proto__ || Object.getPrototypeOf(Action_td)).call(this, props));
 
-        _this7.state = _this7.props;
-        _this7.addToBusket = _this7.addToBusket.bind(_this7);
-        _this7.state.inputs = props.inputs;
-        _this7.state.Quantity = 1;
-        _this7.updateQuantity = _this7.updateQuantity.bind(_this7);
+        _this8.state = _this8.props;
+        _this8.addToBasket = _this8.addToBasket.bind(_this8);
+        _this8.state.inputs = props.inputs;
+        _this8.state.Quantity = 1;
+        _this8.updateQuantity = _this8.updateQuantity.bind(_this8);
 
-        return _this7;
+        return _this8;
     }
 
     _createClass(Action_td, [{
-        key: 'addToBusket',
-        value: function addToBusket() {
+        key: 'addToBasket',
+        value: function addToBasket() {
             var mas = [];
-            for (input in this.state.inputs) {
-                mas.push(input + "=" + this.state.inputs[input]);
+            for (input in this.state.proto) {
+                if (this.state.proto[input].fValue) mas.push(input + "=" + this.state.proto[input].fValue);
             }
 
             var Pro = this.makeRequestToRecieveData("POST", "/ws/AddToBusket.php", false, mas.join('&') + "&Quantity=" + this.state.Quantity);
@@ -12105,33 +12161,33 @@ var Action_td = exports.Action_td = function (_Extends7) {
     }, {
         key: 'render',
         value: function render() {
-            return React.createElement('td', { className: this.state.proto["Action"].className + " text-center" }, React.createElement('div', { className: 'btn-group btn-group-xs' }, React.createElement('input', { type: 'number', name: 'number', onChange: this.updateQuantity, 'data-toggle': 'tooltip', className: 'btn btn-default visible-lg-block', value: this.state.Quantity, style: { width: "3em" } }), React.createElement(Select_quantity, { typeOfSelectNumber: "int", parentComponent: this }), React.createElement('a', { href: '#', onClick: this.addToBusket, 'data-toggle': 'tooltip', title: 'Edit', className: 'btn btn-default' }, React.createElement('i', { className: 'gi gi-shopping_cart' }))));
+            return React.createElement('td', { className: this.state.proto["Action"].className + " text-center" }, React.createElement('div', { className: 'btn-group btn-group-xs' }, React.createElement('input', { type: 'number', name: 'number', onChange: this.updateQuantity, 'data-toggle': 'tooltip', className: 'btn btn-default visible-lg-block', value: this.state.Quantity, style: { width: "3em" } }), React.createElement(Select_quantity, { typeOfSelectNumber: "int", parentComponent: this }), React.createElement('a', { href: '#', onClick: this.addToBasket, 'data-toggle': 'tooltip', title: 'Edit', className: 'btn btn-default' }, React.createElement('i', { className: 'gi gi-shopping_cart' }))));
         }
     }]);
 
     return Action_td;
 }(_main_component.Extends);
 
-var Select_quantity = exports.Select_quantity = function (_Extends8) {
-    _inherits(Select_quantity, _Extends8);
+var Select_quantity = exports.Select_quantity = function (_Extends9) {
+    _inherits(Select_quantity, _Extends9);
 
     function Select_quantity(props) {
         _classCallCheck(this, Select_quantity);
 
-        var _this8 = _possibleConstructorReturn(this, (Select_quantity.__proto__ || Object.getPrototypeOf(Select_quantity)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (Select_quantity.__proto__ || Object.getPrototypeOf(Select_quantity)).call(this, props));
 
-        if (_this8.props.typeOfSelectNumber) _this8.state.typeOfSelectNumber = _this8.props.typeOfSelectNumber;else _this8.state.typeOfSelectNumber = "int";
+        if (_this9.props.typeOfSelectNumber) _this9.state.typeOfSelectNumber = _this9.props.typeOfSelectNumber;else _this9.state.typeOfSelectNumber = "int";
 
-        if (_this8.props.maxNumber) _this8.state.maxNumber = _this8.props.maxNumber;else _this8.state.maxNumber = 25;
+        if (_this9.props.maxNumber) _this9.state.maxNumber = _this9.props.maxNumber;else _this9.state.maxNumber = 25;
 
-        if (_this8.props.parentComponent) {
-            _this8.state.parentComponent = _this8.props.parentComponent;
-            _this8.updateQuantity = _this8.updateQuantity.bind(_this8.state.parentComponent);
+        if (_this9.props.parentComponent) {
+            _this9.state.parentComponent = _this9.props.parentComponent;
+            _this9.updateQuantity = _this9.updateQuantity.bind(_this9.state.parentComponent);
         } else {
-            _this8.state.parentComponent = _this8;
+            _this9.state.parentComponent = _this9;
         }
 
-        return _this8;
+        return _this9;
     }
 
     _createClass(Select_quantity, [{

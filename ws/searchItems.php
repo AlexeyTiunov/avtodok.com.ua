@@ -83,7 +83,7 @@ function GetUserID_1CByID( $ID )
        if(!isSet( $_REQUEST["BCODE"]) )
        {
                       
-           $_REQUEST["BCODE"]= $_POST['BCODE'];
+           $_REQUEST["BCODE"]= $_POST['BrandCode'];
        }     
     
      $cartItemsCnt =0;
@@ -147,7 +147,7 @@ function GetUserID_1CByID( $ID )
                                         'usergrouparray'=>$USER->GetUserGroupArray(),
                                          'currency'=>$_REQUEST["CURRENCY"], 
                                          'icode'=>$itemCodeGAF, 
-                                         'bcode'=>$_GET["BCODE"], 
+                                         'bcode'=>$_REQUEST["BCODE"], 
                                          'page'=>$_GET["pg"], 
                                          'numPage'=>$_REQUEST["NUM_PAG"], 
                                          'sort'=>$_REQUEST["CMB_SORT"],

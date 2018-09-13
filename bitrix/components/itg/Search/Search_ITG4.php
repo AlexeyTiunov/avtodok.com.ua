@@ -588,6 +588,7 @@ class Search_ITG
                   $this->brands[$arItem['BrandCode']] = $arItem['BrandName'];  
                 }  else
                 {
+                   // $this->brands[$arItem['BrandCode']] = $arItem['BrandName']; 
                    $this->brands[$group_code] = $brand_group->getgroupName();    
                 }
                 

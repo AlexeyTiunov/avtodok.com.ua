@@ -4,6 +4,7 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
+import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function getMapObject()
 {
@@ -14,6 +15,7 @@ function getMapObject()
    var defineColumnName=dataConvert.defineColumnName;
    var defineColumnClass=dataConvert.defineColumnClass; 
    var defineTd=dataConvert.defineTd;
+    var defineTh=dataConvert.defineTh; 
    var parceDate=dataConvert.parceDate;
    
   
@@ -22,9 +24,9 @@ function getMapObject()
    
     var mapObject=
     {
-      Action:{functions:{defineColumnName,defineTd},params:["Действие",<Action_td/>,],addNew:true},      
+      Action:{functions:{defineColumnName,defineTd,defineTh},params:["Действие",<Action_td/>,[<Common_th/>,"Действие/Заказать"]],addNew:true},      
       BrandCode:{functions:{},params:[]},      
-      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd},params:[" ","",<Brandname_td />,]}, 
+      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>,"Бренд/Код/Наименование"]]}, 
       ItemCode:{functions:{},params:[]}, 
       Caption:{functions:{},params:[]}, 
       DeliveryDays:{functions:{formatNumber},params:[[".","0"]]},
@@ -32,12 +34,12 @@ function getMapObject()
       RegionFullName:{functions:{},params:[]}, 
       RegionShortName:{functions:{},params:[]},
       RegionCode: {functions:{},params:[]},
-      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd},params:[" ","",<Region_td/>,],addNew:true},  
+      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Region_td/>,[<Common_th/>,"Регион/Дни"]],addNew:true},  
       PercentSupp:{functions:{},params:[]},
       Weight:{functions:{},params:[]}, 
       Currency:{functions:{},params:[]}, 
       ReturnableParts:{functions:{},params:[]}, 
-      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","",<Common_td/>,]}, 
+      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Common_td/>,[<Common_th/>,"Цена/Валюта"]]}, 
       PriceUSD:{functions:{},params:[]}, 
          
         
@@ -52,6 +54,83 @@ function getMapObject()
 
 ////////////////////////////////////////////////////////////////
 
+  export class Search_table_brandheader extends Extends
+  {
+      constructor(props)
+      {
+          super(props);
+          this.state.brandInfo=this.props.brandInfo;
+          this.state.itemCode=this.props.itemCode;
+      } 
+      renderBrandInfo()
+      {
+          var mas=[];
+        for (var item in  this.state.brandInfo) 
+        {
+           mas.push(React.createElement(Brand_links,{brandCode:item,
+                                                     brandName:this.state.brandInfo[item],
+                                                     itemCode:this.state.itemCode
+                                                      })) 
+        }
+        return mas; 
+          
+      }
+      
+      render()
+      {
+        var mas=this.renderBrandInfo();  
+        return(
+               <div>
+                 <table>
+                   <tr>
+                 {
+                    mas.map(function(item){
+                        
+                        return (<td>{item}</td>)
+                        
+                    }) 
+                 }
+                  </tr>
+                 </table>
+               </div>
+              );  
+          
+          
+      }
+  }
+  
+  export class Brand_links extends Extends
+  {
+       constructor(props)
+      {
+          super(props);
+          this.state.brandCode=this.props.brandCode;
+          this.state.brandName=this.props.brandName;
+          this.state.itemCode=this.props.itemCode;
+          this.state.searchTableComponent;
+          this.onclick=this.onclick.bind(this);
+      } 
+      onclick()
+      {
+        if (this.state.searchTableComponent==null || this.state.searchTableComponent==undefined) return;
+        
+         this.state.searchTableComponent.setState({ItemCode:this.state.itemCode,BrandCode:this.state.brandCode});
+          
+      }
+       render()
+      {
+        return(
+                 <div>
+                   <Link onClick={this.onclick}></Link>
+                 </div>
+        
+              );  
+          
+          
+      }
+      
+  }
+
  export class Search_table_v2 extends Extends
  {
      
@@ -60,9 +139,11 @@ function getMapObject()
        
          super(props);         
          this.state.mapArray=[];
+         this.state.mapArrayBrand=[];
          this.state.numberOfrow=5;   
          this.state.page=1;
-         this.state.dataQuantity=1; 
+         this.state.dataQuantity=1;
+        
          
          
      }
@@ -93,13 +174,19 @@ function getMapObject()
      {
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
          var findMySelf=this.findMySelf(this.constructor.name);
-         
          var data="ItemCode="+this.state.itemCode+"";
+         if (this.state.brandCode!="")
+         {
+            data+="&BrandCode="+this.state.brandCode; 
+         }
+         
+         
          var Prom=this.makeRequestToRecieveData("POST","/ws/searchItems.php",false,data)
         
          Prom.then(function(responseText){
              
-                     handleDT=new handleData(responseText,getMapObject(),"ITEMS");
+                     handleBR= new  handleData(responseText,undefined,"BRANDS");             
+                     handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
                      findMySelf().dataSort(handleDT.mapArray)
                      findMySelf().setState({mapArray:handleDT.mapArray,shouldComponentUpdate:true}); 
          })
@@ -115,7 +202,7 @@ function getMapObject()
           } 
           
           
-          return this.state.shouldComponentUpdate;
+          return nextState.shouldComponentUpdate;
       }
      
      componentDidUpdate(prevProps, prevState)
@@ -137,7 +224,7 @@ function getMapObject()
          {
             return(<div></div>); 
          }
-         var names=this.state.mapArray.map(function(tr) 
+       /*  var names=this.state.mapArray.map(function(tr) 
                            {
                                var mas=[];
                              for (th in tr)
@@ -149,15 +236,35 @@ function getMapObject()
                              return mas;
                               
                              //return <th className="text-center">{item.Name}</th> 
-                           })[0]; 
+                           })[0]; */
+           var names=this.state.mapArray.map(function(tr) {
+               
+                     var mas=[];
+                             for (th in tr)
+                             {
+                                 if (tr[th].THH)
+                                 mas.push(tr[th].THH);  
+                             }
+                              return mas;    
+               
+           })[0]                 
                            
-         const tableHead= (  <thead>
+         const tableHead= (  
                                     <tr>
-                                    {
-                                     names  
-                                    } 
+                                     {
+                                       names.map(function(item){
+                                         return  item;
+                                       })  
+                                     } 
                                     </tr>
-                                </thead> )  
+                             
+                     )  
+            
+                                      
+                                   
+                          
+                                     
+                     
                                 
            var rows=this.state.mapArray.map(function(tr) 
                            {
@@ -182,10 +289,12 @@ function getMapObject()
          return (
                    <div class="block">
                      <div className="table-responsive">
+                     <Search_table_brandheader  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/>
                        <Pagination quantity={this.state.dataQuantity}/>
                           <table className="table table-vcenter"> 
+                               <thead>
                                 {tableHead}
-                                
+                               </thead> 
                                 <tbody>
                                     {tableBody}                                   
                                   </tbody>
@@ -247,7 +356,67 @@ export class Pagination extends Extends
     
     
 }
-
+ export class Common_th extends Extends   
+ {
+      constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     renderCaption()
+     {
+         if (!this.state.caption)
+         {
+           return "";  
+         }
+         
+         else
+         {
+          return this.state.caption.split(/\//);
+             
+         }
+         
+         
+     }
+     render()
+     {
+         var caption=this.renderCaption();
+       if (caption instanceof  Array )
+       {
+           const a =(  <th>
+                          {
+                              caption.map(function(item){
+                              
+                              return (<span><span>{item}</span> <br/>
+                                         </span>
+                              )
+                              
+                                     
+                              
+                          }) 
+                          }
+                       </th> 
+           
+                    )
+           return a;  
+       } else
+       {
+           const a =(<th>{this.state.caption}</th>    )  
+           return a;  
+       } 
+      
+                   
+                  
+        
+        
+         
+             
+         
+         
+     }
+     
+ }
 
 
 export class Common_td extends Extends
@@ -390,33 +559,31 @@ export class Action_td extends Extends
    {
       super(props);
       this.state=this.props; 
-      this.addToBusket=this.addToBusket.bind(this);
+      this.addToBasket=this.addToBasket.bind(this);
       this.state.inputs=props.inputs;     
       this.state.Quantity=1;
       this.updateQuantity=this.updateQuantity.bind(this);
        
    }
-   addToBusket()
+  
+   addToBasket()
    {
        var mas=[];
-       for (input in this.state.inputs)
+       for (input in this.state.proto)
        {
-           mas.push(input+"="+this.state.inputs[input]);
-       }
+           if(this.state.proto[input].fValue )           
+           mas.push(input+"="+this.state.proto[input].fValue);
+       } 
        
-      var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity);
+       var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity);
       
       Pro.then(function(data){
         alert(data) ; 
         obj=window.objectReg["Basket_icon"];
         obj.setState({getBasketPartsQuantity:true});  
       }
-     );
-      
-      
-      
-    
-       
+     ); 
+        
        
    }
    updateQuantity(event)
@@ -456,7 +623,7 @@ export class Action_td extends Extends
                  <div className="btn-group btn-group-xs">
                   <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={this.state.Quantity} style={{width:"3em"}} />
                   <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
-                  <a href="#" onClick={this.addToBusket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
+                  <a href="#" onClick={this.addToBasket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                  </div>
             </td>
        

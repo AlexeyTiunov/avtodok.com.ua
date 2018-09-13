@@ -22,23 +22,23 @@ function getMapObject()
    
     var mapObject=
     {
-      Action:{functions:{defineColumnName,defineTd},params:["Номер Заказа",<Action _td/>,]},      
-      BrandCode:{functions:{parceDate,defineColumnClass,defineColumnName},params:["","hidden-xs","Дата"]},      
-      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Бренд/Код","",<Common_td />,]}, 
-      ItemCode:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Код","hidden-xs",<Common_td />,]}, 
-      Caption:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Наименование","hidden-xs",<Common_td />,]}, 
-      DeliveryDays:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Срок","hidden-xs",<Common_td />,]},
-      Quantity:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Количество","hidden-xs",<Common_td/>,]},
+      Action:{functions:{defineColumnName,defineTd},params:["Действие",<Action_td/>,],addNew:true},      
+      BrandCode:{functions:{},params:[]},      
+      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd},params:[" ","",<Brandname_td />,]}, 
+      ItemCode:{functions:{},params:[]}, 
+      Caption:{functions:{},params:[]}, 
+      DeliveryDays:{functions:{formatNumber},params:[[".","0"]]},
+      Quantity:{functions:{},params:[]},
       RegionFullName:{functions:{},params:[]}, 
       RegionShortName:{functions:{},params:[]},
       RegionCode: {functions:{},params:[]},
-      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Регион","hidden-xs",<Region_td/>,],addNew:true},  
-      PercentSupp:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Надежность","hidden-xs",<Percentsupp_td/>,]},
-      Weight:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Вес","hidden-xs",<Common_td/>,]}, 
-      Currency:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Валюта","hidden-xs",<Common_td/>,]}, 
-      ReturnableParts:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Возврат","hidden-xs",<Common_td/>,]}, 
-      Price:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Цена","hidden-xs",<Common_td/>,]}, 
-      PriceUSD:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Цена","hidden-xs",<Common_td/>,]}, 
+      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd},params:[" ","",<Region_td/>,],addNew:true},  
+      PercentSupp:{functions:{},params:[]},
+      Weight:{functions:{},params:[]}, 
+      Currency:{functions:{},params:[]}, 
+      ReturnableParts:{functions:{},params:[]}, 
+      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","",<Common_td/>,]}, 
+      PriceUSD:{functions:{},params:[]}, 
          
         
     }
@@ -48,46 +48,22 @@ function getMapObject()
    return mapObject; 
 }
 
-function getRegionName(value,RigionFullNameFunc,RegionShortNameFunc)
-{
-  var RegionNameMap={
-    "1":RigionFullNameFunc,
-    "2":RegionShortNameFunc,
-    "3":RegionShortNameFunc,
-    "4" :RegionShortNameFunc,
-    "999" :RegionShortNameFunc,
-    "998" :RegionShortNameFunc,
-    "997" :RegionShortNameFunc,
-    "default": RigionFullNameFunc,
-    "defaultName":"Украина",
-      
-  } 
-  var RegionCode=this["RegionCode"].value;
-  if (RegionNameMap[RegionCode]) 
-  {
-    this.value=RegionNameMap[RegionCode].bind(this)();   
-  }else
-  {
-   //this.value=RegionNameMap["default"].bind(this)();
-    this.value=RegionNameMap["defaultName"];  
-  }
-   
-  
-  //this.value=RigionFullNameFunc.bind(this)(); 
-   // this.value=RegionCode; 
-}
 
 
 ////////////////////////////////////////////////////////////////
 
- export class Search_table extends Extends
+ export class Search_table_v2 extends Extends
  {
      
     constructor(props) 
      {  
        
          super(props);         
-         this.state.mapArray=[];                     
+         this.state.mapArray=[];
+         this.state.numberOfrow=5;   
+         this.state.page=1;
+         this.state.dataQuantity=1; 
+         
          
      }
      dataSort(data)
@@ -115,21 +91,36 @@ function getRegionName(value,RigionFullNameFunc,RegionShortNameFunc)
      }
      getSearchData()
      {
+         if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
          var findMySelf=this.findMySelf(this.constructor.name);
          
          var data="ItemCode="+this.state.itemCode+"";
          var Prom=this.makeRequestToRecieveData("POST","/ws/searchItems.php",false,data)
-         
+        
          Prom.then(function(responseText){
              
-                     handleDT=new handleData(responseText,getMapObject());
-                 findMySelf().setState({mapArray:findMySelf().dataSort(handleDT.mapArray)}); 
+                     handleDT=new handleData(responseText,getMapObject(),"ITEMS");
+                     findMySelf().dataSort(handleDT.mapArray)
+                     findMySelf().setState({mapArray:handleDT.mapArray,shouldComponentUpdate:true}); 
          })
      }
      
      /////////////////////////////////////
+      shouldComponentUpdate(nextProps, nextState)
+      {
+          if (!nextState.shouldComponentUpdate && this.state.itemCode!=nextState.itemCode )
+          {
+              this.state.itemCode=nextState.itemCode;
+              this.getSearchData();   
+          } 
+          
+          
+          return this.state.shouldComponentUpdate;
+      }
+     
      componentDidUpdate(prevProps, prevState)
      {
+         super.componentDidUpdate(prevProps, prevState); 
          // debugger;
         //this.state.tableBody=[];
        // this.makeDataForRender(this.state.dataRecieved);
@@ -142,8 +133,72 @@ function getRegionName(value,RigionFullNameFunc,RegionShortNameFunc)
      }
      render()
      {
-         
-         return ()
+         if (this.state.mapArray.length==0)
+         {
+            return(<div></div>); 
+         }
+         var names=this.state.mapArray.map(function(tr) 
+                           {
+                               var mas=[];
+                             for (th in tr)
+                             {
+                                if (tr[th].Name)
+                                mas.push(<th className={"text-center"+" "+(tr[th].className!=undefined)?tr[th].className:"" }>{tr[th].Name}</th>);
+                             } 
+                              
+                             return mas;
+                              
+                             //return <th className="text-center">{item.Name}</th> 
+                           })[0]; 
+                           
+         const tableHead= (  <thead>
+                                    <tr>
+                                    {
+                                     names  
+                                    } 
+                                    </tr>
+                                </thead> )  
+                                
+           var rows=this.state.mapArray.map(function(tr) 
+                           {
+                               var mas=[];
+                             for (td in tr)
+                             {
+                                
+                                mas.push(tr[td].TD)
+                             } 
+                              
+                             return mas;
+                              
+                             //return <th className="text-center">{item.Name}</th> 
+                           });
+              
+                                
+                          var i=0;
+               const tableBody= rows.map(function(item){                                  
+                                  return (  <tr key={i++}>{item}</tr> )  
+                                   })                                                        
+                            
+         return (
+                   <div class="block">
+                     <div className="table-responsive">
+                       <Pagination quantity={this.state.dataQuantity}/>
+                          <table className="table table-vcenter"> 
+                                {tableHead}
+                                
+                                <tbody>
+                                    {tableBody}                                   
+                                  </tbody>
+                                              
+                       
+                       
+                         </table>
+                        <Pagination quantity={this.state.dataQuantity}/> 
+                     </div>
+                   </div>
+          
+           
+                 )
          
      }
       
@@ -155,7 +210,43 @@ function getRegionName(value,RigionFullNameFunc,RegionShortNameFunc)
 
 ////////////////////////////////////////////////////////////////
 
-
+export class Pagination extends Extends
+{
+   constructor(props) 
+   {
+      super(props);
+     // this.state={quantity:this.props.quantity}; 
+      this.click=this.click.bind(this) 
+       
+   }
+   click(e)
+   {
+      Uobject=window.objectReg['Search_table'];  
+       Uobject.setState({page:Number(e.target.innerHTML)});  
+       
+       
+   }
+   
+   render(){         
+   var masLi=[];
+         for (i=0;i<this.props.quantity;i++)
+         {
+             masLi.push( <li onClick={this.click} className="page-item"><a className="page-link" href="#">{i+1}</a></li>);
+         }
+        return ( <ul className="pagination">
+        
+               {masLi.map(function(item){return item;})}
+        
+              </ul> );
+   
+   
+   
+   
+            }
+    
+    
+    
+}
 
 
 
@@ -181,12 +272,124 @@ export class Common_td extends Extends
      }
     
 }
+export class Brandname_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+       return(
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
+                   {this.state.proto[this.state.NAME].fValue}<br/>
+                   {this.state.proto["ItemCode"].fValue}
+                   
+                   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+    
+}
+export class Percentsupp_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props.regionProps;
+         
+     } 
+   
+     wrapperA()
+     {
+              var wrapperClassName={
+                "0-40":"label label-danger",
+                "40-70" :"label label-warning",
+                "70-90": "label label-info",
+                "90-100":"label label-success",
+                "default":"label label-danger",
+                  
+              }
+      try
+      {        
+        var value=this.state.proto["PercentSupp"].fValue;
+      }catch(e)
+      {
+        var value="100";  
+      }        
+      return(<a href='#' className={this.getRangeObjectValue(wrapperClassName,value)}>{value+"%"}</a >);
+      
+        
+     }
+     render()
+     {
+       return(
+                  <div>
+                  {this.wrapperA()}
+                  </div>
+         
+             )   
+         
+         
+     }
+    
+}
+export class Region_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     }
+      getRegionName()
+     {
+          var regionRangeObjectValue={
+              "0-1":this.state.proto["RegionFullName"].fValue,
+              "2-4":this.state.proto["RegionShortName"].fValue,
+              "980-999":this.state.proto["RegionShortName"].fValue, 
+              "default": "Украина",
+              
+          };
+          
+          var RegionCode=this.state.proto["RegionCode"].fValue;
+         return this.getRangeObjectValue(regionRangeObjectValue,RegionCode);
+     }
+     
+     ///////////////////////////////////////////// 
+     render()
+     {
+       return(
+                   <td className={this.state.proto["RegionCorrectName"].className+" text-center" }> 
+                   {this.getRegionName()}<br/>                  
+                   {this.state.proto["DeliveryDays"].fValue}<br/> 
+                    <Percentsupp_td regionProps={this.props}/>                     
+                   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+    
+}
 
-export class Action _td extends Extends
+export class Action_td extends Extends
 {
     constructor(props) 
    {
       super(props);
+      this.state=this.props; 
       this.addToBusket=this.addToBusket.bind(this);
       this.state.inputs=props.inputs;     
       this.state.Quantity=1;
@@ -249,12 +452,13 @@ export class Action _td extends Extends
    render()
    {
        return (
+            <td className={this.state.proto["Action"].className+" text-center" }> 
                  <div className="btn-group btn-group-xs">
                   <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={this.state.Quantity} style={{width:"3em"}} />
                   <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
                   <a href="#" onClick={this.addToBusket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                  </div>
-       
+            </td>
        
                )
        

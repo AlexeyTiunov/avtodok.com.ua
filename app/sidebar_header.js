@@ -7,6 +7,7 @@ window.$=jQuery;
 var App=require('./js/app.js'); 
 //import {App} from './js/app.js';
 import {Search_table} from './search_content.js'
+import {Search_table_v2} from './search_content_v2.js'
  
 import {Basket_items} from './basket_items.js' 
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';   
@@ -66,7 +67,7 @@ class Search_form extends Extends
          
                      };     
        this.keyup=this.keyup.bind(this);  
-        debugger;  
+       // debugger;  
      } 
      
      keyup(event)
@@ -79,6 +80,43 @@ class Search_form extends Extends
              return;
          } */
         // Uobject=window.objectReg['Page_content'];
+        
+        if (window.isMobile)
+        {   var itemCode=event.target.value; 
+            getItemCodeFunc=function()
+            {
+              return  itemCode; 
+            }
+            
+                
+          //  getWorkPage().setState({renderIN:<Search_table_v2/>,defineRoutes:false},
+          if (!window.objectReg['Search_table_v2'])
+          {
+            getWorkPage().setState({renderIN:React.createElement(Search_table_v2),defineRoutes:false}, 
+             function(){
+                
+                var itemCode=getItemCodeFunc(); 
+                 
+                if (itemCode=="") 
+                  {
+                   event.preventDefault();
+                   return;  
+                  }
+                  window.objectReg['Search_table_v2'].setState({itemCode:itemCode})
+            }
+             );   
+          } else
+          {
+               window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc()});
+          }
+             
+           
+            
+        }
+        else
+        {
+            
+        
          getWorkPage().setState({renderIN:<Search_table/>,defineRoutes:false});
          
          var itemCode=event.target.value;
@@ -96,7 +134,7 @@ class Search_form extends Extends
          
          
          
-         ;
+        }
          // alert(this.state.dataRecieved);
          
          

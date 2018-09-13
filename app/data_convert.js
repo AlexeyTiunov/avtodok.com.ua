@@ -1,7 +1,7 @@
  var ReactDOM = require('react-dom');
 var React = require('react'); 
 
-export function handleData(jsonData,standMap)
+export function handleData(jsonData,standMap,jsonSubDataName=undefined)
  {
   //////////////////////////////////////////////   
   function makeConfigurationApply(mapArray)
@@ -258,7 +258,15 @@ export function handleData(jsonData,standMap)
    TDD=React.createElement(TD.type,{proto:this.__proto__,NAME:this.nValue},null);
    
     Object.defineProperty(this,"TD",{value:TDD,enumerable:true,writable:true});
+ } 
+this.defineTh=function (TH)
+ {
+   // TDD = new TD.type( {val:this.fValue} );
+   THH=React.createElement(TH.type,{proto:this.__proto__,NAME:this.nValue},null);
+   
+    Object.defineProperty(this,"TНН",{value:THH,enumerable:true,writable:true});
  }  
+  
  
  this.parceDate= function()
  {
@@ -277,7 +285,10 @@ export function handleData(jsonData,standMap)
           
       
          data=JSON.parse(jsonData);
-         this.mapArray=createMapsArray(data);                   
+         if (jsonSubDataName==undefined)
+          this.mapArray=createMapsArray(data); 
+         else
+          this.mapArray=createMapsArray(data[jsonSubDataName]);                  
          makeConfigurationCallApply(this.mapArray);
       }
          

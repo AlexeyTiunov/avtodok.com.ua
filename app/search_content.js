@@ -473,8 +473,8 @@ export class Search_table extends Extends
                                          <th className="sorting">Дія</th>  
                                         <th>Бренд</th>
                                         <th>Код</th>
-                                        <th class="hidden-xs">Опис</th>
-                                        <th class="sorting">Срок</th>
+                                        <th className="hidden-xs">Опис</th>
+                                        <th className="sorting">Срок</th>
                                         <th>К-во</th>
                                         <th>Регіон</th>
                                         <th className="hidden-xs sorting">Надійність</th>

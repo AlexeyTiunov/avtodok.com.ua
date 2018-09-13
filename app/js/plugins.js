@@ -195,7 +195,7 @@ H(n.addClass("fc-agenda")),ze=new Ce(function(e,n){function r(t){return Math.max
 !function(e){"function"==typeof define&&define.amd?define(["jquery"],e):e(jQuery)}(function(e){function t(t,a,r,c){var l=t.success,i=e.extend({},t.data||{},{singleevents:!0,"max-results":9999});return e.extend({},t,{url:t.url.replace(/\/basic$/,"/full")+"?alt=json-in-script&callback=?",dataType:"jsonp",data:i,timezoneParam:"ctz",startParam:"start-min",endParam:"start-max",success:function(t){var a=[];t.feed.entry&&e.each(t.feed.entry,function(t,n){var r;e.each(n.link,function(e,t){"text/html"==t.type&&(r=t.href,c&&"local"!=c&&(r+=(-1==r.indexOf("?")?"?":"&")+"ctz="+encodeURIComponent(c)))}),a.push({id:n.gCal$uid.value,title:n.title.$t,start:n.gd$when[0].startTime,end:n.gd$when[0].endTime,url:r,location:n.gd$where[0].valueString,description:n.content.$t})});var r=[a].concat(Array.prototype.slice.call(arguments,1)),i=n(l,this,r);return e.isArray(i)?i:a}})}var a=e.fullCalendar,n=a.applyAll;a.sourceNormalizers.push(function(e){("gcal"==e.dataType||void 0===e.dataType&&(e.url||"").match(/^(http|https):\/\/www.google.com\/calendar\/feeds\//))&&(e.dataType="gcal",void 0===e.editable&&(e.editable=!1))}),a.sourceFetchers.push(function(e,a,n,r){return"gcal"==e.dataType?t(e,a,n,r):void 0}),a.gcalFeed=function(t,a){return e.extend({},a,{url:t,dataType:"gcal"})}});
  */   
  (function(t) {
-     debugger;
+    // debugger;
    // if ("function" == typeof define && define.amd)
   // {
     //  define(["jquery", "moment"], t);  

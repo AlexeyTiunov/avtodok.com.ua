@@ -218,5 +218,22 @@ export class Extends extends React.Component
             window.objectReg[item].setState({justUpdate:null});
          }
      }
+     getRangeObjectValue(RangeObjectValue,value)
+      {
+         for( var item in RangeObjectValue)
+         {
+            var arr=item.split(/-/);
+            if (arr.length==1) continue;
+            if (Number(value)>arr[0] && Number(value)<=arr[1]  ) 
+            {
+                return  RangeObjectValue[item]
+            }
+            else 
+            {
+                continue;
+            }
+         } 
+         return RangeObjectValue["default"]; 
+    }    
     
 }

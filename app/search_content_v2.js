@@ -4,7 +4,7 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
-import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 
 function getMapObject()
 {
@@ -53,7 +53,8 @@ function getMapObject()
 
 
 ////////////////////////////////////////////////////////////////
-
+  var unickKey=0;
+  const ComContext = React.createContext(null);  
   export class Search_table_brandheader extends Extends
   {
       constructor(props)
@@ -81,12 +82,12 @@ function getMapObject()
         var mas=this.renderBrandInfo();  
         return(
                <div>
-                 <table>
-                   <tr>
+                 <table className="table">
+                   <tr key={unickKey++}>
                  {
                     mas.map(function(item){
                         
-                        return (<td>{item}</td>)
+                        return (<td key={unickKey++} >{item}</td>)
                         
                     }) 
                  }
@@ -113,17 +114,31 @@ function getMapObject()
       onclick()
       {
         if (this.state.searchTableComponent==null || this.state.searchTableComponent==undefined) return;
-        
-         this.state.searchTableComponent.setState({ItemCode:this.state.itemCode,BrandCode:this.state.brandCode});
+         try
+               {
+                this.state.searchTableComponent.xhr.abort();   
+               } catch(e)
+               {
+                   Console.log(e)
+               }
+         this.state.searchTableComponent.setState({itemCode:this.state.itemCode,brandCode:this.state.brandCode});
           
       }
        render()
       {
+          
         return(
-                 <div>
-                   <Link onClick={this.onclick}></Link>
-                 </div>
-        
+                <ComContext.Consumer>
+                {
+                  function (mainComp){
+                    this.state.searchTableComponent=mainComp;   
+                  return(  <div>
+                      <a key={unickKey++} onClick={this.onclick}>{this.state.brandName}</a>
+                    </div> ) 
+                  }.bind(this)  
+                } 
+                 
+                </ComContext.Consumer>
               );  
           
           
@@ -170,34 +185,66 @@ function getMapObject()
          
          
      }
+    async dataSortAsync(data)
+     {
+         if (data.length==1) return data;
+         for (  var i=0;i<data.length;i++)
+         {
+             for ( var j=0;j<data.length-i-1;j++)
+             {
+                 if (Number(data[j].Price.fValue)>Number(data[j+1].Price.fValue))
+                 {
+                    helpMas=data[j];
+                    data[j]=data[j+1];
+                    data[j+1]=helpMas;
+                    
+                 }
+                 
+             } 
+             
+             
+         }
+         
+        return data; 
+     }
      getSearchData()
      {
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
          var findMySelf=this.findMySelf(this.constructor.name);
          var data="ItemCode="+this.state.itemCode+"";
-         if (this.state.brandCode!="")
+         if (this.state.brandCode==undefined )
          {
-            data+="&BrandCode="+this.state.brandCode; 
+            
+         } else
+         {
+             data+="&BrandCode="+this.state.brandCode; 
          }
          
          
-         var Prom=this.makeRequestToRecieveData("POST","/ws/searchItems.php",false,data)
+         var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/searchItems.php",data)
         
          Prom.then(function(responseText){
              
                      handleBR= new  handleData(responseText,undefined,"BRANDS");             
                      handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
-                     findMySelf().dataSort(handleDT.mapArray)
-                     findMySelf().setState({mapArray:handleDT.mapArray,shouldComponentUpdate:true}); 
+                     findMySelf().dataSortAsync(handleDT.mapArray).then( function(mapArray){
+                         
+                         findMySelf().setState({ mapArray:mapArray,shouldComponentUpdate:true});
+                     })
+                     
+                     
+                     findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true}); 
          })
      }
      
-     /////////////////////////////////////
+     /////////////////////////////////////    && this.state.itemCode!=nextState.itemCode
       shouldComponentUpdate(nextProps, nextState)
       {
-          if (!nextState.shouldComponentUpdate && this.state.itemCode!=nextState.itemCode )
+        
+          if (!nextState.shouldComponentUpdate  )
           {
               this.state.itemCode=nextState.itemCode;
+              this.state.brandCode=nextState.brandCode; 
               this.getSearchData();   
           } 
           
@@ -281,15 +328,15 @@ function getMapObject()
                            });
               
                                 
-                          var i=0;
+                          //var i=0;
                const tableBody= rows.map(function(item){                                  
-                                  return (  <tr key={i++}>{item}</tr> )  
+                                  return (  <tr key={unickKey++}>{item}</tr> )  
                                    })                                                        
                             
          return (
                    <div class="block">
                      <div className="table-responsive">
-                     <Search_table_brandheader  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/>
+                    <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
                        <Pagination quantity={this.state.dataQuantity}/>
                           <table className="table table-vcenter"> 
                                <thead>

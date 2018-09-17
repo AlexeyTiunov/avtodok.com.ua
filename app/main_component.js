@@ -158,7 +158,43 @@ export class Extends extends React.Component
                    
                 }else
                 {
-                    reject("ERROR");
+                    //reject("ERROR"); 
+                }
+                
+            }
+            this.xhr.send(data);    
+             
+             
+         })
+         
+         
+         
+       
+         
+      // thisO.setState({dataRecieved:null});  
+        
+       return Pro  
+         
+     }
+     makeRequestToRecieveDataAsync(method,url,data)
+     {   
+         thisO=this;
+         thisO.xhr= new XMLHttpRequest();
+        var Pro= new Promise((resolve,reject)=>{
+            thisO.xhr.open(method,url,true);
+            thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            thisO.xhr.onreadystatechange = function()
+            {
+                if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
+                {
+                    resolve(thisO.xhr.responseText);
+                   
+                }else if (thisO.xhr.readyState<4 && thisO.xhr.status==200)
+                {
+                    
+                }else
+                {
+                    //reject("ERROR"); 
                 }
                 
             }

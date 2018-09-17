@@ -1,6 +1,7 @@
  var path = require('path');
 
-var entryArray=[]; 
+var entryArray=[];
+entryArray.push('babel-polyfill'); 
 entryArray.push('./app/js/detect_mobile.js');
 //entryArray.push("./app/my.jsx");
 entryArray.push("./app/sidebar_li.js");

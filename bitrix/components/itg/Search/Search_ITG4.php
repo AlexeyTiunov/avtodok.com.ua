@@ -1,4 +1,5 @@
-<?php
+<?php    ignore_user_abort(false);  
+set_time_limit(1); 
 error_reporting(0) ;
 require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php"); 
 class Customer

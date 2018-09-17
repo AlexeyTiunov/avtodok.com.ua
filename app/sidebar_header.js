@@ -107,6 +107,13 @@ class Search_form extends Extends
              );   
           } else
           {
+               try
+               {
+                window.objectReg['Search_table_v2'].xhr.abort();   
+               } catch(e)
+               {
+                   Console.log(e)
+               }
                window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc()});
           }
              

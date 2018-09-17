@@ -1,17 +1,22 @@
 <?
+ 
   
   require_once ($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');  
   require_once  ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Search/Search_ITG4.php");
   require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php");  
-  session_start();
+  set_time_limit(1); 
+   ignore_user_abort(false);  
+ // session_start();
+
   global $USER; 
  error_reporting(0);
-  ini_set("display_errors","1"); 
+  ini_set("display_errors","1");
+   // echo  connection_status();   
   ////
   $_SESSION['GLUSERMASS'] =$USER->GetUserGroupArray(); 
   
   //// 
-  //var_dump($_REQUEST);
+  
   //die();
   if (!isset($_POST['ItemCode'])) $_POST['ItemCode']=$_GET['ItemCode'];
   
@@ -80,10 +85,11 @@ function GetUserID_1CByID( $ID )
                
       }  
        
-       if(!isSet( $_REQUEST["BCODE"]) )
+       if(!isSet( $_GET["BCODE"]) )
        {
                       
-           $_REQUEST["BCODE"]= $_POST['BrandCode'];
+           $_GET["BCODE"]=$_POST['BrandCode'];
+            $_REQUEST["BCODE"]=$_POST['BrandCode'];
        }     
     
      $cartItemsCnt =0;
@@ -141,14 +147,14 @@ function GetUserID_1CByID( $ID )
       $_GET["pg"]=0;
       $_REQUEST["NUM_PAG"]=1000;
       $_REQUEST["CMB_SORT"] = "PRICE";
-     
+     // var_dump($_POST); 
      $paramsArray=array(    'user'=>$UID,
                                         'userID'=>$USER->GetID(),
                                         'usergrouparray'=>$USER->GetUserGroupArray(),
                                          'currency'=>$_REQUEST["CURRENCY"], 
                                          'icode'=>$itemCodeGAF, 
                                          'bcode'=>$_REQUEST["BCODE"], 
-                                         'page'=>$_GET["pg"], 
+                                         'page'=>0, 
                                          'numPage'=>$_REQUEST["NUM_PAG"], 
                                          'sort'=>$_REQUEST["CMB_SORT"],
                                          'arBrands'=>$arBrands['id'],
@@ -169,8 +175,11 @@ function GetUserID_1CByID( $ID )
        
         $masToReturn["BRANDS"]=$items->getBrans();
         $masToReturn["ITEMS"]= $items->getArrItems(); 
-        echo (json_encode($masToReturn,JSON_UNESCAPED_UNICODE))
-  
+        echo (json_encode($masToReturn,JSON_UNESCAPED_UNICODE));
+     //echo  connection_status();
+     
+     //echo ini_get("max_execution_time");
+
        //var_dump($products = $items->getArrItems());
     // var_dump ( json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE) ) ; 
      // $brands = $items->getBrans();

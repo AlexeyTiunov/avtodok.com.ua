@@ -16,7 +16,8 @@ export class Extends extends React.Component
                      renderIN:<div></div>,
                      dataRecieved:null,
                      justUpdate:null,
-                     shouldComponentUpdate:false
+                     shouldComponentUpdate:false,
+                     PHPSESSID:this.getCookie("PHPSESSID"),
                      };
         
          this.xhr = new XMLHttpRequest();
@@ -49,6 +50,7 @@ export class Extends extends React.Component
      }
      componentDidUpdate(prevProps, prevState)
       {
+      //  this.state.PHPSESSID=this.getCookie("PHPSESSID");  
         this.state.shouldComponentUpdate=false;  
       }
      
@@ -146,7 +148,7 @@ export class Extends extends React.Component
      }
      makeRequestToRecieveData(method,url,type,data)
      {   
-         thisO=this; 
+        var thisO=this; 
         var Pro= new Promise((resolve,reject)=>{
             thisO.xhr.open(method,url,type);
             thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -178,7 +180,7 @@ export class Extends extends React.Component
      }
      makeRequestToRecieveDataAsync(method,url,data)
      {   
-         thisO=this;
+         var thisO=this;
          thisO.xhr= new XMLHttpRequest();
         var Pro= new Promise((resolve,reject)=>{
             thisO.xhr.open(method,url,true);
@@ -272,4 +274,38 @@ export class Extends extends React.Component
          return RangeObjectValue["default"]; 
     }    
     
+   getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+   return matches ? decodeURIComponent(matches[1]) : undefined;
+   }
+   setCookie(name, value, options) {
+          options = options || {};
+
+          var expires = options.expires;
+
+          if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires * 1000);
+            expires = options.expires = d;
+          }
+          if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+          }
+
+          value = encodeURIComponent(value);
+
+          var updatedCookie = name + "=" + value;
+
+          for (var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+              updatedCookie += "=" + propValue;
+            }
+          }
+
+          document.cookie = updatedCookie;
+  }
 }

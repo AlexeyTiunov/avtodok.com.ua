@@ -102,7 +102,7 @@ class Search_form extends Extends
                    event.preventDefault();
                    return;  
                   }
-                  window.objectReg['Search_table_v2'].setState({itemCode:itemCode})
+                  window.objectReg['Search_table_v2'].setState({itemCode:itemCode,shouldComponentUpdate:false})
             }
              );   
           } else
@@ -114,7 +114,7 @@ class Search_form extends Extends
                {
                    Console.log(e)
                }
-               window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc()});
+               window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc(),shouldComponentUpdate:false});
           }
              
            

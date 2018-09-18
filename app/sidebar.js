@@ -23,6 +23,7 @@ import {Sidebar_usersettings_modal} from './sidebar_userinfo.js'
 import {Sidebar_brand} from './sidebar_brand.js'
 import {Extends} from './main_component.js'
 import {Search_table} from './search_content.js'
+import {Search_table_v2} from './search_content_v2.js' 
 
 import {Basket_items_forModal} from './basket_items.js' 
 import {Basket} from './basket_items.js' 

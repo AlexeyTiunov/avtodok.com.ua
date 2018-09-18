@@ -8,6 +8,7 @@ import {Order_basket} from './order_basket.js'
 import {Order_list} from './order_list.js'
 import {Order_detail} from './order_detail.js'  
 import {Sidebar_usersettings} from './sidebar_userinfo.js'
+import {Search_table_v2} from './search_content_v2.js'
 
 export class Page_content  extends Extends
 {
@@ -44,7 +45,8 @@ export class Page_content  extends Extends
                          <Route path="/order_basket/:DELIVERY/:PAYS" component={Order_basket} />
                          <Route path="/order_list" component={Order_list} /> 
                          <Route path="/order_detail/:id" component={Order_detail} /> 
-                         <Route path="/user_info" component={Sidebar_usersettings} />                                 
+                         <Route path="/user_info" component={Sidebar_usersettings} />
+                         <Route path="/search/:id?" component={Search_table_v2} />                                
                      </Switch>
                   
                 )

@@ -4,7 +4,7 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
-
+import {Search_content_header} from './search_content_header.js'
 
 function getMapObject()
 {
@@ -54,7 +54,7 @@ function getMapObject()
 
 ////////////////////////////////////////////////////////////////
   var unickKey=0;
-  const ComContext = React.createContext(null);  
+ export const ComContext = React.createContext(null);  
   export class Search_table_brandheader extends Extends
   {
       constructor(props)
@@ -81,18 +81,18 @@ function getMapObject()
       {
         var mas=this.renderBrandInfo();  
         return(
-               <div>
-                 <table className="table">
-                   <tr key={unickKey++}>
+               <div className="row">
+                
+                   <div className="col-sm-12" key={unickKey++}>
                  {
                     mas.map(function(item){
                         
-                        return (<td key={unickKey++} >{item}</td>)
+                        return (<div className="col-sm-3" key={unickKey++} >{item}</div>)
                         
                     }) 
                  }
-                  </tr>
-                 </table>
+                  </div>
+                
                </div>
               );  
           
@@ -116,7 +116,8 @@ function getMapObject()
         if (this.state.searchTableComponent==null || this.state.searchTableComponent==undefined) return;
          try
                {
-                this.state.searchTableComponent.xhr.abort();   
+                this.state.searchTableComponent.xhr.abort(); 
+                this.setCookie("PHPSESSID","");  
                } catch(e)
                {
                    Console.log(e)
@@ -158,7 +159,19 @@ function getMapObject()
          this.state.numberOfrow=5;   
          this.state.page=1;
          this.state.dataQuantity=1;
-        
+         this.state.numberOfrow=5;
+         this.state.page=1;
+         this.state.dataQuantity=1;
+         
+         if ("params" in this.props.match)
+         {
+             if  (this.props.match.params.id!=null && this.props.match.params.id!=undefined)
+             {
+                   this.state.itemCode=this.props.match.params.id;
+             }
+         }
+         
+         
          
          
      }
@@ -212,7 +225,7 @@ function getMapObject()
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
          var findMySelf=this.findMySelf(this.constructor.name);
          var data="ItemCode="+this.state.itemCode+"";
-         if (this.state.brandCode==undefined )
+         if (this.state.brandCode==undefined || this.state.brandCode==null )
          {
             
          } else
@@ -233,7 +246,8 @@ function getMapObject()
                      })
                      
                      
-                     findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true}); 
+                     findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
+                     findMySelf().setCookie("PHPSESSID",findMySelf().state.PHPSESSID); 
          })
      }
      
@@ -254,7 +268,9 @@ function getMapObject()
      
      componentDidUpdate(prevProps, prevState)
      {
-         super.componentDidUpdate(prevProps, prevState); 
+        // super.componentDidUpdate(prevProps, prevState); 
+       
+       
          // debugger;
         //this.state.tableBody=[];
        // this.makeDataForRender(this.state.dataRecieved);
@@ -267,11 +283,11 @@ function getMapObject()
      }
      render()
      {
-         if (this.state.mapArray.length==0)
+ if (this.state.mapArray.length==0)
          {
             return(<div></div>); 
-         }
-       /*  var names=this.state.mapArray.map(function(tr) 
+         }                /*
+  var names=this.state.mapArray.map(function(tr) 
                            {
                                var mas=[];
                              for (th in tr)
@@ -284,6 +300,9 @@ function getMapObject()
                               
                              //return <th className="text-center">{item.Name}</th> 
                            })[0]; */
+        
+              
+                           
            var names=this.state.mapArray.map(function(tr) {
                
                      var mas=[];
@@ -310,7 +329,10 @@ function getMapObject()
                                       
                                    
                           
-                                     
+         var startPagination=(this.state.numberOfrow*this.state.page)-this.state.numberOfrow+1;
+         var endPagination=startPagination+this.state.numberOfrow-1;
+         this.state.dataQuantity=(this.state.mapArray.length%this.state.numberOfrow>0)?((this.state.mapArray.length-(this.state.mapArray.length%this.state.numberOfrow))/ this.state.numberOfrow)+1:this.state.mapArray.length/this.state.numberOfrow;
+                                   
                      
                                 
            var rows=this.state.mapArray.map(function(tr) 
@@ -326,17 +348,28 @@ function getMapObject()
                               
                              //return <th className="text-center">{item.Name}</th> 
                            });
+             var rowsPagination=[]
+             
+             for (var i=0;i<rows.length;i++)
+             {
+                  if (i+1<startPagination || i+1>endPagination) continue;
+                  rowsPagination.push(rows[i])
+                  
+             } 
               
                                 
                           //var i=0;
-               const tableBody= rows.map(function(item){                                  
+               const tableBody= rowsPagination.map(function(item){                                  
                                   return (  <tr key={unickKey++}>{item}</tr> )  
-                                   })                                                        
+                                   })  
+          
                             
          return (
-                   <div class="block">
+                   <div class="block">  
+                   <ComContext.Provider value={this}><Search_content_header/> </ComContext.Provider>
                      <div className="table-responsive">
-                    <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
+                     
+                     <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
                        <Pagination quantity={this.state.dataQuantity}/>
                           <table className="table table-vcenter"> 
                                <thead>
@@ -377,8 +410,8 @@ export class Pagination extends Extends
    }
    click(e)
    {
-      Uobject=window.objectReg['Search_table'];  
-       Uobject.setState({page:Number(e.target.innerHTML)});  
+      Uobject=window.objectReg['Search_table_v2'];  
+       Uobject.setState({page:Number(e.target.innerHTML),shouldComponentUpdate:true});  
        
        
    }

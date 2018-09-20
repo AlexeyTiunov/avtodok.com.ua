@@ -1,7 +1,8 @@
-<?php    ignore_user_abort(false);  
-set_time_limit(1); 
-error_reporting(0) ;
-require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php"); 
+<?php   
+require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php");  
+ignore_user_abort(false);  
+//set_time_limit(1); 
+error_reporting(E_ALL) ;
 class Customer
     {
         public $UserName;
@@ -9,7 +10,6 @@ class Customer
         public $SubCustomerId;
         public $CustomerId;
     }
-
 class Search_ITG
 {
    
@@ -554,7 +554,6 @@ class Search_ITG
                 #$short = $sqlRes->fetch_assoc();
                 #$arItem['RegionShortName'] = $short['ShortSupp'];
                 #$arItem['DeliveryDays'] = $short['DeliveryDay'];
-
                 $arItem['Currency'] = $arItem['CurrencyRegion'];
                 #$arItem['RegionCode'] = intval($short['RegionCode']);
                 
@@ -856,7 +855,6 @@ class Search_ITG
                OR (SELECT PriceColumn_1C FROM b_user WHERE ID_1C='{$this->params['user']}' LIMIT 1)=0,10,(SELECT PriceColumn_1C FROM b_user WHERE ID_1C='{$this->params['user']}' LIMIT 1)))";
               
 #(SELECT PriceColumn_1C FROM 
-
 #b_user WHERE ID_1C='{$this->params['user']}');
         
         $this->sql['suppliers'] = "SELECT 
@@ -1155,7 +1153,6 @@ class Search_ITG
        return     $newDeliveryDate;
          
      }  
-
    public function DefineOrderEndTime($RegionShortName)
    {
         $DBB = self::manualConnect();    
@@ -1204,6 +1201,5 @@ class Search_ITG
         
         
    }             
-
 }
 ?>

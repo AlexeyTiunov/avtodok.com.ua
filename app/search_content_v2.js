@@ -122,7 +122,7 @@ function getMapObject()
                {
                    Console.log(e)
                }
-         this.state.searchTableComponent.setState({itemCode:this.state.itemCode,brandCode:this.state.brandCode});
+         this.state.searchTableComponent.setState({itemCode:this.state.itemCode,brandCode:this.state.brandCode,shouldComponentUpdate:false});
           
       }
        render()
@@ -155,6 +155,7 @@ function getMapObject()
        
          super(props);         
          this.state.mapArray=[];
+         this.state.analogInfo=[];
          this.state.mapArrayBrand=[];
          this.state.numberOfrow=5;   
          this.state.page=1;
@@ -162,7 +163,9 @@ function getMapObject()
          this.state.numberOfrow=5;
          this.state.page=1;
          this.state.dataQuantity=1;
-         
+         this.state.showAnalogs=false;
+       if (this.props.match)
+       {          
          if ("params" in this.props.match)
          {
              if  (this.props.match.params.id!=null && this.props.match.params.id!=undefined)
@@ -170,7 +173,7 @@ function getMapObject()
                    this.state.itemCode=this.props.match.params.id;
              }
          }
-         
+       }  
          
          
          
@@ -220,6 +223,29 @@ function getMapObject()
          
         return data; 
      }
+     getAnalogsAsync(itemCode,brandCode)
+     {  
+         if (itemCode== undefined || brandCode==undefined || itemCode==null || brandCode==null  )  return;
+         var data="ItemCode="+itemCode+"&BrandCode="+brandCode;
+            var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/searchItemsAnalogs.php",data);
+            
+      var getAnalogs= function (responseText)
+         { 
+           handleDT=new handleData(responseText,getMapObject());
+           for (var i=0;i<handleDT.mapArray.length;i++)
+           {
+             this.state.analogInfo.push(handleDT.mapArray[i]);  
+           }
+                                        
+         }
+        getAnalogs=getAnalogs.bind(this); 
+       return  Prom.then(function(responseText)
+         {  
+             getAnalogs.responseText=responseText; 
+            return getAnalogs;  
+         });
+         
+     }
      getSearchData()
      {
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
@@ -231,6 +257,14 @@ function getMapObject()
          } else
          {
              data+="&BrandCode="+this.state.brandCode; 
+             this.getAnalogsAsync(this.state.itemCode,this.state.brandCode).then(
+                function (getAnalogs)
+                {
+                  var responseText=getAnalogs.responseText;
+                  getAnalogs(responseText);
+                }
+             
+             )
          }
          
          
@@ -247,8 +281,13 @@ function getMapObject()
                      
                      
                      findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
-                     findMySelf().setCookie("PHPSESSID",findMySelf().state.PHPSESSID); 
+                     findMySelf().setCookie("PHPSESSID",findMySelf().state.PHPSESSID);
+                     
+                      
+                     
+                     
          })
+         
      }
      
      /////////////////////////////////////    && this.state.itemCode!=nextState.itemCode
@@ -283,10 +322,10 @@ function getMapObject()
      }
      render()
      {
- if (this.state.mapArray.length==0)
+               /* if (this.state.mapArray.length==0)
          {
             return(<div></div>); 
-         }                /*
+         }
   var names=this.state.mapArray.map(function(tr) 
                            {
                                var mas=[];
@@ -300,7 +339,11 @@ function getMapObject()
                               
                              //return <th className="text-center">{item.Name}</th> 
                            })[0]; */
-        
+         var tableHead=null;
+         var  tableBody=null; 
+         //this.state.dataQuantity=1;                 
+          try
+          {
               
                            
            var names=this.state.mapArray.map(function(tr) {
@@ -315,7 +358,7 @@ function getMapObject()
                
            })[0]                 
                            
-         const tableHead= (  
+          tableHead= (  
                                     <tr>
                                      {
                                        names.map(function(item){
@@ -359,18 +402,76 @@ function getMapObject()
               
                                 
                           //var i=0;
-               const tableBody= rowsPagination.map(function(item){                                  
+                tableBody= rowsPagination.map(function(item){                                  
                                   return (  <tr key={unickKey++}>{item}</tr> )  
                                    })  
+          }catch(e)
+          {
+             tableHead=null;
+             tableBody=null; 
+             this.state.dataQuantity=1;
+          } 
           
-                            
+  /////////////////////////////////////////////ANALOGS///////////////////////////////////////////// 
+         analogs=(<div className="dShowAnalogs"></div>);
+      if (this.state.showAnalogs)
+      {   
+             try
+             {
+                 
+                               
+               var rowsAnalogs=this.state.analogInfo.map(function(tr) 
+                               {
+                                   var mas=[];
+                                 for (td in tr)
+                                 {
+                                    
+                                    mas.push(tr[td].TD)
+                                 } 
+                                  
+                                 return mas;
+                                  
+                                 //return <th className="text-center">{item.Name}</th> 
+                               });
+                  tableBodyAnalogs= rowsAnalogs.map(function(item){                                  
+                                      return (  <tr key={unickKey++}>{item}</tr> )  
+                                       }) 
+                    if (tableBodyAnalogs.length>0)
+                    {
+                         analogs=(<table className="table table-vcenter"> 
+                                               <thead>
+                                                {tableHead}
+                                               </thead> 
+                                                <tbody>
+                                                    {tableBodyAnalogs}                                   
+                                                  </tbody>                                                       
+                                       
+                                       
+                                         </table>)
+                    }
+              
+                    else
+                    {
+                          analogs=(<div className="noAnalogs"></div>);
+                    } 
+             }catch(e)
+             {
+                analogs=(<div className="catch" ></div>); 
+             }
+      }else
+      {
+           analogs=(<div className="dShowAnalogs" ></div>);   
+      }                    
+  /////////////////////////////////ANALOGS-END//////////////////////////////////////////////////////////////////                                                                           
+         // <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.analogInfo}/></ComContext.Provider>
+                                         
          return (
                    <div class="block">  
                    <ComContext.Provider value={this}><Search_content_header/> </ComContext.Provider>
                      <div className="table-responsive">
                      
                      <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
-                       <Pagination quantity={this.state.dataQuantity}/>
+                     <Pagination quantity={this.state.dataQuantity}/>
                           <table className="table table-vcenter"> 
                                <thead>
                                 {tableHead}
@@ -384,6 +485,9 @@ function getMapObject()
                          </table>
                         <Pagination quantity={this.state.dataQuantity}/> 
                      </div>
+                      <div className="table-responsive analogs">
+                             {analogs}
+                      </div>
                    </div>
           
            

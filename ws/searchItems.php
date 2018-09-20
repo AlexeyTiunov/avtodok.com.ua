@@ -1,15 +1,14 @@
 <?
- 
+  
   
   require_once ($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');  
   require_once  ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Search/Search_ITG4.php");
   require_once ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/BrandGroup.php");  
-  set_time_limit(1); 
+  //set_time_limit(1); 
    ignore_user_abort(false);  
  // session_start();
-
   global $USER; 
- error_reporting(0);
+   error_reporting(0);
   ini_set("display_errors","1");
    // echo  connection_status();   
   ////
@@ -22,12 +21,9 @@
   
 function GetUserID_1CByID( $ID )
 {
-
   global $DB;
   $sql = "SELECT ID_1C FROM b_user WHERE ID='".$ID."'";
-
   $res = $DB->Query( $sql );
-
   if( $arRes = $res->Fetch() )
     return $arRes["ID_1C"];
   else
@@ -97,13 +93,7 @@ function GetUserID_1CByID( $ID )
     
        //var_dump ($_REQUEST["ICODE"] );
      
-     if (isset($_SESSION['arBrands_ITG']) && isset ($_SESSION['arRegion_ITG']))
-           {
-                $arRegions = $_SESSION['arRegion_ITG'];
-                $arBrands = $_SESSION['arBrands_ITG'];
-               
-           } else
-           {
+         
                 require ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/IBPropertyAdvanced1.php"); 
                  $regionID = 17;
                  $brandID = 14;
@@ -111,9 +101,8 @@ function GetUserID_1CByID( $ID )
                  $arRegions = $oRegion->getArray();
                  $oBrand = new IBPropertyAdvanced_ITG(array('IB'=>$brandID));
                  $arBrands = $oBrand->getArray();
-                  $_SESSION['arRegion_ITG'] = $arRegions;
-                 $_SESSION['arBrands_ITG'] = $arBrands;
-           }
+                  
+           
            
       //  var_dump ($_REQUEST["ICODE"]);        
      
@@ -147,8 +136,8 @@ function GetUserID_1CByID( $ID )
       $_GET["pg"]=0;
       $_REQUEST["NUM_PAG"]=1000;
       $_REQUEST["CMB_SORT"] = "PRICE";
-     // var_dump($_POST); 
-     $paramsArray=array(    'user'=>$UID,
+     // var_dump($UID); 
+     $paramsArray=array(                'user'=>$UID,
                                         'userID'=>$USER->GetID(),
                                         'usergrouparray'=>$USER->GetUserGroupArray(),
                                          'currency'=>$_REQUEST["CURRENCY"], 
@@ -165,8 +154,11 @@ function GetUserID_1CByID( $ID )
       
       $items = new Search_ITG($paramsArray );
       
+      
+      
       $url = $items->getUrl();
       $sqlstring=$items->returnSqlString();
+    //  var_dump($sqlstring);
      
      
     
@@ -179,7 +171,6 @@ function GetUserID_1CByID( $ID )
      //echo  connection_status();
      
      //echo ini_get("max_execution_time");
-
        //var_dump($products = $items->getArrItems());
     // var_dump ( json_encode($products = $items->getArrItems(),JSON_UNESCAPED_UNICODE) ) ; 
      // $brands = $items->getBrans();

@@ -200,7 +200,52 @@ export class Extends extends React.Component
                 }
                 
             }
+            thisO.xhr.onabort = function()
+            {
+              var a=1;
+            } 
             this.xhr.send(data);    
+             
+             
+         })
+         
+         
+         
+       
+         
+      // thisO.setState({dataRecieved:null});  
+        
+       return Pro  
+         
+     }
+     makeRequestToRecieveDataAsyncNewObject(method,url,data)
+     {   
+        
+        var Pro= new Promise((resolve,reject)=>{  
+            var thisO={};
+            thisO.xhr= new XMLHttpRequest();
+            thisO.xhr.open(method,url,true);
+            thisO.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            thisO.xhr.onreadystatechange = function()
+            {
+                if (thisO.xhr.readyState==4 && thisO.xhr.status==200)
+                {
+                    resolve(thisO.xhr.responseText);
+                   
+                }else if (thisO.xhr.readyState<4 && thisO.xhr.status==200)
+                {
+                    
+                }else
+                {
+                    //reject("ERROR"); 
+                }
+                
+            }
+            thisO.xhr.onabort = function()
+            {
+              var a=1;
+            } 
+            thisO.xhr.send(data);    
              
              
          })

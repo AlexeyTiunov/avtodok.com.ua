@@ -14,7 +14,9 @@ export class Search_content_header extends Extends
           this.state.itemCode="";
           this.onchange=this.onchange.bind(this);
           this.onclick=this.onclick.bind(this);
+          this.analogAdd=this.analogAdd.bind(this);
           this.state.searchTableComponent=null;
+          this.state.analogAdd="checked";
       }
       onchange(e)
       {
@@ -22,9 +24,20 @@ export class Search_content_header extends Extends
       }
       onclick(e)
         {
-            this.state.searchTableComponent.setState({itemCode:this.state.itemCode,shouldComponentUpdate:false});    
+            this.state.searchTableComponent.setState(
+            {itemCode:this.state.itemCode,
+            shouldComponentUpdate:false,
+            showAnalogs:(this.state.analogAdd=="checked")?true:false,
+            
+            });    
         }
-       
+      analogAdd()
+      {
+          if (this.state.analogAdd=="checked")
+          this.setState({analogAdd:""});
+          else
+          this.setState({analogAdd:"checked"}); 
+      } 
       render ()
       {
          
@@ -48,7 +61,7 @@ export class Search_content_header extends Extends
                                </div>
                                <div className="col-md-4">
                                    <div className="col-md-8">
-                                       <label className="switch switch-danger"><input type="checkbox" checked /><span></span></label><br/>
+                                       <label className="switch switch-danger"><input type="checkbox" onChange={this.analogAdd} checked={this.state.analogAdd} /><span></span></label><br/>
                                        <span>Пошук <br/> аналогів </span>
                                    </div>    
                                </div>    

@@ -307,6 +307,8 @@ function getMapObject()
      
      componentDidUpdate(prevProps, prevState)
      {
+           // here the main_component function (componentDidUpdate) is overrided
+           // so this.state.shouldComponentUpdate is stay unchanged;
         // super.componentDidUpdate(prevProps, prevState); 
        
        

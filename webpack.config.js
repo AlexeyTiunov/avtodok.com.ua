@@ -19,8 +19,8 @@ entryArray.push('./app/js/pages/tablesDatatables.js');
 entryArray.push('./app/css/main.css');
 entryArray.push('./app/css/themes.css');
 entryArray.push('./app/css/themes/fire.css'); 
-//entryArray.push('bootstrap/dist/js/bootstrap.js');
-//entryArray.push('bootstrap/dist/css/bootstrap.min.css');
+entryArray.push('bootstrap/dist/js/bootstrap.js');
+entryArray.push('bootstrap/dist/css/bootstrap.min.css');
 
  
 module.exports = {                

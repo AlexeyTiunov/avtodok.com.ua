@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import $ from 'jquery';
 import jQuery from 'jquery';
 //var $=require('jquery'); 
-//var jQuery=require('jquery');
+//var jQuery=require('jquery'); 
 window.jQuery=jQuery;
 window.$=jQuery;  
 var moment=require('moment');
@@ -139,5 +139,6 @@ window.getWorkPage= function ()
     return window.objectReg['Page_content'];
     
 }
+
  //debugger
  //require ('./js/app.js');     

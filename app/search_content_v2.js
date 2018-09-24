@@ -24,8 +24,10 @@ function getMapObject()
    
     var mapObject=
     {
-      Action:{functions:{defineColumnName,defineTd,defineTh},params:["Действие",<Action_td/>,[<Common_th/>,"Действие/Заказать"]],addNew:true},      
-      BrandCode:{functions:{},params:[]},      
+      Action:{functions:{defineColumnName,defineTd,defineTh},params:["Действие",<Action_td/>,[<Common_th/>,"Действие/Заказать"]],addNew:true},
+      //Info:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Info_td />,[<Common_th/>,"Инфо"]],addNew:true},
+      Pic64Base:{functions:{},params:[]},  
+      BrandCode:{functions:{},params:[]},     
       BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>,"Бренд/Код/Наименование"]]}, 
       ItemCode:{functions:{},params:[]}, 
       Caption:{functions:{},params:[]}, 
@@ -638,11 +640,22 @@ export class Brandname_td extends Extends
      } 
      render()
      {
+       var src="";
+       var img=<div></div>
+       if ("Pic64Base" in this.state.proto )
+       {
+         if (this.state.proto.Pic64Base.fValue!="" && this.state.proto.Pic64Base.fValue!=undefined)
+         { 
+          src= "data:image/png;base64,"+this.state.proto.Pic64Base.fValue; 
+          img=<img style={{width:"30px",height:"30px"}} src={src} />
+         }  
+       }
+         
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
                    {this.state.proto[this.state.NAME].fValue}<br/>
-                   {this.state.proto["ItemCode"].fValue}
-                   
+                   {this.state.proto["ItemCode"].fValue}<br/>
+                   {img}
                    </td> 
         
         
@@ -719,13 +732,26 @@ export class Region_td extends Extends
           var RegionCode=this.state.proto["RegionCode"].fValue;
          return this.getRangeObjectValue(regionRangeObjectValue,RegionCode);
      }
+     getRegionColor()
+     {
+        var regionRangeObjectValue={
+              "0-1":"label label-warning",
+              "2-4":"label label-default",
+              "980-999":"label label-default", 
+              "default": "label label-danger",
+              
+          }; 
+        var RegionCode=this.state.proto["RegionCode"].fValue;
+         return this.getRangeObjectValue(regionRangeObjectValue,RegionCode);  
+         
+     }
      
      ///////////////////////////////////////////// 
      render()
      {
        return(
                    <td className={this.state.proto["RegionCorrectName"].className+" text-center" }> 
-                   {this.getRegionName()}<br/>                  
+                   <div className={this.getRegionColor()}>{this.getRegionName()}</div><br/>                  
                    {this.state.proto["DeliveryDays"].fValue}<br/> 
                     <Percentsupp_td regionProps={this.props}/>                     
                    </td> 
@@ -762,13 +788,15 @@ export class Action_td extends Extends
        } 
        
        var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity);
-      
-      Pro.then(function(data){
-        alert(data) ; 
+       var updateBasketIcon=function(data){
+        //alert(data) ; 
         obj=window.objectReg["Basket_icon"];
-        obj.setState({getBasketPartsQuantity:true});  
+        obj.setState({getBasketPartsQuantity:true});
+        this.showInforMassage("ADD",data)  
       }
-     ); 
+      updateBasketIcon=updateBasketIcon.bind(this);
+      Pro.then( updateBasketIcon ); 
+    
         
        
    }
@@ -803,13 +831,14 @@ export class Action_td extends Extends
        
    }
    render()
-   {
+   {   
        return (
             <td className={this.state.proto["Action"].className+" text-center" }> 
                  <div className="btn-group btn-group-xs">
-                  <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={this.state.Quantity} style={{width:"3em"}} />
+                  <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={(("Quantity" in this.state)==false)?1:this.state.Quantity} style={{width:"3em"}} />
                   <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
                   <a href="#" onClick={this.addToBasket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
+                
                  </div>
             </td>
        
@@ -917,5 +946,21 @@ export class Select_quantity extends Extends
            
        )
    }
+    
+}
+
+export class Info_td extends Extends
+{
+    constructor(props) 
+    {
+       super(props);
+        this.state=this.props; 
+    }
+    render()
+    {
+       return (<td className={"text-center" }> 
+       
+       </td> ) 
+    }
     
 }

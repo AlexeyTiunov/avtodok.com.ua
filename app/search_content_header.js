@@ -24,6 +24,7 @@ export class Search_content_header extends Extends
       }
       onclick(e)
         {
+            
             this.state.searchTableComponent.setState(
             {itemCode:this.state.itemCode,
             shouldComponentUpdate:false,

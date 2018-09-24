@@ -78,8 +78,11 @@ export class Carousel extends Extends
      {
            // here the main_component function (componentDidUpdate) is overrided
            // so this.state.shouldComponentUpdate is stay unchanged;
+     } 
+     componentDidMount()
+     {
+        this.getImagesRoutes(); 
      }
-    
     render()
     {
        var carouselItems=[];

@@ -14,7 +14,7 @@ $arAgrs = GetAgreementsList();
 foreach($arAgrs as $agr)
 {
     
-  if  ($agr["Caption"]!="ДОГОВОР БЕЗНАЛ ГРН." && $agr["Caption"]!="ДОГОВОР НАЛИЧНЫЙ ДОЛЛАР" ) continue;
+  if  (str_replace(" ","",$agr["Caption"])!="ДОГОВОРБЕЗНАЛГРН." && str_replace(" ","",$agr["Caption"])!="ДОГОВОРНАЛИЧНЫЙДОЛЛАР" ) continue;
   
   $currDateObj = new DateTime('now');
     $currDate = $currDateObj->format('Ymd');
@@ -30,6 +30,6 @@ foreach($arAgrs as $agr)
     
     
 }    
-    
- var_dump($pointOfRefferenceArray);   
+  echo (json_encode($pointOfRefferenceArray,JSON_UNESCAPED_UNICODE));    
+ //var_dump($pointOfRefferenceArray);   
 ?>

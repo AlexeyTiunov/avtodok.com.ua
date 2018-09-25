@@ -259,6 +259,11 @@ export function handleData(jsonData,standMap=undefined,jsonSubDataName=undefined
    
     Object.defineProperty(this,"TD",{value:TDD,enumerable:true,writable:true});
  } 
+ this.defineComponent= function(CM)
+ {
+     CMM= React.createElement(CM.type,{proto:this.__proto__,NAME:this.nValue},null);
+      Object.defineProperty(this,"CM",{value:CMM,enumerable:true,writable:true}); 
+ }
 this.defineTh=function (TH,caption)
  {
    // TDD = new TD.type( {val:this.fValue} );

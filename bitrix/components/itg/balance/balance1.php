@@ -40,7 +40,7 @@ class Balance
         $this->params['dateBegin'] = isset($params['dateBegin']) ? intval($params['dateBegin']): false;
         $this->params['dateEnd'] = intval($this->params['dateEnd']);
 
-        $sqlSelectPointOfReference = "SELECT `BalanceOnDate`, CAST(`DateBeginningReference` as SIGNED) as Begin, `OrdersAllSumm`,`OrdersWorkSumm`,`CurrentDebt`,`CurrentDelayDebt` FROM `b_autodoc_agreements`
+        $sqlSelectPointOfReference = "SELECT `BalanceOnDate`, CAST(`DateBeginningReference` as SIGNED) as Begin, `OrdersAllSumm`,`OrdersWorkSumm`,`CurrentDebt`,`CurrentDelayDebt`,`Caption`,`CurrencyCode` FROM `b_autodoc_agreements`
                                             WHERE
                                                     `Code`='".$this->params['agreement']."' 
                                                 AND `ClientCode`='".$this->params['user']."'";

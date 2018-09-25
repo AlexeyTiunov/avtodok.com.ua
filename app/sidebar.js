@@ -30,7 +30,9 @@ import {Basket} from './basket_items.js'
 import {Order_basket} from './order_basket.js'   
 import {Order_list} from './order_list.js'  
 import {Info_message} from './info_message.js'         
-import {Auth} from './auth.js' 
+import {Auth} from './auth.js'
+import {Balance} from './balance.js' 
+import {Pay_notification} from './balance.js'
  
 import './css/plugins.css'; 
 
@@ -105,7 +107,8 @@ export class Sidebar  extends Extends
                                       
                     <Basket_items_forModal/>  
                     <Info_message/>  
-                    <Auth />         
+                    <Auth /> 
+                    <Pay_notification/>        
                 </div>  
                
               </Router> 

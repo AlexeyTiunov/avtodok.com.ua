@@ -13,7 +13,7 @@ export var items = [
   {name:"Пошук", href:"/search", className:"active" ,inner:null},  
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
     inner:[  {name:"Замовлення", href:"/order_list", className:"gi gi-table sidebar-nav-icon" ,inner:null},
-             {name:"Баланс", href:"cabinet_cash.html",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},
+             {name:"Баланс", href:"/balance",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},
              {name:"Історія позицій", href:"cabinet_cash.html",className:"gi gi-show_thumbnails_with_lines sidebar-nav-icon" ,inner:null},
              {name:"Декларації", href:"cabinet_history.html",className:"gi gi-message_out sidebar-nav-icon" ,inner:null},
              {name:"Повернення", href:"cabinet_np.html",className:"gi gi-unshare sidebar-nav-icon" ,inner:null},             
@@ -21,11 +21,14 @@ export var items = [
            ]
   },
   
-  {name:"Каталоги", href:"#",className:"" ,inner:null},
-  {name:"Каталог автозапчастин",href:"#", className:"" ,inner:null},
-  {name:"Каталог аксесуарів",href:"#", className:"" ,inner:null},
+  {name:"Каталоги",href:null,className:"sidebar-header" ,inner:null},
+  {name:"Каталог автозапчастин",href:"#", className:"gi gi-cars sidebar-nav-icon" ,inner:null},
+  {name:"Каталог аксесуарів",href:"#", className:"gi gi-beach_umbrella sidebar-nav-icon" ,inner:null},
   {name:"Корисне",href:null, className:"" ,inner:null},
-  {name:"Про нас",href:"", className:"" ,inner:null},
+  {name:"Про нас",href:"", className:"fa fa-users sidebar-nav-icon" ,inner:null},
+  {name:"Умови роботи",href:"", className:"gi gi-file sidebar-nav-icon" ,inner:null},
+  {name:"Скачати прайс",href:"", className:"gi gi-download_alt sidebar-nav-icon" ,inner:null}, 
+  {name:"Контакти",href:"", className:"gi gi-phone_alt sidebar-nav-icon" ,inner:null},  
   
   
   
@@ -107,10 +110,13 @@ export class Sidebar_nav  extends Extends
                      
                  } else
                  {
-                     const f=  ( <li>
-                               <a  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
-                              </li> ) 
-                      return f;        
+                    const f=   (<li class="sidebar-header">
+                                                                <span className="sidebar-header-title"><font><font>{item.name}</font></font></span>
+                                </li>) 
+                    return f;        
+                     
+                     
+                     
                      
                  }
              

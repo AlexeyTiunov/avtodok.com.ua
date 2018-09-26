@@ -84,8 +84,8 @@ export class Sidebar_nav  extends Extends
                                      
                          
                          const c = (<li>
-                                     <a href={item.href} className={item.className}><i className="fa fa-angle-left sidebar-nav-indicator"></i><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
-                                    <ul>
+                                     <a href={item.href} className={item.className+" open"}><i className="fa fa-angle-left sidebar-nav-indicator"></i><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                                    <ul style={{"display":"block"}}>
                                         
                                        {gg}
                                     
@@ -98,7 +98,7 @@ export class Sidebar_nav  extends Extends
                      }
                      {
                          const ff=  ( <li>
-                               <a  href={item.href}  className={item.className}><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                               <a  href={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></a>
                               </li> ) 
                       return ff;        
                           

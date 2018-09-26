@@ -39,7 +39,7 @@ function getMapObject()
         
         
     }
-   return mapObject; 
+   return mapObject;
 }
 
 

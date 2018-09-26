@@ -94,11 +94,84 @@ export class Sidebar_userinfo extends Extends
       //  window.addEventListener("load",function(){elA.click();})
        
      }
-     
-     render ()
+     getUserData()
      {
+        var findMySelf=this.findMySelf(this.constructor.name);
+         var Prom=this.makeRequestToRecieveData("POST","/ws/personal_profile.php",false,"")
+         
+         Prom.then(function(responseText){
+             
+             handleDT=new handleData(responseText,getMapObject());
+             var state={                        
+                        NAME:handleDT.mapArray[0].NAME.fValue
+                       } 
+                                                                     
+                findMySelf().setState(state);
+         })  
+         
+     }
+     //////////////////////
+     componentDidMount()
+     {
+         super. componentDidMount();
+         this.getUserData();
+     }
+     render ()
+     {   if (this.props.isMobile)
+         {
+           return(  <div className="sidebar-section sidebar-user clearfix" style={{"paddingLeft":"20px"}}>
+                  
+                  <div className="row">  
+                         <div className="col-xs-3 col-sm-3"> </div> 
+                             <div className="sidebar-user-avatar col-xs-6 col-sm-6" style={{"marginLeft":"0px"}}>
+                                            <a href="#">
+                                                <img src="/app/img/placeholders/avatars/avatar2.jpg" alt="аватар"/>
+                                            </a>
+                                        </div>
+                        
+                  </div>
+                  
+                  <div className="row">
+                         <div className="col-xs-3 col-sm-3"></div>   
+                         <div className="sidebar-user-name col-xs-6 col-sm-6"><font><font>{this.state.NAME}</font></font></div>  
+                   </div>  
+                  <div className="row">
+                        <div className="sidebar-user-links col-xs-12 col-sm-12">
+                            <div className="row"> 
+                                <div className="col-xs-6 col-sm-6"> 
+                                      <a href="cabinet_profile.html"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Профіль">
+                                                <i className="gi gi-user" style={{"fontSize":"40px","height":"1em"}}  ></i>
+                                            </a>
+                                </div>
+                                 <div className="col-xs-6 col-sm-6"> 
+                                       <Link to="/user_info"><i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}}  ></i></Link>
+                                 </div>
+                                 <div className="col-xs-6 col-sm-6">
+                                     <a id="user-settings" data-toggle="modal" data-target="#modal-user-auth" >
+                                                <i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}} ></i>
+                                      </a>
+                                  </div> 
+                                 
+                                 <div className="col-xs-6 col-sm-6">
+                                 
+                                      <a href="login.html" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Вийти">
+                                                <i className="gi gi-exit" style={{"fontSize":"40px","height":"1em"}}  ></i>
+                                            </a>
+                                  </div> 
+                                 
+                                 
+                            </div>
+                        
+                        
+                        </div>
+                  </div> 
+              </div> )
+         }else
+         {
+             
+         
          return ( <div className="sidebar-section sidebar-user clearfix">
-                                    <div className="sidebar-user-avatar">
+                                        <div className="sidebar-user-avatar">
                                             <a href="#">
                                                 <img src="/app/img/placeholders/avatars/avatar2.jpg" alt="аватар"/>
                                             </a>
@@ -123,7 +196,7 @@ export class Sidebar_userinfo extends Extends
          
          
                   )
-         
+         }
          
      }
      
@@ -157,7 +230,7 @@ export class Sidebar_usersettings extends Extends
             // findMySelf().setState({mapArray:handleDT.mapArray});
              // findMySelf().setState({sessid:handleDT.mapArray[0].BX_SESSION_CHECK.fValue});
              // findMySelf().setState({email:handleDT.mapArray[0].EMAIL.fValue});
-             // findMySelf().setState({EMAIL:handleDT.mapArray[0].EMAIL.fValue});
+             // findMySelf().setState({EMAIL:handleDT.mapArray[0].EMAIL.fValue});                                                           
                 findMySelf().setState(state);
          })  
          

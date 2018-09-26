@@ -93,7 +93,7 @@ export class Sidebar  extends Extends
                     <div className='sidebar-scroll'> 
                       <div id='sidebar-content' className='sidebar-content'>                         
                         <Sidebar_brand/>    
-                        <Sidebar_userinfo/>                         
+                        <Sidebar_userinfo isMobile={true}/>                         
                         <Sidebar_nav items={ITEMS}/> 
                        
                      </div>  

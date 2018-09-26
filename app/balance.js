@@ -26,7 +26,7 @@ function getMapObject()
       BalanceOnDate: {functions:{},params:[]},
       Begin:{functions:{},params:[]}, 
       CurrencyCode:{functions:{},params:[]},
-      Caption:{functions:{},params:[]},
+      Caption:{functions:{defineComponent},params:[<Widget_caption/>]},
       CurrentDebt: {functions:{defineComponent},params:[<Widget_curentdebt/>]},
       OrdersAllSumm: {functions:{defineComponent},params:[<Widget_orderallsumm/>]},
       OrdersWorkSumm: {functions:{defineComponent},params:[<Widget_orderworksumm/>]},     
@@ -68,7 +68,43 @@ export class Notify_about extends Extends
  }
 
 
-
+ export class Widget_caption  extends Extends
+ {
+    constructor(props) 
+     {  
+       super(props); 
+        this.state=this.props;
+             
+       
+         
+     } 
+     render()
+     {
+         return(
+                   <div className="widget">
+                     <div className="widget-simple">
+                        <a href="javascript:void(0)" className="widget-icon pull-left animation-fadeIn themed-background">
+                        <i className="fa fa-money"></i>
+                        </a>
+                        <h4 className="widget-content text-center animation-hatch">  
+                        <small><em>  
+                                    
+                        </em></small >
+                        <a href="javascript:void(0)"> <strong>{this.state.proto[this.state.NAME].fValue}</strong> </a><br/>
+                         <a href="javascript:void(0)">  {this.state.proto.CurrencyCode.fValue}</a>
+                        </h4>
+                     </div>
+                   </div>
+          
+          
+           
+               
+                
+                )
+         
+         
+     } 
+ }
 
 
 export class Widget_curentdebt extends Extends
@@ -101,7 +137,7 @@ export class Widget_curentdebt extends Extends
                         <i className="fa fa-money"></i>
                         </a>
                         <h4 className="widget-content text-center animation-hatch">  
-                        <small><em>{this.state.proto.Caption.fValue}  <br/>
+                        <small><em>  
                                     {this.defineBalanceName()}
                         </em></small >
                         <a href="javascript:void(0)"> <strong>{this.state.proto[this.state.NAME].fValue}</strong> {this.state.proto.CurrencyCode.fValue}</a>

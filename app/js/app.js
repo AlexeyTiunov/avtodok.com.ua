@@ -324,7 +324,7 @@ export var App = function() {
             else if (mode == 'sidebar-scroll') { // Init sidebars scrolling
                 if (sScroll.length && (!sScroll.parent('.slimScrollDiv').length)) {
                     // Initialize Slimscroll plugin on both sidebars
-                    sScroll.slimScroll({ height: $(window).height(), color: '#fff', size: '3px', touchScrollStep: 100 });
+                    sScroll.slimScroll({ height: $(window).height(), color: '#fff',start:"top", size: '3px', touchScrollStep: 100 ,allowPageScroll:true });
 
                     // Resize sidebars scrolling height on window resize or orientation change
                     $(window).resize(sidebarScrollResize);

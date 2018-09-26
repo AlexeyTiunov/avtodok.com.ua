@@ -30,7 +30,15 @@ function getMapObject()
       QUANTITY:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Количество","hidden-xs",<Common_td/>,]},
       PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","hidden-xs",<Common_td />,]}, 
       ORDER_PRICE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Сумма","hidden-xs",<Common_td />,]},
-      ITEMSTATUS:{functions:{},params:[]}, 
+      ITEMSTATUS:{functions:{},params:[]},
+      ITEMSTATUSQUANTITY:
+      ITEMSTATUS2:
+	  ITEMSTATUSQUANTITY2:
+	  ITEMSTATUSCHANGEQUERY:
+	  QUANTITYCHANGEQUERY:
+	  SHIPPING_DOCUMENT:
+	  ISRETURNABLE:
+	  DELIVERYMETHODTOUA:
       action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Status_td />,],addNew:true},
       state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},
         

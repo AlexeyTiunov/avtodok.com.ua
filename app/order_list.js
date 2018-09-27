@@ -20,7 +20,8 @@ function getMapObject()
     
     
     var mapObject=
-    {
+    { 
+	  ID:{functions:{},params:[]}, // BASKET_ID
       ORDER_ID:{functions:{defineColumnName,defineTd},params:["Номер Заказа",<Orderid_td/>,]},
       DATE_INSERT:{functions:{parceDate,defineColumnClass,defineColumnName,defineTd},params:["","hidden-xs","Дата",<Common_td />]},
       BRAND:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Бренд","hidden-xs",<Common_td />,]}, 
@@ -31,16 +32,16 @@ function getMapObject()
       PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","hidden-xs",<Common_td />,]}, 
       ORDER_PRICE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Сумма","hidden-xs",<Common_td />,]},
       ITEMSTATUS:{functions:{},params:[]},
-      ITEMSTATUSQUANTITY:
-      ITEMSTATUS2:
-	  ITEMSTATUSQUANTITY2:
-	  ITEMSTATUSCHANGEQUERY:
-	  QUANTITYCHANGEQUERY:
-	  SHIPPING_DOCUMENT:
-	  ISRETURNABLE:
-	  DELIVERYMETHODTOUA:
-      action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Status_td />,],addNew:true},
-      state:{functions:{defineColumnName,defineTd},params:["Состояние",<Action_td />,],addNew:true},
+      ITEMSTATUSQUANTITY:{functions:{},params:[]},
+      ITEMSTATUS2:{functions:{},params:[]},
+	  ITEMSTATUSQUANTITY2:{functions:{},params:[]},
+	  ITEMSTATUSCHANGEQUERY:{functions:{},params:[]},
+	  QUANTITYCHANGEQUERY:{functions:{},params:[]},
+	  SHIPPING_DOCUMENT:{functions:{},params:[]},
+	  ISRETURNABLE:{functions:{},params:[]},
+	  DELIVERYMETHODTOUA:{functions:{},params:[]},
+      action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Action_td />,],addNew:true},
+      state:{functions:{defineColumnName,defineTd},params:["Состояние",<Status_td />,],addNew:true},
         
         
         
@@ -57,6 +58,8 @@ function getMapObject()
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 const ThemeContext = React.createContext("value");  
+var regTD={};
+var regTDStatus={};
 
 export class Order_list extends Extends
 {
@@ -79,15 +82,23 @@ export class Order_list extends Extends
     }
     
     /////////////////////////////////////
-    componentDidUpdate(prevProps, prevState)
+	 
+      componentDidUpdate(prevProps, prevState)
     {
         super.componentDidUpdate(prevProps, prevState);
+		for (state in regTDStatus)
+		{
+			regTDStatus[state].setState({otherTd:null});
+		}
         TablesDatatables.init();
     }
     componentDidMount()
     {
         super.componentDidMount();
         this.getOrderListData();
+		//TablesDatatables.init();
+		//this.setState({twiceUpdated:true,shouldComponentUpdate:true});
+		
         //
     }
     render()
@@ -131,7 +142,8 @@ export class Order_list extends Extends
                                 
                           var i=0;
                const tableBody= rows.map(function(item){                                  
-                                  return (  <ThemeContext.Provider value="dark"><tr key={i++}>{item}</tr>  </ThemeContext.Provider>)  
+			                      i++;
+                                  return (  <ThemeContext.Provider value={i}><tr key={i++}>{item}</tr>  </ThemeContext.Provider>)  
                                    })                  
         
         return (  <div className="block full">
@@ -228,20 +240,136 @@ export class Status_td extends Extends
      {  
         super(props);
         this.state=this.props;
+		this.id=0;
+		this.state.updateFromOtherTD=false;
+		this.state.otherTd=null;
+		this.imagePath='/app/img/order_list/';
+		
         this.bClasses={"2":"label label-primary" };
         this.iClasses={"2":"gi gi-remove_2"};
         this.statusNames={"2":"Отказ"};
          
      } 
+	 defineStatus()
+	 {
+		 var state=this.state.proto.ITEMSTATUS.fValue;
+		 if (state=="") return getStatusInWork();
+		 state=Number(state);
+		 switch(state)
+		 {
+			 case 0:
+			   return this.getStatusInWork();
+			 case 2:
+			  return this.getStatusDenided();
+			 case 3:
+			   return this.getStatusInStock();
+			 case 4:
+			   return this.getStatusShipped();
+			 case 5:
+			   return this.getStatusOnTheWay();
+			 default : 
+			   return this.getNullStatus();
+		 }
+	 }
+	 getNullStatus()
+	 {
+		 return (<a href='####'>
+		 {"-"}
+		 </a>)
+	 }	 
+	 getStatusInWork()
+	 {   
+	     try
+		 {
+	     //var actionTd=this.state.proto.action.TD;
+		 var actionTd=regTD[this.id];
+	     var dataForAction=actionTd.getActionCanQueryStatusChange();
+		 actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
+		 }catch(e)
+		 {
+			 
+		 }
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"v_rabote.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusDelayed()
+	 {//otlozhen
+	     
+		 
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"otlozhen.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusPayed()
+	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"vykuplen.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusDenided()
+	 {
+		 try{
+		 var actionTd=regTD[this.id];
+	     var dataForAction=actionTd.getNullAction();
+		 actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
+		 }catch(e)
+		 {}
+		 return (<a href='####'>
+		  <img title='denided' src={this.imagePath+"otkaz.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusInStock()
+	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"sklad.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusShipped()
+	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"otgruzhen.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 getStatusOnTheWay()
+	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"method_sea.png"} style={{"width":"30px","height":"30px"}}/>
+		 </a>)
+	 }
+	 
+	 ////////////////////////////////////////////////////
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
-       return(
+       /*return(
                  
                      <td><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
                                        
                    
          
-             )   
+             )*/   
+			var state= null;
+
+			state=this.defineStatus();
+			
+			/*return  (
+			          <td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>
+			        )*/
+			return (
+			          <ThemeContext.Consumer>
+					  {
+						  function(id)
+						  {
+							  this.id=id;
+							  regTDStatus[id]=this;
+							  return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>)
+						  }.bind(this)
+					  }
+					  
+					  </ThemeContext.Consumer>
+			
+			       )
+			 
          
          
      }
@@ -254,6 +382,8 @@ export class Action_td extends Extends
      {  
         super(props);
         this.state=this.props;
+		this.state.updateFromOtherTD=false;
+		this.state.otherTd=null;
         this.bClasses=window.configObject["Action_td"].bClasses
         
        // this.bClasses={"2":"label label-primary" };
@@ -263,19 +393,121 @@ export class Action_td extends Extends
             "2":"Отказ",
             "5": "В пути",
         };
+		this.imagePath='/app/img/order_list/';
+		
+		this.itemStatusChangeQuery=this.itemStatusChangeQuery.bind(this)
          
      } 
+	 itemStatusChangeQuery(e)
+	 {
+		 // /ws/ItemStatusChangeQuery.php
+		 var basketId=this.state.proto.ID.fValue;
+		 var data ="BASKET_ID="+basketId+"&STATUS_CODE=2";
+		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/ItemStatusChangeQuery.php",data);
+		 
+		 Prom.then(function(responseText)
+		    {
+			 alert(responseText);
+		    }
+		    
+		  )
+		 
+		 
+	 }
+	 defineAction()
+	 {
+		 
+		 var itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
+			if (itemStatusChangeQuery=="") return this.getActionCanQueryStatusChange();
+			changeQueryArray=itemStatusChangeQuery.split(/#/);
+			if (changeQueryArray.length!=2) return this.getActionCanQueryStatusChange();
+			var statusToChange=changeQueryArray[0];
+			var answerStatus=changeQueryArray[1];
+			if (answerStatus=="?") return this.getActionQueryStatusChangeInWait();
+			else if(answerStatus=="X") return this.getActionQueryStatusChangeDined();
+			else if (statusToChange==answerStatus) return this.getActionQueryStatusChangeApproved();
+			else return this.getNullAction();
+			
+			
+		 
+		 
+	 }
+	 getNullAction()
+	 {
+		 return (<a href='####'>-</a>);
+	 }
+	 getActionCanQueryStatusChange()
+	 {
+		 return ( <a href='####'  onClick={this.itemStatusChangeQuery}>
+		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_button_cancel.png"} />
+		 </a>)
+	 }
+	 
+	 getActionQueryStatusChangeInWait()
+	 {
+		 return ( <a href='####'>
+		   <img  style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_deny_wait.png"} />
+		 </a>)
+	 }
+	 getActionQueryStatusChangeDined()
+	 {
+		 return ( <a href='####'>
+		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_cancel_deny.png"} />
+		 </a>)
+	 }
+	  getActionQueryStatusChangeApproved()
+	  {
+		 return ( <a href='####'>
+		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_deny.png"} />
+		 </a>)
+	  }
+
+	 /////////////////////////////////////////////////////////
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
-       return(
+		var action= null;  
+        if ("updateFromOtherTD" in this.state)
+		{
+			if (this.state.updateFromOtherTD)
+			{
+				 action=this.state.otherTd;
+			}else
+			{
+				 action=this.defineAction();
+	            
+			}
+		}else
+		{
+			action=this.defineAction();
+		}      
+	         /*return (
+		         <td className={this.state.proto.action.className}>{action}</td>		  
+		         )*/
+				 
+				 return (
+			          <ThemeContext.Consumer>
+					  {
+						  function(id)
+						  {
+							  regTD[id]=this;
+							  return (<td className={this.state.proto.action.className}>{action}</td>)
+						  }.bind(this)
+					  }
+					  
+					  </ThemeContext.Consumer>
+			
+			       )
+		
+	   /*return(
                 
-                    <td className={this.state.proto.action.className}><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+               <td className={this.state.proto.action.className}><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
                    
          
-             )   
+             )*/   
          
          
      }
     
 }              
+
 

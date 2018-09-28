@@ -4,6 +4,7 @@ import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
+import {App} from './js/app.js';   
 
 function getMapObject()
 {
@@ -80,7 +81,23 @@ export class Order_list extends Extends
              findMySelf().setState({mapArray:handleDT.mapArray}); 
          })
     }
-    
+    initOrderList() {
+            /* Initialize Bootstrap Datatables Integration */
+            App.datatables();
+            if ( $.fn.dataTable.isDataTable( '#example-datatable' ) ) 
+			{
+				return;
+			}
+            /* Initialize Datatables */
+            $('#example-datatable').dataTable({
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1, 5 ] } ],
+                "iDisplayLength": 10,
+                "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "Всі"]]
+            });
+
+            /* Add placeholder attribute to the search input */
+            $('.dataTables_filter input').attr('placeholder', 'Пошук');
+        }
     /////////////////////////////////////
 	 
       componentDidUpdate(prevProps, prevState)
@@ -90,7 +107,7 @@ export class Order_list extends Extends
 		{
 			regTDStatus[state].setState({otherTd:null});
 		}
-        TablesDatatables.init();
+        this.initOrderList();
     }
     componentDidMount()
     {
@@ -98,6 +115,7 @@ export class Order_list extends Extends
         this.getOrderListData();
 		//TablesDatatables.init();
 		//this.setState({twiceUpdated:true,shouldComponentUpdate:true});
+		//TablesDatatables.init();
 		
         //
     }
@@ -143,7 +161,7 @@ export class Order_list extends Extends
                           var i=0;
                const tableBody= rows.map(function(item){                                  
 			                      i++;
-                                  return (  <ThemeContext.Provider value={i}><tr key={i++}>{item}</tr>  </ThemeContext.Provider>)  
+                                  return (  <ThemeContext.Provider value={i}><tr key={i}>{item}</tr>  </ThemeContext.Provider>)  
                                    })                  
         
         return (  <div className="block full">
@@ -244,15 +262,31 @@ export class Status_td extends Extends
 		this.state.updateFromOtherTD=false;
 		this.state.otherTd=null;
 		this.imagePath='/app/img/order_list/';
+		this.style={"width":"20px","height":"20px"};
 		
-        this.bClasses={"2":"label label-primary" };
+        this.bClasses={"2":"text-center" };
         this.iClasses={"2":"gi gi-remove_2"};
         this.statusNames={"2":"Отказ"};
+		
+		this.touchstart=this.touchstart.bind(this);
          
      } 
+	 touchstart()
+	 {
+		 alert("www");
+	 }
+	 getRegTd()
+	 {
+		 return regTD;
+	 }
+	 getRegTdStatus()
+	 {
+		 return regTDStatus;
+	 }
 	 defineStatus()
 	 {
 		 var state=this.state.proto.ITEMSTATUS.fValue;
+		 var state2=this.state.proto.ITEMSTATUS.fValue
 		 if (state=="") return getStatusInWork();
 		 state=Number(state);
 		 switch(state)
@@ -279,18 +313,9 @@ export class Status_td extends Extends
 	 }	 
 	 getStatusInWork()
 	 {   
-	     try
-		 {
-	     //var actionTd=this.state.proto.action.TD;
-		 var actionTd=regTD[this.id];
-	     var dataForAction=actionTd.getActionCanQueryStatusChange();
-		 actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
-		 }catch(e)
-		 {
-			 
-		 }
+	     
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"v_rabote.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"v_rabote.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusDelayed()
@@ -298,44 +323,58 @@ export class Status_td extends Extends
 	     
 		 
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"otlozhen.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"otlozhen.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusPayed()
 	 {
+		 this.updateActionTd("getNullAction");
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"vykuplen.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"vykuplen.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusDenided()
 	 {
-		 try{
-		 var actionTd=regTD[this.id];
+		 /*try{
+		 var actionTd=this.getRegTd()[this.id];
 	     var dataForAction=actionTd.getNullAction();
 		 actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
 		 }catch(e)
-		 {}
-		 return (<a href='####'>
-		  <img title='denided' src={this.imagePath+"otkaz.png"} style={{"width":"30px","height":"30px"}}/>
+		 {}*/
+		 this.updateActionTd("getNullAction");
+		 return (<a href='####' onTouchStart={this.touchstart}>
+		  <img title='denided' src={this.imagePath+"otkaz.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusInStock()
 	 {
+		 this.updateActionTd("getNullAction");
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"sklad.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"sklad.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusShipped()
 	 {
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"otgruzhen.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"otgruzhen.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusOnTheWay()
 	 {
 		 return (<a href='####'>
-		  <img title='' src={this.imagePath+"method_sea.png"} style={{"width":"30px","height":"30px"}}/>
+		  <img title='' src={this.imagePath+"method_sea.png"} style={this.style}/>
 		 </a>)
+	 }
+	 updateActionTd(funcName)
+	 {
+		 try{
+		    var actionTd=this.getRegTd()[this.id];
+	        var dataForAction=actionTd[funcName]();
+		   actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
+		   }catch(e)
+		 {
+			 
+		 }
 	 }
 	 
 	 ////////////////////////////////////////////////////
@@ -361,7 +400,7 @@ export class Status_td extends Extends
 						  function(id)
 						  {
 							  this.id=id;
-							  regTDStatus[id]=this;
+							  this.getRegTdStatus()[id]=this;
 							  return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>)
 						  }.bind(this)
 					  }
@@ -385,7 +424,7 @@ export class Action_td extends Extends
 		this.state.updateFromOtherTD=false;
 		this.state.otherTd=null;
         this.bClasses=window.configObject["Action_td"].bClasses
-        
+        this.style={"width":"20px","height":"20px"};
        // this.bClasses={"2":"label label-primary" };
         this.iClasses={"2":"gi gi-remove_2"};
         this.statusNames={
@@ -414,6 +453,10 @@ export class Action_td extends Extends
 		 
 		 
 	 }
+	 getRegTd()
+	 {
+		 return regTD;
+	 }
 	 defineAction()
 	 {
 		 
@@ -439,26 +482,26 @@ export class Action_td extends Extends
 	 getActionCanQueryStatusChange()
 	 {
 		 return ( <a href='####'  onClick={this.itemStatusChangeQuery}>
-		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_button_cancel.png"} />
+		   <img style={this.style} title='' src={this.imagePath+"user_button_cancel.png"} />
 		 </a>)
 	 }
 	 
 	 getActionQueryStatusChangeInWait()
 	 {
 		 return ( <a href='####'>
-		   <img  style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_deny_wait.png"} />
+		   <img  style={this.style} title='' src={this.imagePath+"user_deny_wait.png"} />
 		 </a>)
 	 }
 	 getActionQueryStatusChangeDined()
 	 {
 		 return ( <a href='####'>
-		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_cancel_deny.png"} />
+		   <img style={this.style} title='' src={this.imagePath+"user_cancel_deny.png"} />
 		 </a>)
 	 }
 	  getActionQueryStatusChangeApproved()
 	  {
 		 return ( <a href='####'>
-		   <img style={{"width":"30px","height":"30px"}} title='' src={this.imagePath+"user_deny.png"} />
+		   <img style={this.style} title='' src={this.imagePath+"user_deny.png"} />
 		 </a>)
 	  }
 
@@ -489,8 +532,8 @@ export class Action_td extends Extends
 					  {
 						  function(id)
 						  {
-							  regTD[id]=this;
-							  return (<td className={this.state.proto.action.className}>{action}</td>)
+							  this.getRegTd()[id]=this;
+							  return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)
 						  }.bind(this)
 					  }
 					  

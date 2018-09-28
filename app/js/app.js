@@ -7,7 +7,7 @@
  *  use them only in specific pages. Also, if you remove a js plugin you won't use, make
  *  sure to remove its initialization from uiInit().
  */
-//var $=require('jquery');
+var $=require('jquery');
 //require ('./slimScroll.js');
 //require('./plugins.js');
 

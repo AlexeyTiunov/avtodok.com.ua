@@ -5,7 +5,7 @@
  */
 import {App} from '../app.js';   
 export var TablesDatatables = function() {
-
+	
     return {
         init: function() {
             /* Initialize Bootstrap Datatables Integration */
@@ -21,6 +21,7 @@ export var TablesDatatables = function() {
             /* Add placeholder attribute to the search input */
             $('.dataTables_filter input').attr('placeholder', 'Пошук');
         }
-    };
+    
+        }
 }();
 //$(function(){ TablesDatatables.init(); });

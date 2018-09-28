@@ -2,6 +2,7 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/sale/general/export.autodoc.php");
+ 
 
 if (!CModule::IncludeModule("sale"))
 {
@@ -315,6 +316,8 @@ while($arOrder = $dbOrder->GetNext())
 	
     while ($arBasket = $dbBasket->Fetch())
 	{
+        $BasketItemProperties= GetBasketItemProperties($arBasket["ID"]);
+       // var_dump($BasketItemProperties); 
         if (isset($_REQUEST["filter_itemstatus"]) && $_REQUEST["filter_itemstatus"]!="" )
         {
            $arBasket["ITEMSTATUS"] = GetBasketItemProperty( $arBasket["ID"], "ItemStatus" );  //  DG  
@@ -330,7 +333,7 @@ while($arOrder = $dbOrder->GetNext())
         }
         if (isset($_REQUEST["filter_itemcode"]) && $_REQUEST["filter_itemcode"]!="" )
         {
-           $arBasket["ARTICLE"] = GetBasketItemProperty( $arBasket["ID"], "ItemCode" );  //  DG  
+           $arBasket["ARTICLE"] = $BasketItemProperties["ItemCode"] ;  //  DG  
            if  ($arBasket["ARTICLE"]!=$_REQUEST["filter_itemcode"] )
            {
                continue;
@@ -340,26 +343,26 @@ while($arOrder = $dbOrder->GetNext())
         
 		$arBasket["NAME~"] = $arBasket["NAME"];
 		$arBasket["NOTES~"] = $arBasket["NOTES"];
-		$arBasket["ARTICLE"] = GetBasketItemProperty( $arBasket["ID"], "ItemCode" );
-		$arBasket["BRAND"] = GetBasketItemProperty( $arBasket["ID"], "Brand" );
-        $arBasket["~BRAND"] = GetBasketItemProperty( $arBasket["ID"], "Brand" ); 
-		$arBasket["NAME"] = htmlspecialcharsEx($arBasket["NAME"]);
+		$arBasket["ARTICLE"] = ($BasketItemProperties["ItemCode"]==null)?"":$BasketItemProperties["ItemCode"];
+		$arBasket["BRAND"] = ($BasketItemProperties["Brand"]==null)?"":$BasketItemProperties["Brand"];
+        $arBasket["~BRAND"] =($BasketItemProperties["Brand"]==null)?"":$BasketItemProperties["Brand"];
+		$arBasket["NAME"] = htmlspecialcharsEx($arBasket["NAME"]); 
 		$arBasket["NOTES"] = htmlspecialcharsEx($arBasket["NOTES"]);
 		$arBasket["QUANTITY"] = DoubleVal($arBasket["QUANTITY"]);
-        $arBasket["REGIONCODE"] = GetBasketItemProperty( $arBasket["ID"], "RegionCode" );  
-		$arBasket["ITEMSTATUS"] = GetBasketItemProperty( $arBasket["ID"], "ItemStatus" );  //  DG
-        $arBasket["ITEMSTATUSQUANTITY"]=GetBasketItemProperty( $arBasket["ID"], "ItemStatusQuantity" );
-        $arBasket["ITEMSTATUS2"] = GetBasketItemProperty( $arBasket["ID"], "ItemStatus2" );  //  DG
-        $arBasket["ITEMSTATUSQUANTITY2"]=GetBasketItemProperty( $arBasket["ID"], "ItemStatusQuantity2" );
-        $arBasket["ITEMSTATUSCHANGEQUERY"]=GetBasketItemProperty( $arBasket["ID"], "ItemStatusChangeQuery" );
-        $arBasket["QUANTITYCHANGEQUERY"]=GetBasketItemProperty( $arBasket["ID"], "QuantityChangeQuery" ); 
-        $arBasket["WAREHOUSEDATE"]=GetBasketItemProperty( $arBasket["ID"], "WAREHOUSEDATE" );   
+        $arBasket["REGIONCODE"] =($BasketItemProperties["RegionCode"]==null)?"":$BasketItemProperties["RegionCode"];
+		$arBasket["ITEMSTATUS"] = ($BasketItemProperties["ItemStatus"]==null)?"":$BasketItemProperties["ItemStatus"];//  DG
+        $arBasket["ITEMSTATUSQUANTITY"]=($BasketItemProperties["ItemStatusQuantity"]==null)?"":$BasketItemProperties["ItemStatusQuantity"];
+        $arBasket["ITEMSTATUS2"] = ($BasketItemProperties["ItemStatus2"]==null)?"":$BasketItemProperties["ItemStatus2"];  //  DG
+        $arBasket["ITEMSTATUSQUANTITY2"]=($BasketItemProperties["ItemStatusQuantity2"]==null)?"":$BasketItemProperties["ItemStatusQuantity2"];
+        $arBasket["ITEMSTATUSCHANGEQUERY"]= ($BasketItemProperties["ItemStatusChangeQuery"]==null)?"":$BasketItemProperties["ItemStatusChangeQuery"];
+        $arBasket["QUANTITYCHANGEQUERY"]=($BasketItemProperties["QuantityChangeQuery"]==null)?"":$BasketItemProperties["QuantityChangeQuery"];
+        $arBasket["WAREHOUSEDATE"]=$BasketItemProperties["WAREHOUSEDATE"];  
         $arBasket["PRICE_FORMATED"]=SaleFormatCurrency( $arBasket["PRICE"], $arBasket["CURRENCY"]); 
         $arBasket["SUM"]=DoubleVal($arBasket["PRISE"]*$arBasket["QUANTITY"]);
         $arBasket["SUM_FORMATED"]=SaleFormatCurrency(DoubleVal($arBasket["PRICE"]*$arBasket["QUANTITY"]),$arBasket["CURRENCY"]);
         $arBasket['SHIPPING_DOCUMENT']=getPositionOrderShippingDocument($arOrder['ID'],$arBasket["ARTICLE"]);
-        $arBasket["ISRETURNABLE"]=GetBasketItemProperty( $arBasket["ID"], "IsReturnable" ); 
-        $arBasket["DELIVERYMETHODTOUA"]=GetBasketItemProperty( $arBasket["ID"], "DeliveryMethodToUA" );
+        $arBasket["ISRETURNABLE"]=($BasketItemProperties["IsReturnable"]==null)?"":$BasketItemProperties["IsReturnable"]; 
+        $arBasket["DELIVERYMETHODTOUA"]=($BasketItemProperties["DeliveryMethodToUA"]==null)?"":$BasketItemProperties["DeliveryMethodToUA"];  
         
 		
         $arOBasket[] = $arBasket;

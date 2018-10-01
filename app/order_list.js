@@ -107,6 +107,10 @@ export class Order_list extends Extends
 		{
 			regTDStatus[state].setState({otherTd:null});
 		}
+		for (action in regTD)
+		{
+			regTD[action].setState({otherTd:null})
+		}
         this.initOrderList();
     }
     componentDidMount()
@@ -264,7 +268,7 @@ export class Status_td extends Extends
 		this.imagePath='/app/img/order_list/';
 		this.style={"width":"20px","height":"20px"};
 		
-        this.bClasses={"2":"text-center" };
+        this.bClasses=window.configObject["Status_td"].bClasses;
         this.iClasses={"2":"gi gi-remove_2"};
         this.statusNames={"2":"Отказ"};
 		
@@ -355,21 +359,29 @@ export class Status_td extends Extends
 	 }
 	 getStatusShipped()
 	 {
+		 this.updateActionTd("getNullAction");
 		 return (<a href='####'>
 		  <img title='' src={this.imagePath+"otgruzhen.png"} style={this.style}/>
 		 </a>)
 	 }
 	 getStatusOnTheWay()
 	 {
+		 this.updateActionTd("getActionWareHouse",'');
 		 return (<a href='####'>
 		  <img title='' src={this.imagePath+"method_sea.png"} style={this.style}/>
 		 </a>)
 	 }
-	 updateActionTd(funcName)
+	 getStatusUserDenyApproved()
 	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"user_deny.png"} style={this.style}/>
+		 </a>)
+	 }
+	 updateActionTd(funcName,value)
+	 {   
 		 try{
 		    var actionTd=this.getRegTd()[this.id];
-	        var dataForAction=actionTd[funcName]();
+	        var dataForAction=actionTd[funcName](value);
 		   actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
 		   }catch(e)
 		 {
@@ -389,7 +401,22 @@ export class Status_td extends Extends
              )*/   
 			var state= null;
 
+			//state=this.defineStatus();
+			  
+         if ("updateFromOtherTD" in this.state)
+		{
+			if (this.state.updateFromOtherTD)
+			{
+				 state=this.state.otherTd;
+			}else
+			{
+				 state=this.defineStatus();
+	            
+			}
+		}else
+		{
 			state=this.defineStatus();
+		}      
 			
 			/*return  (
 			          <td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>
@@ -401,7 +428,7 @@ export class Status_td extends Extends
 						  {
 							  this.id=id;
 							  this.getRegTdStatus()[id]=this;
-							  return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>)
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{state}</td>)
 						  }.bind(this)
 					  }
 					  
@@ -444,18 +471,40 @@ export class Action_td extends Extends
 		 var data ="BASKET_ID="+basketId+"&STATUS_CODE=2";
 		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/ItemStatusChangeQuery.php",data);
 		 
-		 Prom.then(function(responseText)
+		 var updateIcon=function(responseText)
 		    {
-			 alert(responseText);
-		    }
+			  try
+			  {
+				  var answer= Number(responseText);
+				  if (!isNaN(answer) && answer>0)
+				  {
+					 var inWait= this.getActionQueryStatusChangeInWait();
+					 this.setState({updateFromOtherTD:true,otherTd:inWait})
+				  }else{
+					  this.showInforMassage("ERROR","Операция не прошла");
+				  }
+			  }catch(e)
+			  {
+				  this.showInforMassage("ERROR","Операция не прошла");
+			  }
+				
+			 
+			 
+		    }.bind(this)
 		    
-		  )
+		 Prom.then(updateIcon)
+		  
+		  
 		 
 		 
 	 }
 	 getRegTd()
 	 {
 		 return regTD;
+	 }
+	 getRegTdStatus()
+	 {
+		 return regTDStatus;
 	 }
 	 defineAction()
 	 {
@@ -495,16 +544,34 @@ export class Action_td extends Extends
 	 getActionQueryStatusChangeDined()
 	 {
 		 return ( <a href='####'>
-		   <img style={this.style} title='' src={this.imagePath+"user_cancel_deny.png"} />
+		   <img style={this.style} title='' src={this.imagePath+"v_rabote.png"} />
 		 </a>)
 	 }
 	  getActionQueryStatusChangeApproved()
 	  {
+		  this.updateStatus("getStatusUserDenyApproved");
 		 return ( <a href='####'>
 		   <img style={this.style} title='' src={this.imagePath+"user_deny.png"} />
 		 </a>)
 	  }
-
+      getActionWareHouse()
+	  {
+		  return ( <a href='####'>
+		   <img style={this.style} title='' src={this.imagePath+"date_come.png"} />
+		 </a>)
+	  }
+	  updateStatus(funcName,value)
+	  {
+		  try{
+		    var statusTd=this.getRegTdStatus()[this.id];
+	        var dataForStatus=statusTd[funcName](value);
+		   statusTd.setState({updateFromOtherTD:true,otherTd:dataForStatus})
+		   }catch(e)
+		 {
+			 
+		 }
+		  
+	  }
 	 /////////////////////////////////////////////////////////
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
@@ -531,9 +598,10 @@ export class Action_td extends Extends
 			          <ThemeContext.Consumer>
 					  {
 						  function(id)
-						  {
+						  {   this.id=id;
 							  this.getRegTd()[id]=this;
-							  return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)
+							  //return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)							  
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
 						  }.bind(this)
 					  }
 					  

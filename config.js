@@ -1,7 +1,10 @@
 var configObject={}
 
  configObject.Action_td={
-                        bClasses:{"2":"text-center" }
+                        bClasses:{"0-7":"text-center" }
+                       };
+configObject.Status_td={
+                        bClasses:{"0-7":"text-center" }
                        }
                           
                           

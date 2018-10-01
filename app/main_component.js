@@ -307,7 +307,7 @@ export class Extends extends React.Component
          {
             var arr=item.split(/-/);
             if (arr.length==1) continue;
-            if (Number(value)>arr[0] && Number(value)<=arr[1]  ) 
+            if (Number(value)>=arr[0] && Number(value)<=arr[1]  ) 
             {
                 return  RangeObjectValue[item]
             }

@@ -9,20 +9,22 @@
      if ($STATUS_CODE=="") exit("ERROR_STATUS_CODE");
      
      $STATUS_CODE.="#?";
-    # echo $STATUS_CODE;
+    // echo $STATUS_CODE;
      if (!detectPreviousStatusChangeQuery($BASKET_ID)) 
      {   
      $sql="INSERT INTO b_sale_basket_props (BASKET_ID,NAME,VALUE,CODE,SORT) 
      VALUES({$BASKET_ID},'Запрос на изменение статуса','{$STATUS_CODE}','ItemStatusChangeQuery',100)     
      ";
-     echo $sql;
+         $DB->query($sql);
+        echo (updateOrderDate($BASKET_ID)==true)?1:0;
      } else
      {
         $sql="UPDATE b_sale_basket_props SET VALUE='{$STATUS_CODE}' WHERE BASKET_ID={$BASKET_ID} AND CODE='ItemStatusChangeQuery' " ;  
+         $DB->query($sql);
+         echo (updateOrderDate($BASKET_ID)==true)?1:0;
      }
      
-     $DB->query($sql);
-     updateOrderDate($BASKET_ID);
+    
      
      function updateOrderDate($BASKET_ID)
      {
@@ -35,8 +37,18 @@
               
             $date=date("Y-m-d H:i:s");
             $sql="UPDATE b_sale_order SET DATE_UPDATE='{$date}' WHERE ID={$ORDER_ID_ARRAY['ORDER_ID']}";
-            $DB->query($sql);  
-          }    
+           $result=$DB->query($sql); 
+           if ($result->AffectedRowsCount()>0)
+           {
+               return true;
+           }else
+           {
+               return false;
+           }
+             
+          }  
+          
+          return false ; 
          
      }
     

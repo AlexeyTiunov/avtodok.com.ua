@@ -73,7 +73,7 @@ export class Order_list extends Extends
     getOrderListData()
     {
         var findMySelf=this.findMySelf(this.constructor.name);
-         var Prom=this.makeRequestToRecieveData("POST","/ws/order_list.php",false,this.makePostDataFromState())
+         var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/order_list.php",this.makePostDataFromState())
          
          Prom.then(function(responseText){
              
@@ -111,12 +111,21 @@ export class Order_list extends Extends
 		{
 			regTD[action].setState({otherTd:null})
 		}
-        this.initOrderList();
+		if (this.state.mapArray.length!=0)
+		{
+			this.initOrderList();	    
+		    this.deActivateProgressBar();
+		}
+        
     }
     componentDidMount()
     {
         super.componentDidMount();
-        this.getOrderListData();
+		var getOrderListData=function(){ this.getOrderListData();}
+		getOrderListData=getOrderListData.bind(this);		
+		getOrderListData();
+		
+       
 		//TablesDatatables.init();
 		//this.setState({twiceUpdated:true,shouldComponentUpdate:true});
 		//TablesDatatables.init();
@@ -168,7 +177,8 @@ export class Order_list extends Extends
                                   return (  <ThemeContext.Provider value={i}><tr key={i}>{item}</tr>  </ThemeContext.Provider>)  
                                    })                  
         
-        return (  <div className="block full">
+        return (  
+		          <div className="block full">
                      <div className="block-title">
                        <div className="table-responsive">
                            <table id="example-datatable" className="table table-vcenter table-condensed table-bordered">
@@ -291,7 +301,7 @@ export class Status_td extends Extends
 	 {
 		 var state=this.state.proto.ITEMSTATUS.fValue;
 		 var state2=this.state.proto.ITEMSTATUS.fValue
-		 if (state=="") return getStatusInWork();
+		 if (state=="") return this.getStatusInWork();
 		 state=Number(state);
 		 switch(state)
 		 {

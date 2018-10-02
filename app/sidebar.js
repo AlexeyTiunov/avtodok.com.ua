@@ -33,6 +33,7 @@ import {Info_message} from './info_message.js'
 import {Auth} from './auth.js'
 import {Balance} from './balance.js' 
 import {Pay_notification} from './balance.js'
+import {Progress_bar} from './progress_bar.js'
  
 import './css/plugins.css'; 
 
@@ -88,8 +89,11 @@ export class Sidebar  extends Extends
      render()
      {          
        return (<Router>
+	            
                 <div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
-                  <div id="sidebar" className="">        
+                  <Progress_bar/>				  
+				  
+				  <div id="sidebar" className="">        
                     <div className='sidebar-scroll'> 
                       <div id='sidebar-content' className='sidebar-content'>                         
                         <Sidebar_brand/>    

@@ -301,7 +301,7 @@ export class Balance extends Extends
       {
                // here the main_component function (componentDidUpdate) is overrided
                // so this.state.shouldComponentUpdate is stay unchanged;
-           
+              this.deActivateProgressBar();
            
               
       }

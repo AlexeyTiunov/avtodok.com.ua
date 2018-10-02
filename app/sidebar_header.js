@@ -11,6 +11,7 @@ import {Search_table_v2} from './search_content_v2.js'
  
 import {Basket_items} from './basket_items.js' 
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';   
+import {Progress_bar} from './progress_bar.js'
  //debugger;  
 
 
@@ -206,7 +207,7 @@ class Search_form extends Extends
            this.setState({partsQuantity:responseText}); 
         }.bind(this);
        
-        var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
+        var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/AddToBusket.php","getBasketPartsQuantity=getBasketPartsQuantity");       
        Prom.then(
          (responseText)=>{findMySelf().setState({partsQuantity:responseText,shouldComponentUpdate:true})}
          ); 
@@ -299,16 +300,22 @@ export class Sidebar_header  extends Extends
      render()
      {
       return ( <header className="navbar navbar-inverse navbar-fixed-top ">
-                 <Sidebar_control_button parentMod={this.props.parentMod}/>
-                 <Search_form/>
-                 
-                 <ul className="nav navbar-nav-custom pull-right">
-                    <li>
+	           <div className="row">
+			    <div className="col-xs-12"> 
+                  <Sidebar_control_button parentMod={this.props.parentMod}/>
+                  <Search_form/>
+				  <ul className="nav navbar-nav-custom pull-right">
+                     <li>
                        <Basket_icon/> 
                       
-                    </li>                 
-                 </ul>
-      
+                     </li> 
+				  </ul>  
+				</div>
+				<div className="col-xs-12"> 
+                  <Progress_bar/>				  
+				 </div> 
+				 
+                </div>
                </header>
              )
          

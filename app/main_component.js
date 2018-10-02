@@ -52,6 +52,7 @@ export class Extends extends React.Component
       {
       //  this.state.PHPSESSID=this.getCookie("PHPSESSID");  
         this.state.shouldComponentUpdate=false;  
+		//this.deActivateProgressBar();
       }
      
     ///////////////////////////////////////////////////////////////////// 
@@ -325,7 +326,9 @@ export class Extends extends React.Component
     ));
    return matches ? decodeURIComponent(matches[1]) : undefined;
    }
-   setCookie(name, value, options) {
+   setCookie(name, value, options) 
+   {
+
           options = options || {};
 
           var expires = options.expires;
@@ -352,5 +355,15 @@ export class Extends extends React.Component
           }
 
           document.cookie = updatedCookie;
+  }
+  
+  activateProgressBar(func)
+  {
+	  var progressBar=window.objectReg["Progress_bar"];
+	  progressBar.activateBar(func);
+  }
+  deActivateProgressBar()
+  {    var progressBar=window.objectReg["Progress_bar"];
+	  progressBar.deActivateBar();
   }
 }

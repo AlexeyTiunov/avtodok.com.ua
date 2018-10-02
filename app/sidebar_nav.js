@@ -54,7 +54,9 @@ export class Sidebar_nav  extends Extends
      } 
      onclick()
      {
+		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
+		 
      }
      componentDidCatch(error, info) 
      {

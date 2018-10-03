@@ -297,8 +297,8 @@ if ((isset($_REQUEST["filter_itemstatus"]) && $_REQUEST["filter_itemstatus"]!=""
    $dbOrder->NavStart($arParams["ORDERS_PER_PAGE"]);
  } */
  
-  #$dbOrder->NavStart($arParams["ORDERS_PER_PAGE"]);
-#$arResult["NAV_STRING"] = $dbOrder->GetPageNavString(GetMessage("SPOL_PAGES"), $arParams["NAV_TEMPLATE"]);  
+  $dbOrder->NavStart($arParams["ORDERS_PER_PAGE"]);
+$arResult["NAV_STRING"] = $dbOrder->GetPageNavString(GetMessage("SPOL_PAGES"), $arParams["NAV_TEMPLATE"]);  
 
 
 ############################################

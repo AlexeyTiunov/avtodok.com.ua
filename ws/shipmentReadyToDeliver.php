@@ -101,6 +101,7 @@ $DELIVERY_ALLOW[1]="ДА";
          # print_r($arDateFrom);
          if ($TimeCheckDate <= $mkDateFrom)
          {
+          $ShipsID[$ShipItem['ID']]['ID']= $ShipItem['ID'];
           $ShipsID[$ShipItem['ID']]['shipnumber']=$ShipItem['PROPERTY_CODE_VALUE'];
           $ShipsID[$ShipItem['ID']]['currency'] = $ShipItem['PROPERTY_CURRENCYCODE_VALUE'];
           $ShipsID[$ShipItem['ID']]['NUMBER'] = $ShipItem['PROPERTY_CODE_VALUE'];
@@ -109,13 +110,25 @@ $DELIVERY_ALLOW[1]="ДА";
           $ShipsID[$ShipItem['ID']]['CLIENT_CODE']=$ShipItem['PROPERTY_CLIENTCODE_VALUE'];
           $ShipsID[$ShipItem['ID']]['AGREEMENT_CODE']=$ShipItem['PROPERTY_AGREEMENTCODE_VALUE']; 
           $ShipsID[$ShipItem['ID']]['DATE']=Date("m.d.Y",$mkDateFrom);
-         }
-          
+         
+         if (isset($_REQUEST["SHIPNUMBERONLY"]))
+          {
+             $ShipsIDInfo[]=$ShipsID[$ShipItem['ID']]; 
+          }   
+         }  
       }
+      if (isset($_REQUEST["SHIPNUMBERONLY"]))
+      {
+         echo (json_encode($ShipsIDInfo,JSON_UNESCAPED_UNICODE));
+        exit(); 
+      }
+      
         #print_r($ShipsID);
        #var_dump($ShipsID);
-      foreach ($ShipsID as $shipid=>$shipnumber)
+     // foreach ($ShipsID as $shipid=>$shipnumber)
+      if (isset ($_REQUEST["SHIPMENTID"]))
       {
+           $shipid=$_REQUEST["SHIPMENTID"];
            $arSelect=Array(
            'ID','PROPERTY_ShippingID','PROPERTY_BCode','PROPERTY_ICode','PROPERTY_Quantity',
            'PROPERTY_Summ','PROPERTY_Price','PROPERTY_Caption','PROPERTY_Order'
@@ -128,6 +141,7 @@ $DELIVERY_ALLOW[1]="ДА";
                     
                     
            $ShipsItemResult = CIBlockElement::GetList(Array('ID'=>"DESC"), $arFilter, false, false, $arSelect);
+           $shipnumber=$ShipsID[$shipid];
            while($shipeditem= $ShipsItemResult->Fetch())  
            {
                
@@ -148,13 +162,15 @@ $DELIVERY_ALLOW[1]="ДА";
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Price']=number_format($shipeditem['PROPERTY_PRICE_VALUE']*Search_ITG::PriceKoef($shipnumber['currency'],'USD'),  2, '.', '');
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Sum']=number_format($shipeditem['PROPERTY_SUMM_VALUE']*Search_ITG::PriceKoef($shipnumber['currency'],'USD'),  2, '.', '');  
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Order']=$shipeditem['PROPERTY_ORDER_VALUE'];
+               $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['AgreementInfo']=GetAgreementInfo($shipnumber["AGREEMENT_CODE"],$shipnumber["CLIENT_CODE"]);
+               $partsreadytodeliverCommom[]= $partsreadytodeliver[$shipnumber["NUMBER"]];
                
            }    
           
           
       }
       
-      echo (json_encode($partsreadytodeliver,JSON_UNESCAPED_UNICODE));
+      echo (json_encode($partsreadytodeliverCommom,JSON_UNESCAPED_UNICODE));
       exit();
 
       #print_r($partsreadytodeliver);

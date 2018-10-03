@@ -425,7 +425,7 @@ function getMapObject()
                  
                                
                var rowsAnalogs=this.state.analogInfo.map(function(tr) 
-                               {
+                               { 
                                    var mas=[];
                                  for (td in tr)
                                  {

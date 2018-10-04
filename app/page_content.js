@@ -11,6 +11,7 @@ import {Sidebar_usersettings} from './sidebar_userinfo.js'
 import {Search_table_v2} from './search_content_v2.js'
 import {Start_page} from './start_page.js'
 import {Balance} from './balance.js' 
+import {Shipments} from './shipment_readydellivery.js'
 
 export class Page_content  extends Extends
 {
@@ -43,7 +44,8 @@ export class Page_content  extends Extends
          return ( 
                        <Switch>
                          <Route exact path="/" component={Start_page} />
-                          <Route path="/balance" component={Balance} />  
+                          <Route path="/balance" component={Balance} /> 
+                          <Route path="/shipments" component={Shipments} />  						  
                          <Route path="/basket" component={Basket} />
                          <Route path="/order_basket/:DELIVERY/:PAYS" component={Order_basket} />
                          <Route path="/order_list" component={Order_list} /> 

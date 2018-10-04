@@ -17,7 +17,7 @@ export var items = [
              {name:"Історія позицій", href:"cabinet_cash.html",className:"gi gi-show_thumbnails_with_lines sidebar-nav-icon" ,inner:null},
              {name:"Декларації", href:"cabinet_history.html",className:"gi gi-message_out sidebar-nav-icon" ,inner:null},
              {name:"Повернення", href:"cabinet_np.html",className:"gi gi-unshare sidebar-nav-icon" ,inner:null},             
-             {name:"Готовий до видачі", href:"cabinet_to_delivery.html",className:"si si-dropbox sidebar-nav-icon" ,inner:null}, 
+             {name:"Готовий до видачі", href:"/shipments",className:"si si-dropbox sidebar-nav-icon" ,inner:null}, 
            ]
   },
   

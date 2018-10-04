@@ -162,14 +162,15 @@ $DELIVERY_ALLOW[1]="ДА";
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Price']=number_format($shipeditem['PROPERTY_PRICE_VALUE']*Search_ITG::PriceKoef($shipnumber['currency'],'USD'),  2, '.', '');
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Sum']=number_format($shipeditem['PROPERTY_SUMM_VALUE']*Search_ITG::PriceKoef($shipnumber['currency'],'USD'),  2, '.', '');  
                $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['Order']=$shipeditem['PROPERTY_ORDER_VALUE'];
-               $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['AgreementInfo']=GetAgreementInfo($shipnumber["AGREEMENT_CODE"],$shipnumber["CLIENT_CODE"]);
+               //$partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['AgreementInfo']=GetAgreementInfo($shipnumber["AGREEMENT_CODE"],$shipnumber["CLIENT_CODE"]);
+               $partsreadytodeliver[$shipnumber["NUMBER"]][$shipeditem['ID'] ]['CurrentDebt']=GetAgreementInfo($shipnumber["AGREEMENT_CODE"],$shipnumber["CLIENT_CODE"])["CurrentDebt"]; 
                $partsreadytodeliverCommom[]= $partsreadytodeliver[$shipnumber["NUMBER"]];
                
            }    
           
           
       }
-      
+       //var_dump($partsreadytodeliverCommom);
       echo (json_encode($partsreadytodeliverCommom,JSON_UNESCAPED_UNICODE));
       exit();
 

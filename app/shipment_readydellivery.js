@@ -16,6 +16,7 @@ function getMapObject()
    var defineColumnName=dataConvert.defineColumnName;
    var defineColumnClass=dataConvert.defineColumnClass; 
    var defineTd=dataConvert.defineTd;
+   var defineTh=dataConvert.defineTh; 
    var parceDate=dataConvert.parceDate;
    
     /*
@@ -39,7 +40,7 @@ function getMapObject()
     var mapObject=
     { 
 	  ID:{functions:{},params:[]},
-	  shipnumber:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Номер/Дата","",<Shipmentnumber_td/>]},
+	  shipnumber:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:["Номер/Дата/Замовлення","",<Shipmentnumber_td/>,[<Common_th/>,"Номер/Дата/Замовлення"]]},
 	  currency:{functions:{},params:[]},	  
 	  CLIENT_CODE:{functions:{},params:[]},
 	  AGREEMENT_CODE:{functions:{},params:[]},
@@ -48,15 +49,15 @@ function getMapObject()
 	  Shiping1cCode:{functions:{},params:[]},
 	  SHIPMENT_TYPE:{functions:{},params:[]},
 	  DELIVERY_ALLOW:{functions:{},params:[]},
-	  BrandCode:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Бренд/Номер/Найм-ня","",<Brandname_td/>]},
+	  BrandCode:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:["Бренд/Номер/Найм-ня","",<Brandname_td/>,[<Common_th/>,"Бренд/Номер/Найм-ня"]]},
 	  ItemCode:{functions:{},params:[]},
 	  ItemCodeTamlated:{functions:{},params:[]},	  
 	  Caption:{functions:{formatNumber},params:[]},
-	  Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Ціна/Кіл-ть/Сума","",<Price_td />,]]},
+	  Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Ціна/Кіл-ть/Сума","",<Price_td />,[<Common_th/>,"Ціна/Кіл-ть/Сума"]]},
 	  Quantity:{functions:{},params:[]}, 	 
 	  Sum:{functions:{formatNumber},params:[[".","2"],]},
 	  Order:{functions:{},params:[]},
-	  CurrentDebt:{functions:{formatNumber},params:[[".","2"],]},
+	  CurrentDebt:{functions:{formatNumber},params:[[".","2"]]},
 	  CurrentDelayDebt:{functions:{formatNumber},params:[[".","2"],]},
 	  totalSum:{functions:{},params:[],addNew:true},
 	  deliveryType:{functions:{},params:[],addNew:true},
@@ -86,30 +87,60 @@ export class Shipments extends Extends
 	 constructor(props) 
      { 
 	    super(props);
+		this.state.mapArray=[];
 	 }
 	 getShipments()
 	 {
 		 data="SHIPNUMBERONLY=Y";
 		 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/shipmentReadyToDeliver.php",data);
 		 
-		  var shipmentInfo= function(responceText)
+		  var shipmentInfo= function(responseText)
 		    {
 			  handleBR= new  handleData(responseText,getMapObjectId());			  
-			  this.setState({mapArray:handleDT.mapArray});
+			  this.setState({mapArray:handleBR.mapArray});
 		    }
-
+            shipmentInfo=shipmentInfo.bind(this);
 		 Prom.then(shipmentInfo);
 	 }
-	 
-	 render()
+	 ///////////////////////////////////////////////////
+	 componentDidUpdate()
 	 {
+		 super.componentDidUpdate();
+		 if (this.state.mapArray.length!=0)
+		 {
+			  this.deActivateProgressBar();
+		 }
+		 
+	 }
+	 componentDidMount()
+	 {
+		 this.getShipments();
+		 if (this.state.mapArray.length!=0)
+		 {
+			
+		    this.deActivateProgressBar();
+		 }
+		 
+	 }
+	 render()
+	 {     var tables=null
 		 try
+		 {
+			  tables=this.state.mapArray.map(function(row){
+				 
+				  for (item in row)
+				  {
+					  return (<Shipment_readyordelivery shipmentID={row[item].fValue}/>)
+				  }
+				 
+			 })
+		 }catch(e)
 		 {
 			 
 		 }
-		 <div>
-		 
-		 </div>
+		 return (<div>
+		         {tables}
+		       </div>)
 	 }
 	
 	
@@ -122,23 +153,35 @@ export class Shipment_readyordelivery extends Extends
      { 
 	    super(props);
 		this.state.shipmentID=this.props.shipmentID;
+		this.state.mapArray=[];
+		this.state.shipmentTypes={"0":"Самовивіз","1":"Відправка","2":"Доставка"};
+		this.state.comments={"0":"Видачу товару зі складу не схвалено","1":"Борг","2":"Баланс"}
+		this.state.debtComments={"0":""};
 	 }
 	 
 	 getShipmentInfo()
 	 {
-		 data="SHIPNUMBER="+this.state.shipmentID;
+		 data="SHIPMENTID="+this.state.shipmentID;
 		 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/shipmentReadyToDeliver.php",data);
 		 
-		 var shipmentInfo= function(responceText)
+		 var shipmentInfo= function(responseText)
 		 {
 			  handleBR= new  handleData(responseText,getMapObject()); 
-			  this.setState({mapArray:handleDT.mapArray});
+			  this.setState({mapArray:handleBR.mapArray});
 		 }
-
+          shipmentInfo=shipmentInfo.bind(this);
 		 Prom.then(shipmentInfo);
 	 }
 	 
 	 ////////////////////////////////////////////////
+	 
+	 
+	 componentDidMount()
+	 {
+		 this.getShipmentInfo();
+	 }
+	 
+	 
 	 render()
 	 {
 		 var tableHead=null;
@@ -149,39 +192,52 @@ export class Shipment_readyordelivery extends Extends
 		     var totalSum=0;
 			 var shipmentType="";
 			 var deliveryAllow="";
+			 var comments="";
 			 var currentDebt=0;
+			 var debtComments="";
 			 this.state.mapArray.map(function(tr) 
 			 {    
 			         for (item in tr)
                       {
-						  if (th=="price")
+						  if (item=="Sum")
 						  {
-							  totalSum+=Number(tr[item]);
+							  totalSum+=Number(tr[item].fValue);
 						  }else if (item=="SHIPMENT_TYPE")
 						  {
-							  shipmentType=tr[item];
+							  shipmentType=tr[item].fValue;
 						  }else if (item=="DELIVERY_ALLOW")
 						  {
-							  deliveryAllow=tr[item];
-						  }else if (item=="currentDebt")
+							  deliveryAllow=tr[item].fValue;
+						  }else if (item=="CurrentDebt")
 						  {
-							  currentDebt=Number(tr[item]);
+							  currentDebt=Number(tr[item].fValue);
 						  }
 							  
 					  }
+			 })
+			
+			 if (shipmentType==null || shipmentType==undefined)
+			 {
+				 shipmentType=0;
+			 }
+			  if (deliveryAllow==null || deliveryAllow==undefined)
+			 {
+				 deliveryAllow=0;
+			 }
+			 
+			 if (shipmentType!=0)
+			 {
+				 if (deliveryAllow==0) 
+				 comments+=this.state.comments[deliveryAllow]+"\n";
+				 if (Number(currentDebt)>0)
+			     {
+			 	    debtComments+=this.state.comments["1"]+": "+currentDebt;
+			     }
 				 
-			 });
-		     var  tableFooter=this.state.mapArray.map(function(tr) {
-			          var mas=[];
-                      for (th in tr)
-                      {
-                        if (tr[th].THH)
-                        mas.push(tr[th].THH);  
-                      }
-                              return mas;    
+			 }
 			 
 			 
-		       })
+		     
 			 var names=this.state.mapArray.map(function(tr) {
                
                              var mas=[];
@@ -208,7 +264,7 @@ export class Shipment_readyordelivery extends Extends
                                var mas=[];
                              for (td in tr)
                              {
-                                
+                                if (tr[td].TD)
                                 mas.push(tr[td].TD)
                              } 
                               
@@ -219,18 +275,18 @@ export class Shipment_readyordelivery extends Extends
               
                                 
                           var i=0;
-               const tableBody= rows.map(function(item){                                  
+                    tableBody= rows.map(function(item){                                  
 			                      i++;
-                                  return (  <ThemeContext.Provider value={i}><tr key={i}>{item}</tr>  </ThemeContext.Provider>)  
+                                  return (  <tr key={i}>{item}</tr>)  
                                    })                  
         
 			 
 		 }catch(e)
 		 {
-			 
+			 return (<div className="block"> </div>);
 		 }
-		 return
-		 (
+		 
+		 var a=(
 		  <div className="block">    
 		     <table className="table table-vcenter table-condensed table-bordered"> 
 			     <thead>
@@ -244,19 +300,30 @@ export class Shipment_readyordelivery extends Extends
 			 </table>
 			 <div className="row">
 			    <div className="col-xs-4">
-				        {"Всього:"+totalSum}
+				        {"Всього: "+totalSum}
 				</div>
 			 </div>
 			 <div className="row">
 			    <div className="col-xs-4">
-				        {deliveryType}
+				        {this.state.shipmentTypes[shipmentType]}
+				</div>
+			 </div>
+			 <div className="row">
+			    <div className="col-xs-12">
+				        {comments}
+				</div>
+			 </div>
+			 <div className="row">
+			    <div className="col-xs-4">
+				        {debtComments}
 				</div>
 			 </div>
 		  
 		  </div>
+		  
 		 
 		 )
-		 
+		 return a;
 		 
 	 }
 	
@@ -276,8 +343,9 @@ export class Shipmentnumber_td extends Extends
      {
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
-				   {this.state.proto.shipnumber.fValue}<br/>
-				   {this.state.proto.DATE.fValue}
+				   <a href="#">{this.state.proto.shipnumber.fValue}</a><br/>
+				   {this.state.proto.DATE.fValue}<br/>
+				   <a href="#">{this.state.proto.Order.fValue}</a>
 				   
 				   
 				   </td> 
@@ -333,9 +401,9 @@ export class Price_td extends Extends
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
 				   {this.state.proto.Price.fValue}<br/>
-				   {"x"}<strong><span class="badge">{this.state.proto.Quantity.fValue}</span></strong><br/>
-				   {"="}{this.state.proto.Sum.fValue}
-				   
+				   {"x "}<strong><span class="badge">{this.state.proto.Quantity.fValue}</span></strong><br/>
+				   {"= "}{this.state.proto.Sum.fValue}<br/>
+					   {this.state.proto.currency.fValue}
 				   
 				   </td> 
         
@@ -370,3 +438,64 @@ export class Common_td extends Extends
      }
     
 }
+export class Common_th extends Extends   
+ {
+      constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     renderCaption()
+     {
+         if (!this.state.caption)
+         {
+           return "";  
+         }
+         
+         else
+         {
+          return this.state.caption.split(/\//);
+             
+         }
+         
+         
+     }
+     render()
+     {
+         var caption=this.renderCaption();
+       if (caption instanceof  Array )
+       {
+           const a =(  <th className="text-center">
+                          {
+                              caption.map(function(item){
+                              
+                              return (<span><span>{item}</span> <br/>
+                                         </span>
+                              )
+                              
+                                     
+                              
+                          }) 
+                          }
+                       </th> 
+           
+                    )
+           return a;  
+       } else
+       {
+           const a =(<th className="text-center">{this.state.caption}</th>    )  
+           return a;  
+       } 
+      
+                   
+                  
+        
+        
+         
+             
+         
+         
+     }
+     
+ }

@@ -41,31 +41,120 @@ function getMapObject()
     }
    return mapObject; 
 }
+function getMapObjectOrder()
+{
+	
+    dataConvert = new handleData(null,null); 
+   var formatNumber=dataConvert.formatNumber;
+   var addSuffix=dataConvert.addSuffix;
+   var defineColumnName=dataConvert.defineColumnName;
+   var defineColumnClass=dataConvert.defineColumnClass; 
+   var defineTd=dataConvert.defineTd;
+   var parceDate=dataConvert.parceDate;
+   var mapObject={
+   ID:{functions:{},params:[]}, 
+   STATUS_ID:{functions:{},params:[]}, 
+   PRICE:{functions:{},params:[]}, 
+   DATE_INSERT:{functions:{},params:[]}, 
+   DARE_UPDATE:{functions:{},params:[]}, 
+   REGIONCODE:{functions:{},params:[]}, 
+   ALLOW_DELIVERY:{functions:{},params:[]}, 
+   COMMENTS:{functions:{},params:[]}, 
+   STATUS:{functions:{},params:[],ignore:true},
+   PERSON_TYPE:{functions:{},params:[],ignore:true},
+   PAY_SYSTEM:{functions:{},params:[],ignore:true},
+   CURRENCY:{functions:{},params:[],ignore:true},
+   }
+   return mapObject; 
+	
+}
+
+function getMapObjectItems()
+{
+  dataConvert = new handleData(null,null); 
+   var formatNumber=dataConvert.formatNumber;
+   var addSuffix=dataConvert.addSuffix;
+   var defineColumnName=dataConvert.defineColumnName;
+   var defineColumnClass=dataConvert.defineColumnClass; 
+   var defineTd=dataConvert.defineTd;
+   var parceDate=dataConvert.parceDate;
+    var defineTh=dataConvert.defineTh;
+   
+   var mapObject={
+    ID:{functions:{},params:[]},	   
+   Brand:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:["Бренд/Номер/Найм-ня","",<Brandname_td/>,[<Common_th/>,"Бренд/Номер/Найм-ня"]]},
+   ItemCode:{functions:{},params:[]}, 
+   NAME:{functions:{},params:[]},   
+   PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Ціна/Кіл-ть/Сума","",<Price_td />,[<Common_th/>,"Ціна/Кіл-ть/Сума"]]},
+   QUANTITY:{functions:{},params:[]},  
+   CURRENCY:{functions:{},params:[]},     
+   RegionCode:{functions:{},params:[]},  
+   ItemStatus:{functions:{},params:[]},     
+   ItemStatusQuantity:{functions:{},params:[]},  
+   ItemStatus2:{functions:{},params:[]},  
+   ItemStatusQuantity2:{functions:{},params:[]},  
+   IsReturnable:{functions:{},params:[]},  
+   ItemStatusChangeQuery:{functions:{},params:[]},  
+   QuantityChangeQuery:{functions:{},params:[]},  
+   WAREHOUSEDATE:{functions:{},params:[]},  
+   DeliveryMethodToUA:{functions:{},params:[]},  
+   action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Action_td />,],addNew:true},
+   state:{functions:{defineColumnName,defineTd},params:["Состояние",<Status_td />,],addNew:true},
+   }
+   
+   
+   
+   return mapObject; 
+	
+}
+
+var regTD={};
+var regTDStatus={};
 
 export class Order_detail extends Extends
 {
     constructor(props)
     {
         super(props);
-        this.state=this.props.match.params;
+        //this.state=this.props.match.params;
         this.state.mapArray=[];
+		this.state.orderHeaderInfo={};
     }
     
     getOrderDetail(id)
     {
-        var findMySelf=this.findMySelf(this.constructor.name); 
+        
          var Prom=this.makeRequestToRecieveData("POST","/ws/order_detail.php",false,"ID="+this.props.match.params.id)
-         
-         Prom.then(function(responseText){
+         var OrderInfo=function(responseText){
+            handleOrderHeader=new handleData(responseText,undefined,'ORDER');
+			 handleOrderItems=new handleData(responseText,getMapObjectItems(),'BASKET');
+             this.setState({mapArray:handleOrderItems.mapArray,orderHeaderInfo:handleOrderHeader.mapArray});
              
-             handleDT=new handleData(responseText,getMapObject());
-             findMySelf().setState({mapArray:handleDT.mapArray});
-             
-         })
+         }
+		 OrderInfo=OrderInfo.bind(this);
+         Prom.then(OrderInfo);
         
     }
     
     ///////////////////////////////////
+	 componentDidUpdate(prevProps, prevState)
+    {
+        super.componentDidUpdate(prevProps, prevState);
+		for (state in regTDStatus)
+		{
+			regTDStatus[state].setState({otherTd:null});
+		}
+		for (action in regTD)
+		{
+			regTD[action].setState({otherTd:null})
+		}
+		if (this.state.mapArray.length!=0)
+		{
+			this.initOrderList();	    
+		    this.deActivateProgressBar();
+		}
+        
+    }
     
     componentDidMount()
     {
@@ -74,15 +163,135 @@ export class Order_detail extends Extends
     }
     
     render ()
-    {
+
+    {      
+	      var tableHead=null;
+         var  tableBody=null; 
+	      try{
+			   var names=this.state.mapArray.map(function(tr) {
+               
+                             var mas=[];
+                             for (th in tr)
+                             {
+                                 if (tr[th].THH)
+                                 mas.push(tr[th].THH);  
+                             }
+                              return mas;    
+               
+                       })[0]
+				 tableHead= (  
+                                    <tr>
+                                     {
+                                       names.map(function(item){
+                                         return  item;
+                                       })  
+                                     } 
+                                    </tr>
+                             
+                     )  
+					 var rows=this.state.mapArray.map(function(tr) 
+                           {
+                               var mas=[];
+                             for (td in tr)
+                             {
+                                if (tr[td].TD)
+                                mas.push(tr[td].TD)
+                             } 
+                              
+                             return mas;
+                              
+                             //return <th className="text-center">{item.Name}</th> 
+                           });
+              
+                                
+                          var i=0;
+                    tableBody= rows.map(function(item){                                  
+			                      i++;
+                                  return (  <tr key={i}>{item}</tr>)  
+                                   }) 
+		
+	         }catch(e)
+			 {
+				   return (<div className="block"> </div>); 
+			 }
+		  
             return (<div className="block full">
-          
-                      {this.props.match.params.id}
+                         <div className="block-title" style={{"backgroundColor":""}}>
+						      <Order_header  info={this.state.orderHeaderInfo}/>
+								 <table id="general-table" className="table table-vcenter table-striped table-condensed table-bordered"> 
+			                        <thead>
+                                      {tableHead}
+                                     </thead> 
+                                     <tbody>
+                                      {tableBody}                     
+                                 </tbody>
+			 
+			 
+			 </table>
+						 </div>
+                          
                     </div>
                   )
     }       
     
 }
+export class Order_header extends Extends
+{
+	 constructor(props) 
+     {  
+        super(props);
+        this.state.info=this.props.info
+         
+     } 
+	 render()
+	 {
+		 return(<div>
+		    <div className="row">
+			    <div className='col-xs-12'>
+				{"Замовлення № "+ this.state.info.ID + "від" + this.state.info.DATE_INSERT}
+				</div>
+			</div>
+		     
+		     <div className="row">
+			     <div className='col-xs-6'>
+				 {"Сума замовлення"}
+				 </div>
+				 <div className='col-xs-6'>
+				 {this.state.info.PRICE +" "+ this.state.info.CURRENCY}
+				 </div>
+			 </div>
+			 <div className="row">
+			    <div className='col-xs-6'>
+				{"Регіон"}
+			    </div>
+			    <div className='col-xs-6'>
+				{this.state.info.REGIONCODE}
+			    </div>
+			 </div>
+			 
+			 <div className="row">
+			    <div className='col-xs-6'>
+				{"Спосіб доставки"}
+			    </div>
+			    <div className='col-xs-6'>
+				{this.state.info.deliveyType}
+			    </div>
+			 </div>
+			 
+			 <div className="row">
+			 
+			 </div>
+		 </div>)
+		 
+		 
+		 
+	 }
+	
+}
+
+
+
+
 export class Common_td extends Extends
 {
     
@@ -105,3 +314,505 @@ export class Common_td extends Extends
      }
     
 }
+
+export class Status_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+		this.id=0;
+		this.state.updateFromOtherTD=false;
+		this.state.otherTd=null;
+		this.imagePath='/app/img/order_list/';
+		this.style={"width":"20px","height":"20px"};
+		
+        this.bClasses=window.configObject["Status_td"].bClasses;
+        this.iClasses={"2":"gi gi-remove_2"};
+        this.statusNames={"2":"Отказ"};
+		
+		this.touchstart=this.touchstart.bind(this);
+         
+     } 
+	 touchstart()
+	 {
+		 alert("www");
+	 }
+	 getRegTd()
+	 {
+		 return regTD;
+	 }
+	 getRegTdStatus()
+	 {
+		 return regTDStatus;
+	 }
+	 defineStatus()
+	 {
+		 
+		 var state=this.state.proto.ITEMSTATUS.fValue;
+		 var state2=this.state.proto.ITEMSTATUS.fValue
+		 if (state=="") return this.getStatusInWork();
+		 state=Number(state);
+		 switch(state)
+		 {
+			 case 0:
+			   return this.getStatusInWork();
+			 case 2:
+			  return this.getStatusDenided();
+			 case 3:
+			   return this.getStatusInStock();
+			 case 4:
+			   return this.getStatusShipped();
+			 case 5:
+			   return this.getStatusOnTheWay();
+			 default : 
+			   return this.getNullStatus();
+		 }
+	 }
+	 getNullStatus()
+	 {
+		 return (<a href='####'>
+		 {"-"}
+		 </a>)
+	 }	 
+	 getStatusInWork()
+	 {   
+	     
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"v_rabote.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusDelayed()
+	 {//otlozhen
+	     
+		 
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"otlozhen.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusPayed()
+	 {
+		 this.updateActionTd("getNullAction");
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"vykuplen.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusDenided()
+	 {
+		 /*try{
+		 var actionTd=this.getRegTd()[this.id];
+	     var dataForAction=actionTd.getNullAction();
+		 actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
+		 }catch(e)
+		 {}*/
+		 this.updateActionTd("getNullAction");
+		 return (<a href='####' onTouchStart={this.touchstart}>
+		  <img title='denided' src={this.imagePath+"otkaz.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusInStock()
+	 {
+		 this.updateActionTd("getNullAction");
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"sklad.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusShipped()
+	 {
+		 this.updateActionTd("getNullAction");
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"otgruzhen.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusOnTheWay()
+	 {
+		 this.updateActionTd("getActionWareHouse",'');
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"method_sea.png"} style={this.style}/>
+		 </a>)
+	 }
+	 getStatusUserDenyApproved()
+	 {
+		 return (<a href='####'>
+		  <img title='' src={this.imagePath+"user_deny.png"} style={this.style}/>
+		 </a>)
+	 }
+	 updateActionTd(funcName,value)
+	 {   
+		 try{
+		    var actionTd=this.getRegTd()[this.id];
+	        var dataForAction=actionTd[funcName](value);
+		   actionTd.setState({updateFromOtherTD:true,otherTd:dataForAction})
+		   }catch(e)
+		 {
+			 
+		 }
+	 }
+	 
+	 ////////////////////////////////////////////////////
+     render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
+     {
+       /*return(
+                 
+                     <td><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                                       
+                   
+         
+             )*/   
+			var state= null;
+
+			//state=this.defineStatus();
+			  
+         if ("updateFromOtherTD" in this.state)
+		{
+			if (this.state.updateFromOtherTD)
+			{
+				 state=this.state.otherTd;
+			}else
+			{
+				 state=this.defineStatus();
+	            
+			}
+		}else
+		{
+			state=this.defineStatus();
+		}      
+			
+			/*return  (
+			          <td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{state}</td>
+			        )*/
+			return (
+			          <ThemeContext.Consumer>
+					  {
+						  function(id)
+						  {
+							  this.id=id;
+							  this.getRegTdStatus()[id]=this;
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{state}</td>)
+						  }.bind(this)
+					  }
+					  
+					  </ThemeContext.Consumer>
+			
+			       )
+			 
+         
+         
+     }
+    
+}  
+export class Action_td extends Extends
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+		this.state.updateFromOtherTD=false;
+		this.state.otherTd=null;
+        this.bClasses=window.configObject["Action_td"].bClasses
+        this.style={"width":"20px","height":"20px"};
+       // this.bClasses={"2":"label label-primary" };
+        this.iClasses={"2":"gi gi-remove_2"};
+        this.statusNames={
+            "0":"В работе",
+            "2":"Отказ",
+            "5": "В пути",
+        };
+		this.imagePath='/app/img/order_list/';
+		
+		this.itemStatusChangeQuery=this.itemStatusChangeQuery.bind(this)
+         
+     } 
+	 itemStatusChangeQuery(e)
+	 {
+		 // /ws/ItemStatusChangeQuery.php
+		 var basketId=this.state.proto.ID.fValue;
+		 var data ="BASKET_ID="+basketId+"&STATUS_CODE=2";
+		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/ItemStatusChangeQuery.php",data);
+		 
+		 var updateIcon=function(responseText)
+		    {
+			  try
+			  {
+				  var answer= Number(responseText);
+				  if (!isNaN(answer) && answer>0)
+				  {
+					 var inWait= this.getActionQueryStatusChangeInWait();
+					 this.setState({updateFromOtherTD:true,otherTd:inWait})
+				  }else{
+					  this.showInforMassage("ERROR","Операция не прошла");
+				  }
+			  }catch(e)
+			  {
+				  this.showInforMassage("ERROR","Операция не прошла");
+			  }
+				
+			 
+			 
+		    }.bind(this)
+		    
+		 Prom.then(updateIcon)
+		  
+		  
+		 
+		 
+	 }
+	 getRegTd()
+	 {
+		 return regTD;
+	 }
+	 getRegTdStatus()
+	 {
+		 return regTDStatus;
+	 }
+	 defineAction()
+	 {
+		    var itemStatusChangeQuery
+		   try
+		   {
+			    itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
+		   }catch(e)
+		   {
+			   try
+			   {
+				   itemStatusChangeQuery=this.state.proto.ItemStatusChangeQuery.fValue;
+			   }catch(e)
+			   {
+				   itemStatusChangeQuery="";
+			   }
+			    
+		   }
+		    //var itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
+			if (itemStatusChangeQuery=="") return this.getActionCanQueryStatusChange();
+			changeQueryArray=itemStatusChangeQuery.split(/#/);
+			if (changeQueryArray.length!=2) return this.getActionCanQueryStatusChange();
+			var statusToChange=changeQueryArray[0];
+			var answerStatus=changeQueryArray[1];
+			if (answerStatus=="?") return this.getActionQueryStatusChangeInWait();
+			else if(answerStatus=="X") return this.getActionQueryStatusChangeDined();
+			else if (statusToChange==answerStatus) return this.getActionQueryStatusChangeApproved();
+			else return this.getNullAction();
+			
+			
+		 
+		 
+	 }
+	 getNullAction()
+	 {
+		 return (<a href='####'>-</a>);
+	 }
+	 getActionCanQueryStatusChange()
+	 {
+		 return ( <a href='####'  onClick={this.itemStatusChangeQuery}>
+		   <img style={this.style} title='' src={this.imagePath+"user_button_cancel.png"} />
+		 </a>)
+	 }
+	 
+	 getActionQueryStatusChangeInWait()
+	 {
+		 return ( <a href='####'>
+		   <img  style={this.style} title='' src={this.imagePath+"user_deny_wait.png"} />
+		 </a>)
+	 }
+	 getActionQueryStatusChangeDined()
+	 {
+		 return ( <a href='####'>
+		   <img style={this.style} title='' src={this.imagePath+"v_rabote.png"} />
+		 </a>)
+	 }
+	  getActionQueryStatusChangeApproved()
+	  {
+		  this.updateStatus("getStatusUserDenyApproved");
+		 return ( <a href='####'>
+		   <img style={this.style} title='' src={this.imagePath+"user_deny.png"} />
+		 </a>)
+	  }
+      getActionWareHouse()
+	  {
+		  return ( <a href='####'>
+		   <img style={this.style} title='' src={this.imagePath+"date_come.png"} />
+		 </a>)
+	  }
+	  updateStatus(funcName,value)
+	  {
+		  try{
+		    var statusTd=this.getRegTdStatus()[this.id];
+	        var dataForStatus=statusTd[funcName](value);
+		   statusTd.setState({updateFromOtherTD:true,otherTd:dataForStatus})
+		   }catch(e)
+		 {
+			 
+		 }
+		  
+	  }
+	 /////////////////////////////////////////////////////////
+     render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
+     {
+		var action= null;  
+        if ("updateFromOtherTD" in this.state)
+		{
+			if (this.state.updateFromOtherTD)
+			{
+				 action=this.state.otherTd;
+			}else
+			{
+				 action=this.defineAction();
+	            
+			}
+		}else
+		{
+			action=this.defineAction();
+		}      
+	         /*return (
+		         <td className={this.state.proto.action.className}>{action}</td>		  
+		         )*/
+				 
+				 return (
+			          <ThemeContext.Consumer>
+					  {
+						  function(id)
+						  {   this.id=id;
+							  this.getRegTd()[id]=this;
+							  //return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)							  
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
+						  }.bind(this)
+					  }
+					  
+					  </ThemeContext.Consumer>
+			
+			       )
+		
+	   /*return(
+                
+               <td className={this.state.proto.action.className}><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                   
+         
+             )*/   
+         
+         
+     }
+    
+}              
+
+export class Price_td extends Extends
+{
+	 constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+       return(
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
+				   {this.state.proto.PRICE.fValue}<br/>
+				   {"x "}<strong><span class="badge">{this.state.proto.QUANTITY.fValue}</span></strong><br/>
+				   {"= "}{}<br/>
+					   {this.state.proto.CURRENCY.fValue}
+				   
+				   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+	
+}
+
+export class Brandname_td extends Extends
+ {
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+       
+         
+       return(
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
+                   {this.state.proto.Brand.fValue}<br/>
+                   {this.state.proto.ItemCode.fValue}<br/>
+				   {this.state.proto.NAME.fValue}<br/>
+                   
+                   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+    
+}
+
+export class Common_th extends Extends   
+ {
+      constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     renderCaption()
+     {
+         if (!this.state.caption)
+         {
+           return "";  
+         }
+         
+         else
+         {
+          return this.state.caption.split(/\//);
+             
+         }
+         
+         
+     }
+     render()
+     {
+         var caption=this.renderCaption();
+       if (caption instanceof  Array )
+       {
+           const a =(  <th className="text-center">
+                          {
+                              caption.map(function(item){
+                              
+                              return (<span><span>{item}</span> <br/>
+                                         </span>
+                              )
+                              
+                                     
+                              
+                          }) 
+                          }
+                       </th> 
+           
+                    )
+           return a;  
+       } else
+       {
+           const a =(<th className="text-center">{this.state.caption}</th>    )  
+           return a;  
+       } 
+      
+                   
+                  
+        
+        
+         
+             
+         
+         
+     }
+     
+ }
+ 

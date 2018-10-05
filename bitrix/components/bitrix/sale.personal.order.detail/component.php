@@ -280,7 +280,7 @@ else
     $this->IncludeComponentTemplate();   
     
    } */
-   $arResult["BASKET"] = Array();
+  // $arResult["BASKET"] = Array();
     $BASKET=Array();
     //var_dump($rateCurrency);
     while ($arBasket = $dbBasket->Fetch())
@@ -316,16 +316,22 @@ else
             $arBasketTmp["PROPS"][] = $arBasketProps;
         }  */
         $arBasketTmp["PROPS"]= GetBasketItemProperties( $arBasketTmp["ID"]);
-        $arBasketTmp["ORDER"]= $arResult;
+       /* $arBasketTmp["ORDER"]= $arResult;
         $arBasketTmp["ORDER_ID"]= $arResult["ID"];
         $arBasketTmp["ORDER_STATUS_ID"]=$arResult["STATUS"]["ID"];
-        $arBasketTmp["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"];
+        $arBasketTmp["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"]; */
        // $arResult["BASKET"][] = $arBasketTmp;
         $BASKET[] = $arBasketTmp;
     }
    
+   $OrderDetailed["ORDER"]= $arResult;
+   $OrderDetailed["ORDER"]["RIGIONCODE"]=GetRegionCodeForOrder($arResult["ID"]);
+ //  $OrderDetailed["ORDER_ID"]= $arResult["ID"];
+//   $OrderDetailed["ORDER_STATUS_ID"]=$arResult["STATUS"]["ID"];  
+ //  $OrderDetailed["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"];
+   $OrderDetailed["BASKET"]= $BASKET;  
+     
    
-   
-  # var_dump($BASKET);
-  echo (json_encode($BASKET ,JSON_UNESCAPED_UNICODE)); 
+ // var_dump($OrderDetailed);
+ echo (json_encode($OrderDetailed ,JSON_UNESCAPED_UNICODE)); 
 ?>

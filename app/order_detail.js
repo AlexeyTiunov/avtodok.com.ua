@@ -98,8 +98,8 @@ function getMapObjectItems()
    QuantityChangeQuery:{functions:{},params:[]},  
    WAREHOUSEDATE:{functions:{},params:[]},  
    DeliveryMethodToUA:{functions:{},params:[]},  
-   action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Действие" ," ", <Action_td />,],addNew:true},
-   state:{functions:{defineColumnName,defineTd},params:["Состояние",<Status_td />,],addNew:true},
+   action:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:["Действие" ," ", <Action_td />,[<Common_th/>,"Дія"]],addNew:true},
+   state:{functions:{defineColumnName,defineTd,defineTh},params:["Состояние",<Status_td />,[<Common_th/>,"Статус"]],addNew:true},
    }
    
    
@@ -107,7 +107,7 @@ function getMapObjectItems()
    return mapObject; 
 	
 }
-
+const ThemeContext = React.createContext("value"); 
 var regTD={};
 var regTDStatus={};
 
@@ -150,7 +150,7 @@ export class Order_detail extends Extends
 		}
 		if (this.state.mapArray.length!=0)
 		{
-			this.initOrderList();	    
+			
 		    this.deActivateProgressBar();
 		}
         
@@ -215,8 +215,9 @@ export class Order_detail extends Extends
 				   return (<div className="block"> </div>); 
 			 }
 		  
-            return (<div className="block full">
-                         <div className="block-title" style={{"backgroundColor":""}}>
+            return ( <div className="block">
+			          <div className="block full">
+                         <div className="block-title" style={{"backgroundColor":"white"}}>
 						      <Order_header  info={this.state.orderHeaderInfo}/>
 								 <table id="general-table" className="table table-vcenter table-striped table-condensed table-bordered"> 
 			                        <thead>
@@ -224,13 +225,14 @@ export class Order_detail extends Extends
                                      </thead> 
                                      <tbody>
                                       {tableBody}                     
-                                 </tbody>
+                                     </tbody>
 			 
 			 
-			 </table>
+			                    </table>
 						 </div>
                           
-                    </div>
+                     </div>
+				  </div>
                   )
     }       
     
@@ -247,34 +249,34 @@ export class Order_header extends Extends
 	 {
 		 return(<div>
 		    <div className="row">
-			    <div className='col-xs-12'>
-				{"Замовлення № "+ this.state.info.ID + "від" + this.state.info.DATE_INSERT}
+			    <div className='col-xs-12 text-center'>
+				<h2>{"Замовлення № "+ this.state.info.ID + " від " + this.state.info.DATE_INSERT}</h2>
 				</div>
 			</div>
 		     
 		     <div className="row">
-			     <div className='col-xs-6'>
-				 {"Сума замовлення"}
+			     <div className='col-xs-6 text-center'>
+				<p className="form-control-label"><h5><strong>{"Сума замовлення"}</strong></h5></p>
 				 </div>
-				 <div className='col-xs-6'>
-				 {this.state.info.PRICE +" "+ this.state.info.CURRENCY}
+				 <div className='col-xs-6 '>
+				  <p className="form-control-label"><h5>{this.state.info.PRICE +" "+ this.state.info.CURRENCY}</h5></p>
 				 </div>
 			 </div>
 			 <div className="row">
-			    <div className='col-xs-6'>
-				{"Регіон"}
+			    <div className='col-xs-6 text-center'>
+				<p className="form-control-label"><h5><strong>{"Регіон"}</strong></h5></p>
 			    </div>
-			    <div className='col-xs-6'>
-				{this.state.info.REGIONCODE}
+			    <div className='col-xs-6 '>
+				 <p className="form-control-label"><h3>{this.state.info.REGIONCODE}</h3></p>
 			    </div>
 			 </div>
 			 
 			 <div className="row">
-			    <div className='col-xs-6'>
-				{"Спосіб доставки"}
+			    <div className='col-xs-6 text-center'>
+				<p className="form-control-label"><h5><strong>{"Спосіб доставки"}</strong></h5></p>
 			    </div>
 			    <div className='col-xs-6'>
-				{this.state.info.deliveyType}
+				 <p className="form-control-label"><h5>{this.state.info.ALLOW_DELIVERY}</h5></p>
 			    </div>
 			 </div>
 			 
@@ -347,11 +349,22 @@ export class Status_td extends Extends
 	 {
 		 return regTDStatus;
 	 }
+	 getfValue(valueName)
+	 {
+		 try
+		 {
+			 return this.state.proto[valueName].fValue;
+		 }catch(e)
+		 {
+			 return "";
+		 }
+	 }
 	 defineStatus()
 	 {
 		 
-		 var state=this.state.proto.ITEMSTATUS.fValue;
-		 var state2=this.state.proto.ITEMSTATUS.fValue
+		 //var state=this.state.proto.ItemStatus.fValue;
+		 //var state2=this.state.proto.ItemStatus2.fValue
+		 var state=this.getfValue("ItemStatus");
 		 if (state=="") return this.getStatusInWork();
 		 state=Number(state);
 		 switch(state)
@@ -489,7 +502,7 @@ export class Status_td extends Extends
 						  {
 							  this.id=id;
 							  this.getRegTdStatus()[id]=this;
-							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{state}</td>)
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ItemStatus.fValue)}>{state}</td>)
 						  }.bind(this)
 					  }
 					  
@@ -567,24 +580,21 @@ export class Action_td extends Extends
 	 {
 		 return regTDStatus;
 	 }
+	 getfValue(valueName)
+	 {
+		 try
+		 {
+			 return this.state.proto[valueName].fValue;
+		 }catch(e)
+		 {
+			 return "";
+		 }
+	 }
 	 defineAction()
 	 {
-		    var itemStatusChangeQuery
-		   try
-		   {
-			    itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
-		   }catch(e)
-		   {
-			   try
-			   {
-				   itemStatusChangeQuery=this.state.proto.ItemStatusChangeQuery.fValue;
-			   }catch(e)
-			   {
-				   itemStatusChangeQuery="";
-			   }
-			    
-		   }
-		    //var itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
+		    var itemStatusChangeQuery		   
+		    //var itemStatusChangeQuery=this.state.proto.ItemStatusChangeQuery.fValue;
+			var itemStatusChangeQuery=this.getfValue("ItemStatusChangeQuery");
 			if (itemStatusChangeQuery=="") return this.getActionCanQueryStatusChange();
 			changeQueryArray=itemStatusChangeQuery.split(/#/);
 			if (changeQueryArray.length!=2) return this.getActionCanQueryStatusChange();
@@ -676,7 +686,7 @@ export class Action_td extends Extends
 						  {   this.id=id;
 							  this.getRegTd()[id]=this;
 							  //return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)							  
-							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
+							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ItemStatus.fValue)}>{action}</td>)
 						  }.bind(this)
 					  }
 					  

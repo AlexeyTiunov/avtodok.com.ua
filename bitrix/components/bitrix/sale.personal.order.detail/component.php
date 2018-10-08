@@ -325,7 +325,7 @@ else
     }
    
    $OrderDetailed["ORDER"]= $arResult;
-   $OrderDetailed["ORDER"]["RIGIONCODE"]=GetRegionCodeForOrder($arResult["ID"]);
+   $OrderDetailed["ORDER"]["REGIONCODE"]=GetRegionCodeForOrder($arResult["ID"]);
  //  $OrderDetailed["ORDER_ID"]= $arResult["ID"];
 //   $OrderDetailed["ORDER_STATUS_ID"]=$arResult["STATUS"]["ID"];  
  //  $OrderDetailed["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"];

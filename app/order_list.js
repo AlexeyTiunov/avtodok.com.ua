@@ -179,9 +179,9 @@ export class Order_list extends Extends
         
         return (  
 		          <div className="block full">
-                     <div className="block-title">
-                       <div className="table-responsive">
-                           <table id="example-datatable" className="table table-vcenter table-condensed table-bordered">
+                     <div className="block-title" style={{"backgroundColor":"white"}}>
+                       <div className="table-responsive ">
+                           <table id="example-datatable" className="table table-vcenter table-condensed table-bordered table-striped">
                                 {tableHead}                   
                                    <tbody>
                                     {tableBody}                                   

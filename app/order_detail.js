@@ -226,8 +226,6 @@ export class Order_detail extends Extends
                                      <tbody>
                                       {tableBody}                     
                                      </tbody>
-			 
-			 
 			                    </table>
 						 </div>
                           

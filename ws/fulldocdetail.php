@@ -3,106 +3,7 @@
    require($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');
    $APPLICATION->SetTitle("Список документов");
     global $USER ;
-    
-function GetUserID_1CByID( $ID )
-{
-
-  global $DB;
-  $sql = "SELECT ID_1C FROM b_user WHERE ID='".$ID."'";
-
-  $res = $DB->Query( $sql );
-
-  if( $arRes = $res->Fetch() )
-    return $arRes["ID_1C"];
-  else
-    return false;
-}            
-
- $ID1C =GetUserID_1CByID($USER->GetID()  );    
-    
-    
-   if ($_GET['auth']=='no') 
-   {
-        #require($_SERVER["DOCUMENT_ROOT"].'/personal/profile/index.php') ;       
-        # echo 'no' ;    
-   }
-   if (!$USER->IsAuthorized())
-   {  
-       die();   
-   }
-   
-   
-   
- # $_GET['ItemCode']="0446660120" ;
- #$_GET["filter_date_from"]='01.01.2012';
-   if( isset($_GET['ItemCode']) ) 
-   {   
-              if( ! isset( $_GET["filter_date_from"] )   )
-              {
-                        //  сегодня - 1 месяц
-                #$mkDateFrom = date( "d.m.Y" ,mktime(0, 0, 0, date("m")-1, date("d"),   date("Y")) );
-                $mkDateFrom = mktime(0, 0, 0, date("m")-1, date("d"),   date("Y"));
-              }
-              else
-              {
-                $dateFrom = $_GET["filter_date_from"];
-                $arDateFrom = explode(".", $dateFrom);
-                $mkDateFrom = mktime(0, 0, 0, $arDateFrom[1], $arDateFrom[0], $arDateFrom[2]);
-                $TimeCheckDate= mktime(0,0,0,1,1,2012);
-                if($TimeCheckDate>$mkDateFrom)
-                {
-                     $dateFrom=  date( "d.m.Y" ,mktime(0,0,0,1,1,2012)); 
-                     $arDateFrom = explode(".", $dateFrom);
-                     $mkDateFrom = mktime(0, 0, 0, $arDateFrom[1], $arDateFrom[0], $arDateFrom[2]);
-                } 
-                
-              }  
-              
-              if( ! isset( $_GET["filter_date_to"] )   )
-              {
-                        //  сегодня
-                $dateTo = date( "d.m.Y" );
-              }
-            else
-              {
-                $dateTo = $_GET["filter_date_to"];
-              }
-
-                
-       
-       
-       
-    CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');
-   # echo CSaleBasket::GetBasketUserID(); 
-    $ItemCode= preg_replace("/[^A-Za-z0-9]*/i", "",  $_GET['ItemCode']); 
-    
-   # $BusketPosition=CSaleBasket::GetList(
-      #               array(
-      #          "NAME" => "ASC",
-      #          "ID" => "ASC"
-      #          )
-        
-      #  );
-    #  while ($BusketPositionResult=$BusketPosition->Fetch())
-    #  {
-               
-   $BusketProp=CSaleBasket::GetPropsList(
-            
-     array(
-       "SORT" => "ASC",
-        "NAME" => "ASC"
-         ),
-     array(
-           "VALUE"=>$ItemCode
-           )
-       );
-            
-    while( $BusketPropResult= $BusketProp->Fetch())
-     {
-           $BusketIDArray[]=$BusketPropResult['BASKET_ID'];                
-                     
-     } 
-     //-------------------------------------------------------------
+    //-------------------------------------------------------------
        function OrderProperty ($BasketId)
        {
             global $USER ;
@@ -145,8 +46,14 @@ function GetUserID_1CByID( $ID )
               elseif ($OrderProp['ItemStatus']=='5')  $Region['ItemStatus']='В Пути';
               else $Region['ItemStatus']='нео';
               
-             if ($Region['RegionCode']<=4 || ($Region['RegionCode']>900 && $Region['RegionCode']<=1000) 
-              ) $Region['Name']=$Region['RegionNumber'];
+             if ($Region['RegionCode']<=4 || ($Region['RegionCode']>900 && $Region['RegionCode']<=1000))
+             {
+                 if ($Region['RegionNumber']=="")
+                 $Region['Name']="";
+                 else 
+                 $Region['Name']=$Region['RegionNumber']; 
+             } 
+ 
               else $Region['Name']='УКРАИНА';
             
               #print_r($Region);
@@ -159,6 +66,116 @@ function GetUserID_1CByID( $ID )
           
           
     //--------------------------------------------------------------      
+    
+function GetUserID_1CByID( $ID )
+{
+
+  global $DB;
+  $sql = "SELECT ID_1C FROM b_user WHERE ID='".$ID."'";
+
+  $res = $DB->Query( $sql );
+
+  if( $arRes = $res->Fetch() )
+    return $arRes["ID_1C"];
+  else
+    return false;
+}            
+
+ $ID1C =GetUserID_1CByID($USER->GetID()  );    
+    
+    
+   if ($_GET['auth']=='no') 
+   {
+        #require($_SERVER["DOCUMENT_ROOT"].'/personal/profile/index.php') ;       
+        # echo 'no' ;    
+   }
+   if (!$USER->IsAuthorized())
+   {  
+       die();   
+   }
+   
+   
+   
+ # $_GET['ItemCode']="0446660120" ;
+ #$_GET["filter_date_from"]='01.01.2012';
+   if( isset($_REQUEST['ItemCode']) ) 
+   {   
+      
+              if( ! isset( $_REQUEST["filter_date_from"] )   )
+              {
+                        //  сегодня - 1 месяц
+                #$mkDateFrom = date( "d.m.Y" ,mktime(0, 0, 0, date("m")-1, date("d"),   date("Y")) );
+                $mkDateFrom = mktime(0, 0, 0, date("m"), date("d"),   date("Y")-1);
+                
+                $dateLineBegin=date("Y-m-d h:i:s",$mkDateFrom);
+              }
+              else
+              {
+                $dateFrom = $_GET["filter_date_from"];
+                $arDateFrom = explode(".", $dateFrom);
+                $mkDateFrom = mktime(0, 0, 0, $arDateFrom[1], $arDateFrom[0], $arDateFrom[2]);
+                $dateLineBegin=date("Y-m-d h:i:s",$mkDateFrom);  
+                $TimeCheckDate= mktime(0,0,0,1,1,2012);
+                if($TimeCheckDate>$mkDateFrom)
+                {
+                     $dateFrom=  date( "d.m.Y" ,mktime(0,0,0,1,1,2012)); 
+                     $arDateFrom = explode(".", $dateFrom);
+                     $mkDateFrom = mktime(0, 0, 0, $arDateFrom[1], $arDateFrom[0], $arDateFrom[2]);
+                     $dateLineBegin=date("Y-m-d h:i:s",$mkDateFrom);
+                } 
+                
+               // var_dump($dateLineBegin);
+                
+              }  
+              
+              if( ! isset( $_REQUEST["filter_date_to"] )   )
+              {
+                        //  сегодня
+                $dateTo = date( "d.m.Y" );
+              }
+            else
+              {
+                $dateTo = $_REQUEST["filter_date_to"];
+              }
+
+                
+       
+       
+       
+    CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');
+   # echo CSaleBasket::GetBasketUserID(); 
+    $ItemCode= preg_replace("/[^A-Za-z0-9]*/i", "",  $_REQUEST['ItemCode']); 
+    
+   # $BusketPosition=CSaleBasket::GetList(
+      #               array(
+      #          "NAME" => "ASC",
+      #          "ID" => "ASC"
+      #          )
+        
+      #  );
+    #  while ($BusketPositionResult=$BusketPosition->Fetch())
+    #  {
+  if ($_REQUEST['GETORDERS'])
+  {
+      
+               
+   $BusketProp=CSaleBasket::GetPropsList(
+            
+     array(
+       "SORT" => "ASC",
+        "NAME" => "ASC"
+         ),
+     array(
+           "VALUE"=>$ItemCode,           
+           )
+       );
+            
+    while( $BusketPropResult= $BusketProp->Fetch())
+     {
+           $BusketIDArray[]=$BusketPropResult['BASKET_ID'];                
+                     
+     } 
+     
      # }
      $OrderCol=0;
   foreach($BusketIDArray as $IDofBusket) 
@@ -167,11 +184,18 @@ function GetUserID_1CByID( $ID )
        $BusketPosition=CSaleBasket::GetList(
                  array(
             "NAME" => "ASC",
-            "ID" => "ASC"
+            "ID" => "ASC",
+           
             ),
+             
         array(
-            "ID"=>$IDofBusket
-            )
+            "ID"=>$IDofBusket,
+            ">=DATE_INSERT"=>$dateLineBegin, 
+              
+            ),
+            false,
+              false,
+               array()
     );
           $OrderProps= OrderProperty ($IDofBusket); 
          # print_r($OrderProps);
@@ -200,15 +224,20 @@ function GetUserID_1CByID( $ID )
                           $OrderToShow[$Order['ID']]['CURRENCY']=$BusketPositionResult['CURRENCY'];
                           //$OrderIdArray[]= $BusketPositionResult['ORDER_ID'] ;
                           //$OrderArray[]=$Order;
-                          $OrderArray[]=$OrderToShow;
+                          $OrderArray["ORDERS"][]=$OrderToShow[$Order['ID']];
                           $OrderCol++; 
-                  }
+                 }
                  }
               #$OrderCol++;   
           }
       
   }
-  echo (json_encode($OrderArray ,JSON_UNESCAPED_UNICODE));     
+     echo (json_encode($OrderArray ,JSON_UNESCAPED_UNICODE)); 
+  }elseif ($_REQUEST["GETSHIPINGS"])
+  {
+      
+  
+  
   # var_dump($mkDateFrom);      
    #print_r($OrderDate);
   # print_r($OrderToShow);
@@ -219,13 +248,13 @@ function GetUserID_1CByID( $ID )
  //---------------------------------------------------------    //    
     
     $arSelect=Array(
-           'ID','PROPERTY_ShippingID','PROPERTY_BCode','PROPERTY_ICode','PROPERTY_Quantity',
+           'ID','TIMESTAMP_X','PROPERTY_ShippingID','PROPERTY_BCode','PROPERTY_ICode','PROPERTY_Quantity',
            'PROPERTY_Summ','PROPERTY_Price','PROPERTY_Caption'
     );
     $arFilter = Array(
                     "IBLOCK_ID" =>26,
-                    "PROPERTY_ICode"=>$ItemCode
-    
+                    "PROPERTY_ICode"=>$ItemCode,
+                    ">=TIMESTAMP_X"=> $dateLineBegin
                     );
                     
                     
@@ -291,8 +320,13 @@ function GetUserID_1CByID( $ID )
                                $DocShipedToshow[$DocShiped['ID']]['DELIVER']=$DocShiped['PROPERTY_DELIVER_VALUE'];
                                $DocShipedToshow[$DocShiped['ID']]['DATE']=$DocShiped['PROPERTY_DATE_VALUE'];
                                $DocShipedToshow[$DocShiped['ID']]['PLACES']=$DocShiped['PROPERTY_NUMPLACE_VALUE'];
+                               
+                               $DocShipedToshowArr["SHIPINGDOCS"][]= $DocShipedToshow[$DocShiped['ID']];
                                #print_r($DocShipedToshow);
                      }
+                     
+                     $ShipedToShowArr["SHIPINGS"][]=$ShipedToShow[$ShipItem['ID']];
+                     
                       
                   }
                   elseif ($ShipItem['PROPERTY_DOCUMENTTYPE_VALUE']=='Возврат товаров от покупателя' && $ShipedDate>$mkDateFrom )
@@ -303,6 +337,8 @@ function GetUserID_1CByID( $ID )
                       $BackToShow[$ShipItem['ID']] ['QUANTITY']=$ShipedItemCodePosition['PROPERTY_QUANTITY_VALUE'];
                       $BackToShow[$ShipItem['ID']]['SUMM']=$ShipedItemCodePosition['PROPERTY_SUMM_VALUE'];
                       $BackToShow[$ShipItem['ID']]['CURRENCY']=$ShipItem['PROPERTY_CURRENCYCODE_VALUE'];
+                      
+                      $BackToShowArr["RETURNS"][]= $BackToShow[$ShipItem['ID']];
                       
                       #print_r($BackToShow);
                       
@@ -317,7 +353,18 @@ function GetUserID_1CByID( $ID )
               
              #var_dump($arFilter) ;
          }
-         exit();     
+         if  (count($ShipedToShowArr)>0)
+         echo (json_encode($ShipedToShowArr ,JSON_UNESCAPED_UNICODE));
+         if  (count($DocShipedToshowArr)>0) 
+         echo (json_encode($DocShipedToshowArr ,JSON_UNESCAPED_UNICODE));
+         if  (count($BackToShowArr)>0) 
+         echo (json_encode($BackToShowArr ,JSON_UNESCAPED_UNICODE));      
+   } else
+   {
+        exit();     
+   }       
+         
+   exit();          
          if ($ItemCode!='')  
          {   
         ?>

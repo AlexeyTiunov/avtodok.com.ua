@@ -105,8 +105,8 @@ function GetUserID_1CByID( $ID )
               {
                         //  сегодня - 1 месяц
                 #$mkDateFrom = date( "d.m.Y" ,mktime(0, 0, 0, date("m")-1, date("d"),   date("Y")) );
-                $mkDateFrom = mktime(0, 0, 0, date("m"), date("d"),   date("Y")-1);
-                
+               // $mkDateFrom = mktime(0, 0, 0, date("m"), date("d"),   date("Y")-1);
+                  $mkDateFrom= mktime(0,0,0,1,1,2012); 
                 $dateLineBegin=date("Y-m-d h:i:s",$mkDateFrom);
               }
               else
@@ -321,7 +321,7 @@ function GetUserID_1CByID( $ID )
                                $DocShipedToshow[$DocShiped['ID']]['DATE']=$DocShiped['PROPERTY_DATE_VALUE'];
                                $DocShipedToshow[$DocShiped['ID']]['PLACES']=$DocShiped['PROPERTY_NUMPLACE_VALUE'];
                                
-                               $DocShipedToshowArr["SHIPINGDOCS"][]= $DocShipedToshow[$DocShiped['ID']];
+                               $ShipedToShowArr["SHIPINGDOCS"][]= $DocShipedToshow[$DocShiped['ID']];
                                #print_r($DocShipedToshow);
                      }
                      
@@ -338,7 +338,7 @@ function GetUserID_1CByID( $ID )
                       $BackToShow[$ShipItem['ID']]['SUMM']=$ShipedItemCodePosition['PROPERTY_SUMM_VALUE'];
                       $BackToShow[$ShipItem['ID']]['CURRENCY']=$ShipItem['PROPERTY_CURRENCYCODE_VALUE'];
                       
-                      $BackToShowArr["RETURNS"][]= $BackToShow[$ShipItem['ID']];
+                      $ShipedToShowArr["RETURNS"][]= $BackToShow[$ShipItem['ID']];
                       
                       #print_r($BackToShow);
                       
@@ -353,12 +353,10 @@ function GetUserID_1CByID( $ID )
               
              #var_dump($arFilter) ;
          }
-         if  (count($ShipedToShowArr)>0)
+        
          echo (json_encode($ShipedToShowArr ,JSON_UNESCAPED_UNICODE));
-         if  (count($DocShipedToshowArr)>0) 
-         echo (json_encode($DocShipedToshowArr ,JSON_UNESCAPED_UNICODE));
-         if  (count($BackToShowArr)>0) 
-         echo (json_encode($BackToShowArr ,JSON_UNESCAPED_UNICODE));      
+        
+               
    } else
    {
         exit();     

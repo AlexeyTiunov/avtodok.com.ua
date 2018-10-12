@@ -442,7 +442,7 @@ function getMapObject()
                                        }) 
                     if (tableBodyAnalogs.length>0)
                     {
-                         analogs=(<table className="table table-vcenter"> 
+                         analogs=(<table className="table table-vcenter table-striped"> 
                                                <thead>
                                                 {tableHead}
                                                </thead> 
@@ -476,7 +476,7 @@ function getMapObject()
                      
                      <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
                      <Pagination quantity={this.state.dataQuantity}/>
-                          <table className="table table-vcenter"> 
+                          <table className="table table-vcenter table-striped"> 
                                <thead>
                                 {tableHead}
                                </thead> 
@@ -489,7 +489,7 @@ function getMapObject()
                          </table>
                         <Pagination quantity={this.state.dataQuantity}/> 
                      </div>
-                      <div className="table-responsive analogs">
+                      <div className="table-responsive analogs table-striped">
                              {analogs}
                       </div>
                    </div>

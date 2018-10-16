@@ -14,8 +14,8 @@ export var items = [
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
     inner:[  {name:"Замовлення", href:"/order_list", className:"gi gi-table sidebar-nav-icon" ,inner:null},
              {name:"Баланс", href:"/balance",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},
-             {name:"Історія позицій", href:"cabinet_cash.html",className:"gi gi-show_thumbnails_with_lines sidebar-nav-icon" ,inner:null},
-             {name:"Декларації", href:"cabinet_history.html",className:"gi gi-message_out sidebar-nav-icon" ,inner:null},
+             {name:"Історія позицій", href:"/history",className:"gi gi-show_thumbnails_with_lines sidebar-nav-icon" ,inner:null},
+             {name:"Декларації", href:"/shdocs",className:"gi gi-message_out sidebar-nav-icon" ,inner:null},
              {name:"Повернення", href:"cabinet_np.html",className:"gi gi-unshare sidebar-nav-icon" ,inner:null},             
              {name:"Готовий до видачі", href:"/shipments",className:"si si-dropbox sidebar-nav-icon" ,inner:null}, 
            ]

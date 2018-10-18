@@ -25,7 +25,11 @@ export class Calendar_set extends Extends
 		super.componentDidUpdate();
 		try
 		{
-			$("."+thisElement.classList[1]).datepicker({weekStart: 1,showOnFocus:false});
+			$("."+thisElement.classList[1]).datepicker({weekStart: 1,
+			showOnFocus:false,
+			beforeShow: function(){$('input').blur();},ignoreReadonly: true
+			}
+			);
 		}catch(e)
 		{
 			
@@ -37,13 +41,15 @@ export class Calendar_set extends Extends
 		var thisElement=ReactDOM.findDOMNode(this);
 		try
 		{
-			$("."+thisElement.classList[1]).datepicker({weekStart: 1,showOnFocus:false});
-			
+			$("."+thisElement.classList[1]).datepicker({weekStart: 1,
+			showOnFocus:false,
+			beforeShow: function(){$('input').blur();},ignoreReadonly: true
+			}
+			);
 		}catch(e)
 		{
 			
 		}
-		
 	}
 	render()
 	{
@@ -150,7 +156,7 @@ export var getInputCalendarComponent =function (id,name,placeholder)
 	render()
 	{
 		return (
-		          <input onClick={this.onclick} onFocus={this.onfocus} id={this.state.id} name={this.state.name} className="form-control text-center" placeholder={this.state.placeholder}/>
+		          <input onClick={this.onclick} onFocus={this.onfocus} id={this.state.id} name={this.state.name} className="form-control text-center" placeholder={this.state.placeholder} readonly={(window.isMobile==true)?"true":"false"}/>
 		 
 		        )
 	}

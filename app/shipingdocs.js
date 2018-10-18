@@ -14,7 +14,7 @@ var i=0;
 function getMapObjectShipingsDocs()
 {
    
-    dataConvert = new handleData(null,null); 
+   dataConvert = new handleData(null,null); 
    var formatNumber=dataConvert.formatNumber;
    var addSuffix=dataConvert.addSuffix;
    var defineColumnName=dataConvert.defineColumnName;
@@ -27,7 +27,7 @@ function getMapObjectShipingsDocs()
     
     
     var mapObject=
-    { 
+    {  ID:{functions:{},params:[]},
 	  NUMBER:{functions:{defineColumnName,defineTd,defineTh},params:["Номер Документу",<Shiping_td/>,[<Common_th/>,"Номер/Документу"]]},
 	  DELIVER:{functions:{defineColumnName,defineTd,defineTh},params:["Перевізник",<Common_td/>,[<Common_th/>,"Перевізник"]]},
 	  //REGION:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Регіон","",<Common_td />,[<Common_th/>,"Регіон"]]},
@@ -66,6 +66,7 @@ export class Shiping_docs extends Extends
 	componentDidMount()
 	{
 		super.componentDidMount();
+		 this.deActivateProgressBar();
 		
 	}
 	 
@@ -79,9 +80,12 @@ export class Shiping_docs extends Extends
 		ShipingDocsListComp.mapObject=getMapObjectShipingsDocs();		
 		return (<div onClick={this.onclick} className="block">
                  <Calendar_set />
-				
-                        <button onClick={this.getList} className="btn btn-danger" style={{"margin-left":"40%","margin-top":"1em"}}>Показати декларації</button>
-                  
+				  <div className="col-xs-2">
+				  </div>
+				   <div className="col-xs-8 text-center">
+                        <button onClick={this.getList} className="btn btn-danger" style={{"margin-left":"auto","margin-top":"1em"}}>Показати декларації</button>
+                   </div>
+				  
 				   <ShipingDocsListComp />
 		        </div>)	 
 	}
@@ -270,7 +274,7 @@ export class Shiping_td extends Extends
 		         
           
                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
-				  <Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link><br/>
+				  <Link to={"/shipingdoc_detail/"+this.state.proto.ID.fValue}>{this.state.proto[this.state.NAME].fValue}</Link><br/>
 					  {this.state.proto.DATE.fValue}
 					  {}
 				  
@@ -366,3 +370,5 @@ export class Common_th extends Extends
      }
     
 }
+
+

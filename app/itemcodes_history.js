@@ -27,6 +27,25 @@ function getHistoryItemComponent(urlGetParametr,subData,mapObject,documentName)
 		  if (this.getHistoryFunc==null || this.getHistoryFunc==undefined) return;
 		  this.getHistoryFunc.call(this,this.urlGetParametr,this.subData,this.mapObject);
 	 }
+	 initDataTable()
+	 {
+		 var thisElement=ReactDOM.findDOMNode(this);
+		 var thisElement=thisElement.lastElementChild;
+		 if (thisElement==null) return;
+		 App.datatables();
+		 if ( $.fn.dataTable.isDataTable( $(thisElement) ) ) 
+		{
+			return;
+		}
+		 $(thisElement).dataTable({
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ],
+                "iDisplayLength": 5,
+                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
+            });
+
+            /* Add placeholder attribute to the search input */
+            $(thisElement).attr('placeholder', 'Пошук');
+	 }
 	 //////////////////////////////////////
 	  shouldComponentUpdate(nextProps, nextState)
       {
@@ -39,6 +58,10 @@ function getHistoryItemComponent(urlGetParametr,subData,mapObject,documentName)
           
           return nextState.shouldComponentUpdate;
       }
+	  componentDidUpdate(prevProps, prevState)
+	  {
+		  this.initDataTable();
+	  }
 	 componentDidMount()
      {
         super.componentDidMount();
@@ -106,7 +129,7 @@ function getHistoryItemComponent(urlGetParametr,subData,mapObject,documentName)
 						    <th className=" text-center">{this.documentName}</th>
 						 </thead> 
 					</table>
-					</div>
+					</div><br/>
 		            <table className="table table-vcenter table-condensed table-bordered table-striped">
 					       <thead>
                                {tableHead}
@@ -182,7 +205,7 @@ function getMapObjectShipingsDocs()
     
     
     var mapObject=
-    { 
+    { ID:{functions:{},params:[]},
 	  NUMBER:{functions:{defineColumnName,defineTd,defineTh},params:["Номер Документу",<Shiping_td/>,[<Common_th/>,"Номер/Документу"]]},
 	  DELIVER:{functions:{defineColumnName,defineTd,defineTh},params:["Перевізник",<Common_td/>,[<Common_th/>,"Перевізник"]]},
 	  //REGION:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Регіон","",<Common_td />,[<Common_th/>,"Регіон"]]},
@@ -211,7 +234,9 @@ function getMapObjectShipings()
     
     var mapObject=
     { 
+	
 	  NUMBER:{functions:{defineColumnName,defineTd,defineTh},params:["Номер Документу",<Shiping_td/>,[<Common_th/>,"Номер/Документу"]]},
+	  ID:{functions:{},params:[]},
 	  STATUS:{functions:{},params:[]},
 	  REGION:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Регіон","",<Common_td />,[<Common_th/>,"Регіон"]]},
 	  DATE:{functions:{},params:[]},	  
@@ -276,10 +301,10 @@ export class History extends Extends
 		  return (
 		     
 			  <div className="block">
-			         <ComContext.Provider value={this}><History_header /></ComContext.Provider>
-			          <History_orders key={c++} itemCode={this.state.itemCode}/>
-					  <History_shiping key={c++} itemCode={this.state.itemCode}/>
-					  <History_shipingdocs key={c++} itemCode={this.state.itemCode}/>
+			         <ComContext.Provider value={this}><History_header /></ComContext.Provider><br/>
+			          <History_orders key={c++} itemCode={this.state.itemCode}/><br/>
+					  <History_shiping key={c++} itemCode={this.state.itemCode}/><br/>
+					  <History_shipingdocs key={c++} itemCode={this.state.itemCode}/><br/>
 					   <History_returns key={c++} itemCode={this.state.itemCode}/>
 					  
 			  </div>
@@ -617,7 +642,7 @@ export class Shiping_td extends Extends
 		         
           
                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
-				  <Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link><br/>
+				  <Link to={"/shiping_detail/"+this.state.proto.ID.fValue}>{this.state.proto[this.state.NAME].fValue}</Link><br/>
 					  {this.state.proto.DATE.fValue}
 					  {}
 				  

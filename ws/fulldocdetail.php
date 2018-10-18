@@ -294,7 +294,7 @@ function GetUserID_1CByID( $ID )
                   if ($ShipItem['PROPERTY_DOCUMENTTYPE_VALUE']=='Реализация товаров и услуг' && $ShipedDate>$mkDateFrom)
                   { 
                      
-                      
+                      $ShipedToShow[$ShipItem['ID']]["ID"]= $ShipItem['ID'];
                       $ShipedToShow[$ShipItem['ID']]['NUMBER']=$ShipItem['PROPERTY_CODE_VALUE'];
                       $ShipedToShow[$ShipItem['ID']]['STATUS']=$ShipItem['PROPERTY_STATUS_VALUE'];
                       $ShipedToShow[$ShipItem['ID']] ['DATE']=$ShipItem['PROPERTY_DOCUMENTDATE_VALUE'];
@@ -315,6 +315,7 @@ function GetUserID_1CByID( $ID )
                                  $DocShipedResult= CIBlockElement::GetList(Array(), $arFilter, false, Array(), $arSelect);
                                  $DocShiped=$DocShipedResult->Fetch();
                                
+                               $DocShipedToshow[$DocShiped['ID']]["ID"]=  $DocShiped['ID'];
                                $DocShipedToshow[$DocShiped['ID']]['NUMBER']=$DocShiped['PROPERTY_NUMBER_VALUE'];
                                $DocShipedToshow[$DocShiped['ID']]['NUMBERBASE']=$DocShiped['PROPERTY_NUM1C_VALUE'];
                                $DocShipedToshow[$DocShiped['ID']]['DELIVER']=$DocShiped['PROPERTY_DELIVER_VALUE'];
@@ -331,6 +332,7 @@ function GetUserID_1CByID( $ID )
                   }
                   elseif ($ShipItem['PROPERTY_DOCUMENTTYPE_VALUE']=='Возврат товаров от покупателя' && $ShipedDate>$mkDateFrom )
                   {
+                       $BackToShow[$ShipItem['ID']]["ID"]= $ShipItem['ID'];
                       $BackToShow[$ShipItem['ID']]['NUMBER']=$ShipItem['PROPERTY_CODE_VALUE'];
                       $BackToShow[$ShipItem['ID']]['STATUS']=$ShipItem['PROPERTY_STATUS_VALUE'];
                       $BackToShow[$ShipItem['ID']] ['DATE']=$ShipItem['PROPERTY_DOCUMENTDATE_VALUE'];

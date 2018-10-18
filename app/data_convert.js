@@ -283,6 +283,14 @@ this.defineTh=function (TH,caption)
    var date = new Date(Date.parse(dat));  
    this.fValue=date.toLocaleDateString("ru");  
  } 
+ this.makeAlias=function(alias)
+ {
+	 Object.defineProperty(this,"alias",{value:alias,enumerable:true,writable:true});
+ }
+ this.makeTitle=function()
+ {
+	 Object.defineProperty(this,"title",{value:this.fValue,enumerable:true,writable:true});
+ }
     ////////////////////////////////////////////////////////////////// 
       
       if (jsonData!=undefined && jsonData!=null)

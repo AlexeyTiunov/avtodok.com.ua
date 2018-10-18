@@ -81,7 +81,7 @@ require($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.ph
       );
       $arSelect=Array('ID',"DATE_CREATE",'PROPERTY_Receiver','PROPERTY_NumPlace',
        'PROPERTY_Deliver','PROPERTY_Number','PROPERTY_Num1c','PROPERTY_Date');
-     $DocShipedResult= CIBlockElement::GetList(Array(), $arFilter, false, Array(), $arSelect);
+     $DocShipedResult= CIBlockElement::GetList(Array(), $arFilter, false, false, $arSelect);
      while ($DocShiped=$DocShipedResult->Fetch())
      {
          $DocShipedToshow[$DocShiped['ID']]['ID']=$DocShiped['ID'];

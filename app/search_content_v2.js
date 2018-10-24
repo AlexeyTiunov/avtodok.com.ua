@@ -5,6 +5,7 @@ import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
 import {Search_content_header} from './search_content_header.js'
+import {App} from './js/app.js';  
 
 function getMapObject()
 {
@@ -28,7 +29,7 @@ function getMapObject()
       //Info:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Info_td />,[<Common_th/>,"Инфо"]],addNew:true},
       Pic64Base:{functions:{},params:[]},  
       BrandCode:{functions:{},params:[]},     
-      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>,"Бренд/Код/Наименование"]]}, 
+      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>,"Бренд/Код/Наимено-/вание"]]}, 
       ItemCode:{functions:{},params:[]}, 
       Caption:{functions:{},params:[]}, 
       DeliveryDays:{functions:{formatNumber},params:[[".","0"]]},
@@ -149,7 +150,7 @@ function getMapObject()
       
   }
 
- export class Search_table_v2 extends Extends
+ export class Search_table_v2_old extends Extends
  {
      
     constructor(props) 
@@ -502,8 +503,354 @@ function getMapObject()
      
  }
 
+ export class Search_table_v2 extends Extends
+ {
+     
+    constructor(props) 
+     {  
+       
+         super(props);         
+         this.state.mapArray=[];
+         this.state.analogInfo=[];
+         this.state.mapArrayBrand=[];
+         this.state.numberOfrow=5;   
+         this.state.page=1;
+         this.state.dataQuantity=1;
+         this.state.numberOfrow=5;
+         this.state.page=1;
+         this.state.dataQuantity=1;
+         this.state.showAnalogs=false;
+       if (this.props.match)
+       {          
+         if ("params" in this.props.match)
+         {
+             if  (this.props.match.params.id!=null && this.props.match.params.id!=undefined)
+             {
+                   this.state.itemCode=this.props.match.params.id;
+             }
+         }
+       }  
+         
+         
+         
+     }
+     dataSort(data)
+     {   
+         if (data.length==1) return;
+         for (  var i=0;i<data.length;i++)
+         {
+             for ( var j=0;j<data.length-i-1;j++)
+             {
+                 if (Number(data[j].Price)>Number(data[j+1].Price))
+                 {
+                    helpMas=data[j];
+                    data[j]=data[j+1];
+                    data[j+1]=helpMas;
+                    
+                 }
+                 
+             } 
+             
+             
+         }
+         
+         
+         
+     }
+    async dataSortAsync(data)
+     {
+         if (data.length==1) return data;
+         for (  var i=0;i<data.length;i++)
+         {
+             for ( var j=0;j<data.length-i-1;j++)
+             {
+                 if (Number(data[j].Price.fValue)>Number(data[j+1].Price.fValue))
+                 {
+                    helpMas=data[j];
+                    data[j]=data[j+1];
+                    data[j+1]=helpMas;
+                    
+                 }
+                 
+             } 
+             
+             
+         }
+         
+        return data; 
+     }
+     getAnalogsAsync(itemCode,brandCode)
+     {  
+         if (itemCode== undefined || brandCode==undefined || itemCode==null || brandCode==null  )  return;
+         var data="ItemCode="+itemCode+"&BrandCode="+brandCode;
+            var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/searchItemsAnalogs.php",data);
+            
+      var getAnalogs= function (responseText)
+         { 
+           handleDT=new handleData(responseText,getMapObject());
+           for (var i=0;i<handleDT.mapArray.length;i++)
+           {
+             this.state.analogInfo.push(handleDT.mapArray[i]);  
+           }
+                                        
+         }
+        getAnalogs=getAnalogs.bind(this); 
+       return  Prom.then(function(responseText)
+         {  
+             getAnalogs.responseText=responseText; 
+            return getAnalogs;  
+         });
+         
+     }
+     getSearchData()
+     {
+         if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
+         var findMySelf=this.findMySelf(this.constructor.name);
+         var data="ItemCode="+this.state.itemCode+"";
+         if (this.state.brandCode==undefined || this.state.brandCode==null )
+         {
+            
+         } else
+         {
+             data+="&BrandCode="+this.state.brandCode; 
+             this.getAnalogsAsync(this.state.itemCode,this.state.brandCode).then(
+                function (getAnalogs)
+                {
+                  var responseText=getAnalogs.responseText;
+                  getAnalogs(responseText);
+                }
+             
+             )
+         }
+         
+         
+         var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/searchItems.php",data)
+        
+         Prom.then(function(responseText){
+             
+                     handleBR= new  handleData(responseText,undefined,"BRANDS");             
+                     handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
+                     findMySelf().dataSortAsync(handleDT.mapArray).then( function(mapArray){
+                         
+                         findMySelf().setState({ mapArray:mapArray,shouldComponentUpdate:true});
+                     })
+                     
+                     
+                     findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
+                     findMySelf().setCookie("PHPSESSID",findMySelf().state.PHPSESSID);
+                     
+                      
+                     
+                     
+         })
+         
+     }
+     
+     /////////////////////////////////////    && this.state.itemCode!=nextState.itemCode
+      shouldComponentUpdate(nextProps, nextState)
+      {
+        
+          if (!nextState.shouldComponentUpdate  )
+          {
+              this.state.itemCode=nextState.itemCode;
+              this.state.brandCode=nextState.brandCode; 
+              this.getSearchData();   
+          } 
+          
+          
+          return nextState.shouldComponentUpdate;
+      }
+     
+     componentDidUpdate(prevProps, prevState)
+     {
+           // here the main_component function (componentDidUpdate) is overrided
+           // so this.state.shouldComponentUpdate is stay unchanged;
+        // super.componentDidUpdate(prevProps, prevState); 
+       
+       
+         // debugger;
+        //this.state.tableBody=[];
+       // this.makeDataForRender(this.state.dataRecieved);
+       
+          
+     }
+     componentWillUpdate()
+     {  
+          
+     }
+     render()
+     { 
+	     var V2_table=getV2_table();
+		 V2_table.mapArray=this.state.mapArray;
+		 
+		 var V2_table_analogs=getV2_table();
+		 V2_table_analogs.mapArray=this.state.analogInfo;
+		 return (
+                   <div class="block">  
+                   <ComContext.Provider value={this}><Search_content_header/> </ComContext.Provider>
+                     <div className="table-responsive">
+                     
+                     <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
+                       <V2_table/>
+                     </div><br/>
+                      <div className="table-responsive analogs table-striped">
+					    <div className="col-xs-12"><p>{"Аналогі"}</p></div>
+                        <V2_table_analogs/>
+                      </div>
+                   </div>
+          
+           
+                 )
+        /* return (
+                   <div class="block">  
+                   <ComContext.Provider value={this}><Search_content_header/> </ComContext.Provider>
+                     <div className="table-responsive">
+                     
+                     <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
+                       <Search_table_v2_table  mapArray={this.state.mapArray} />
+                     </div>
+                      <div className="table-responsive analogs table-striped">
+                        <Search_table_v2_table  mapArray={this.state.analogInfo} />
+                      </div>
+                   </div>
+          
+           
+                 )*/
+         
+     }
+      
+     
+ }
+function getV2_table()
+{
+	
 
+  class Search_table_v2_table extends Extends
+ {
+	 
+	 constructor(props) 
+     {  
+       
+         super(props);         
+         this.state.mapArray=this.constructor.mapArray;
+	 }
+	  initDataTable()
+	 {
+		 var thisElement=ReactDOM.findDOMNode(this);
+		  var thisElement=thisElement.firstElementChild;
+		 if (thisElement==null) return;
+		 App.datatables();
+		 /*if ( $.fn.dataTable.isDataTable( "#"+thisElement.id ) ) 
+		 {
+			return;
+		 }*/
+		 
+		 $(thisElement).dataTable({
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 2 ] } ],
+                "iDisplayLength": 5,
+                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
+            });
 
+            /* Add placeholder attribute to the search input */
+            $(thisElement).attr('placeholder', 'Пошук');
+	 }
+
+	 /////////////////////////////////////////////
+	 componentDidUpdate()
+	 {
+		 if (this.state.mapArray.length>0)
+		 this.initDataTable();
+	 }
+	 componentDidMount()
+	 {
+		 if (this.state.mapArray.length>0)
+		 this.initDataTable();
+	 }
+	 render()
+	 {
+		 //this.state.mapArray=this.props.mapArray;
+		 var tableHead=null;
+         var  tableBody=null; 
+         //this.state.dataQuantity=1;                 
+          try
+          {
+              
+                           
+           var names=this.state.mapArray.map(function(tr) {
+               
+                     var mas=[];
+                             for (th in tr)
+                             {
+                                 if (tr[th].THH)
+                                 mas.push(tr[th].THH);  
+                             }
+                              return mas;    
+               
+           })[0]                 
+                           
+          tableHead= (  
+                                    <tr>
+                                     {
+                                       names.map(function(item){
+                                         return  item;
+                                       })  
+                                     } 
+                                    </tr>
+                             
+                     )  
+            
+                                      
+                                   
+                          
+                      
+                     
+                                
+           var rows=this.state.mapArray.map(function(tr) 
+                           {
+                               var mas=[];
+                             for (td in tr)
+                             {
+                                
+                                mas.push(tr[td].TD)
+                             } 
+                              
+                             return mas;
+                              
+                             //return <th className="text-center">{item.Name}</th> 
+                           });
+           
+              
+                                
+                          //var i=0;
+                tableBody= rows.map(function(item){                                  
+                                  return (  <tr key={unickKey++}>{item}</tr> )  
+                                   })  
+          }catch(e)
+          {
+             tableHead=null;
+             tableBody=null; 
+             this.state.dataQuantity=1;
+          } 
+		  return (<div>
+		           <table  className="table table-vcenter table-striped"> 
+                               <thead>
+                                {tableHead}
+                               </thead> 
+                                <tbody>
+                                    {tableBody}                                   
+                                  </tbody>
+                                              
+                       
+                       
+                    </table>
+					</div>)
+	 }
+	 
+	 
+	 
+ }
+ return Search_table_v2_table
+ }
 
 ////////////////////////////////////////////////////////////////
 

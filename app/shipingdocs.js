@@ -38,6 +38,25 @@ function getMapObjectShipingsDocs()
     }
    return mapObject;
 }
+function initDataTable()
+	 {
+		 var thisElement=ReactDOM.findDOMNode(this);
+		 var thisElement=thisElement.lastElementChild;
+		 if (thisElement==null) return;
+		 App.datatables();
+		 if ( $.fn.dataTable.isDataTable( $(thisElement) ) ) 
+		 {
+			return;
+		 }
+		 $(thisElement).dataTable({
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ],
+                "iDisplayLength": 3,
+                "aLengthMenu": [[3, 5, -1], [3, 5, "Всі"]]
+            });
+
+            /* Add placeholder attribute to the search input */
+            $(thisElement).attr('placeholder', 'Пошук');
+	 }
 
 export class Shiping_docs extends Extends
 {
@@ -78,6 +97,10 @@ export class Shiping_docs extends Extends
 		ShipingDocsListComp.dateEnd=this.dateEnd;
 		ShipingDocsListComp.getFunc=getShipingDocsList;
 		ShipingDocsListComp.mapObject=getMapObjectShipingsDocs();		
+		ShipingDocsListComp.compDidUpdateFunc=[];
+		ShipingDocsListComp.compDidUpdateFunc.push(initDataTable);
+		
+		
 		return (<div onClick={this.onclick} className="block">
                  <Calendar_set />
 				  <div className="col-xs-2">
@@ -137,12 +160,27 @@ function getDocsListComponent()
 		this.state.itemCode=""+this.props.itemCode;
         this.state.mapArray=[];
 		this.getFunc=this.constructor.getFunc;
+		this.compDidUpdateFunc=this.constructor.compDidUpdateFunc;
 		/*this.urlGetParametr=this.constructor.urlGetParametr;
 		this.subData=this.constructor.subData
 		this.mapObject=this.constructor.mapObject;
 		this.documentName=this.constructor.documentName;*/
          
      } 
+	 callDidUpdateFuncs()
+	 {
+		 try
+		 {
+			 for (var i=0;i<this.compDidUpdateFunc.length;i++)
+		    {
+			  this.compDidUpdateFunc[i].call(this);
+		    }
+		 }catch(e)
+		 {
+			 
+		 }
+		 
+	 }
 	 callGetFunc()
 	 {
 		  if (this.getFunc==null || this.getFunc==undefined) return;
@@ -160,10 +198,16 @@ function getDocsListComponent()
           
           return nextState.shouldComponentUpdate;
       }
+	  componentDidUpdate()
+	  {
+		  super.componentDidUpdate();
+		  this.callDidUpdateFuncs();
+	  }
 	 componentDidMount()
      {
         super.componentDidMount();
         this.callGetFunc();
+		
      }
      render()
      {

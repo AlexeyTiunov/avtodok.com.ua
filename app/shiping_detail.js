@@ -468,7 +468,7 @@ export class Brandname_td extends Extends
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
                    {this.state.proto.BCODE.fValue}<br/>
                    {this.state.proto.ICODE.fValue}<br/>				   
-				   {captionArr.map(function(item){return <span>{item}</span></br>})}
+				   {captionArr.map(function(item){return <span><span>{item}</span><br/></span>})}
 				    
                    
                    </td> 

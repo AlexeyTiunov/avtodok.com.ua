@@ -39,8 +39,8 @@ function getHistoryItemComponent(urlGetParametr,subData,mapObject,documentName)
 		}
 		 $(thisElement).dataTable({
                 "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ],
-                "iDisplayLength": 5,
-                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
+                "iDisplayLength": 3,
+                "aLengthMenu": [[3, 5, -1], [3, 5, "Всі"]]
             });
 
             /* Add placeholder attribute to the search input */

@@ -112,19 +112,20 @@ export class Carousel extends Extends
           console.log(e); 
            
        }
-       
+       var carouselIndicatorsActiveClass="active";
        try
        {
          for (var i=0;i<carouselItems.length;i++)
          {
-           carouselIndicators.push(<li data-target={"#"+this.state.id} data-slide-to={i} className="active"></li> )  
+           carouselIndicators.push(<li data-target={"#"+this.props.id} data-slide-to={i} className={carouselIndicatorsActiveClass}></li> ) 
+           carouselIndicatorsActiveClass="";		   
          }  
        } catch(e)
        {
           console.log(e);  
        }
          
-       return ( <div id={this.props.id} className="carousel slide">
+       return ( <div id={this.props.id} className="carousel slide" data-ride="carousel">
                                    
                                     <ol className="carousel-indicators">
                                                  {carouselIndicators}

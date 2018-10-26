@@ -12,6 +12,7 @@ import {Search_table_v2} from './search_content_v2.js'
 import {Basket_items} from './basket_items.js' 
 import {Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';   
 import {Progress_bar} from './progress_bar.js'
+import {Currency_rates} from './currency_rates.js'
  //debugger;  
 
 
@@ -306,9 +307,13 @@ export class Sidebar_header  extends Extends
                   <Search_form/>
 				  <ul className="nav navbar-nav-custom pull-right">
                      <li>
+					    <Currency_rates/>
+					 </li>
+					 <li>
                        <Basket_icon/> 
                       
                      </li> 
+					 
 				  </ul>  
 				</div>
 				<div className="col-xs-12"> 

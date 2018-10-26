@@ -49,16 +49,18 @@ define("STOP_STATISTICS", true);  // отключаем сбор статист�
 
 
 
-                       $ORDER_ID = CSaleOrder::Add($arFields);
+                       $ORDER_ID = CSaleOrder::Add($arFields);                       
                        CSaleBasket::OrderBasket($ORDER_ID, $_SESSION["SALE_USER_ID"], SITE_ID);
-                       $massagesArray[$ORDER_ID]["REGION"]=$arRegions[ $i ];  
+                       $massageArray["ORDER"]["ID"]= $ORDER_ID;
+                       $massageArray["ORDER"]["REGION"]=$arRegions[ $i ];  
                        #$massagesArray[$ORDER_ID][]="Для товаров с регионом поставки {$arRegions[ $i ]} создан заказ № {$ORDER_ID = IntVal($ORDER_ID)}";
                       # $massagesArray[$ORDER_ID][]="Вы можете добавить комментарий к заказу № &nbsp;&nbsp;{$ORDER_ID}";
                        
                        #<p><textarea id="COMMENT_ <?#=$i; >" name="COMMENT_<?#=$i;>" rows="5" cols="30"></textarea></p>  
       
-                      
+                      $masArray[]=$massageArray;
                      }
+                  $massagesArray["ORDERS"]= $masArray;  
                   $massagesArray["NUM_ORDERS"]=count( $arRegions );
                   
               }

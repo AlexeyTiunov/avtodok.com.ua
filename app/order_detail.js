@@ -119,12 +119,20 @@ export class Order_detail extends Extends
         //this.state=this.props.match.params;
         this.state.mapArray=[];
 		this.state.orderHeaderInfo={};
+		try
+		{
+			this.id=this.props.match.params.id
+		}catch(e)
+		{
+			this.id=this.props.id;
+		}
+		
     }
     
     getOrderDetail(id)
     {
         
-         var Prom=this.makeRequestToRecieveData("POST","/ws/order_detail.php",false,"ID="+this.props.match.params.id)
+         var Prom=this.makeRequestToRecieveData("POST","/ws/order_detail.php",false,"ID="+this.id)
          var OrderInfo=function(responseText){
             handleOrderHeader=new handleData(responseText,undefined,'ORDER');
 			 handleOrderItems=new handleData(responseText,getMapObjectItems(),'BASKET');
@@ -159,7 +167,8 @@ export class Order_detail extends Extends
     componentDidMount()
     {
         super.componentDidMount();
-        this.getOrderDetail(this.props.match.params.id);
+        //this.getOrderDetail(this.props.match.params.id);
+		this.getOrderDetail(this.id);
     }
     
     render ()

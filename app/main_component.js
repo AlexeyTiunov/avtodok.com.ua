@@ -269,7 +269,16 @@ export class Extends extends React.Component
          return fms;
             
      }
-     
+     getCurrencyRate(currency)
+	 {
+		 var curComp=window.objectReg["Currency_rates"];
+		 if (curComp==null || curComp== undefined)
+		 {
+			 return null;
+		 }
+		 return curComp.state["RateInfo"+currency].AMOUNT;
+		 
+	 }
      showInforMassage(header,message)
      {
          var linkA=document.getElementById("showMess");

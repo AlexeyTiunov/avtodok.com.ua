@@ -106,11 +106,20 @@ if (CModule::IncludeModule("currency")):
                         }
                     }
                 }
-                
-                $arDBCurrencies = array();
+             $arCurrencies = array();
                 $dbCurrencyList = CCurrency::GetList(($b = ""), ($o = ""));
                 while ($arCurrency = $dbCurrencyList->Fetch())
                 {
+                   $arCurrencies[$arCurrency["CURRENCY"]]=$arCurrency; 
+                   $arCurrencies[$arCurrency["CURRENCY"]]["AMOUNT"]= CCurrencyRates::ConvertCurrency($arCurrency["AMOUNT_CNT"], $arCurrency["CURRENCY"], $arParams["CURRENCY_BASE"], $arParams["RATE_DAY"]);  
+                    
+                }
+                
+              /*     $arDBCurrencies = array();
+                $dbCurrencyList = CCurrency::GetList(($b = ""), ($o = ""));
+                while ($arCurrency = $dbCurrencyList->Fetch())
+                {
+                    var_dump ($arCurrency);
                     if ($arCurrency["CURRENCY"]=='USD')   // исключил EUR
                     {
                     $arDBCurrencies[$arCurrency["CURRENCY"]] = $arCurrency["AMOUNT_CNT"];
@@ -128,7 +137,7 @@ if (CModule::IncludeModule("currency")):
 						$rateCurrency[$currencyString[$i]] = $rate;
 						//echo "<pre>".print_r($rate)."</pre>";
                     }
-                }
+                } */
             }
         }
 
@@ -142,13 +151,14 @@ if (CModule::IncludeModule("currency")):
             );
         }
     }
-   if (isset($NoTemplate) && $NoTemplate="YES")
-   {
+    echo (json_encode($arCurrencies ,JSON_UNESCAPED_UNICODE));   
+  // if (isset($NoTemplate) && $NoTemplate="YES")
+  // {
        
-   }else
-   {
-    $this->IncludeComponentTemplate();
-   }
+  // }else
+ //  {
+    //$this->IncludeComponentTemplate();
+ //  }
     
     //*******************************************************
 endif;

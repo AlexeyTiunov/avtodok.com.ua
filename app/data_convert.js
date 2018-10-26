@@ -291,6 +291,31 @@ this.defineTh=function (TH,caption)
  {
 	 Object.defineProperty(this,"title",{value:this.fValue,enumerable:true,writable:true});
  }
+ function getCurrencyRate(currency)
+ {
+	 var curComp=window.objectReg["Currency_rates"];
+		 if (curComp==null || curComp== undefined)
+		 {
+			 return null;
+		 }
+		 return curComp.state["RateInfo"+currency].AMOUNT;
+ }
+ this.convertCurrencyToUah= function (amount,currFrom)
+ {
+	var amt=amount 
+	var cFrom=currFrom;
+	if (typeof amount =="function")
+	{
+		amt=amount.call(this);
+	}		
+	if (typeof currFrom =="function")
+	{
+		cFrom=currFrom.call(this);
+	}		
+	var rate=getCurrencyRate(cFrom);
+	this.fValue=String(amt*rate);	
+	
+ } 
     ////////////////////////////////////////////////////////////////// 
       
       if (jsonData!=undefined && jsonData!=null)

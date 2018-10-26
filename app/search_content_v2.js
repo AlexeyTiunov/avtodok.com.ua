@@ -18,8 +18,19 @@ function getMapObject()
    var defineTd=dataConvert.defineTd;
     var defineTh=dataConvert.defineTh; 
    var parceDate=dataConvert.parceDate;
+   var convertCurrencyToUah=dataConvert.convertCurrencyToUah;
    
-  
+   function gProperty(name)
+   {
+
+       function b()
+       {
+        return this[name].fValue;     
+       }
+       
+       return b;
+       
+   }
     
     
    
@@ -42,8 +53,9 @@ function getMapObject()
       Weight:{functions:{},params:[]}, 
       Currency:{functions:{},params:[]}, 
       ReturnableParts:{functions:{},params:[]}, 
-      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Common_td/>,[<Common_th/>,"Цена/Валюта"]]}, 
-      PriceUSD:{functions:{},params:[]}, 
+      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Price_td/>,[<Common_th/>,"Цена/Валюта"]]}, 
+      PriceUAH:{functions:{convertCurrencyToUah,formatNumber},params:[[gProperty("Price"),gProperty("Currency")],[".","2"]],addNew:true}, 
+	  
          
         
     }
@@ -891,6 +903,7 @@ export class Pagination extends Extends
     
     
 }
+ 
  export class Common_th extends Extends   
  {
       constructor(props) 
@@ -919,7 +932,7 @@ export class Pagination extends Extends
          var caption=this.renderCaption();
        if (caption instanceof  Array )
        {
-           const a =(  <th>
+           const a =(  <th className="text-center">
                           {
                               caption.map(function(item){
                               
@@ -937,7 +950,7 @@ export class Pagination extends Extends
            return a;  
        } else
        {
-           const a =(<th>{this.state.caption}</th>    )  
+           const a =(<th className="text-center">{this.state.caption}</th>    )  
            return a;  
        } 
       
@@ -983,8 +996,14 @@ export class Brandname_td extends Extends
      {  
         super(props);
         this.state=this.props;
+		this.showPic=this.showPic.bind(this);
          
      } 
+	 showPic(e)
+	 {
+		 
+		 this.showInforMassage("",<img style={{width:"100%",height:"100%"}} src={e.target.src}/>);
+	 }
      render()
      {
        var src="";
@@ -994,7 +1013,7 @@ export class Brandname_td extends Extends
          if (this.state.proto.Pic64Base.fValue!="" && this.state.proto.Pic64Base.fValue!=undefined)
          { 
           src= "data:image/png;base64,"+this.state.proto.Pic64Base.fValue; 
-          img=<img style={{width:"30px",height:"30px"}} src={src} />
+          img=<img onClick={this.showPic}style={{width:"30px",height:"30px"}} src={src} />
          }  
        }
          
@@ -1310,4 +1329,44 @@ export class Info_td extends Extends
        </td> ) 
     }
     
+}
+
+export class Price_td extends Extends
+{
+	 constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+   /*var rate=this.getCurrencyRate(this.state.proto.Currency.fValue);
+   var dataConvert = new handleData(null,null); 
+   var formatNumber=dataConvert.formatNumber;	   
+   var priceObject={fValue:""+this.state.proto.Price.fValue*rate};
+   formatNumber.call(priceObject,".","2");*/
+       return(
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
+				   {this.state.proto.Price.fValue}<br/>
+				   <strong><span class="badge">
+				   {this.state.proto.Currency.fValue}
+				   </span></strong><br/>				   
+				   {this.state.proto.PriceUAH.fValue}					
+				   <br/>
+				   <strong><span class="badge">
+				   {"UAH"}
+				   </span></strong><br/>
+				  
+					
+				   
+				   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+	
 }

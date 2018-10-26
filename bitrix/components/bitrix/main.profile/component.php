@@ -19,8 +19,9 @@ $arParams['CHECK_RIGHTS'] = $arParams['CHECK_RIGHTS'] == 'Y' ? 'Y' : 'N';
 if(!($arParams['CHECK_RIGHTS'] == 'N' || $USER->CanDoOperation('edit_own_profile')) || $arResult["ID"]<=0)
 {
     
-	$APPLICATION->ShowAuthForm(GetMessage("ACCESS_DENIED".$LangSuffixe));
-	return;
+	//$APPLICATION->ShowAuthForm(GetMessage("ACCESS_DENIED".$LangSuffixe));
+	//return;
+    exit("");
 }
 
 /***************************************************************************

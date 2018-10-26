@@ -83,7 +83,8 @@ export class Sidebar_userinfo extends Extends
    constructor(props) 
      {  
        super(props);      
-         
+       this.state.inOutIconClass="gi gi-log_in";  
+	   this.state.ID=0;
          
      }
      ///////////////////////////////////////
@@ -100,25 +101,70 @@ export class Sidebar_userinfo extends Extends
          var Prom=this.makeRequestToRecieveData("POST","/ws/personal_profile.php",false,"")
          
          Prom.then(function(responseText){
-             
-             handleDT=new handleData(responseText,getMapObject());
-             var state={                        
-                        NAME:handleDT.mapArray[0].NAME.fValue
+			 var state=null;
+             if (responseText=="")
+			 {
+				 state={                        
+                        NAME:"",
+						ID:0,
+						shouldComponentUpdate:true,
                        } 
-                                                                     
+			 }else
+			 {
+				 
+			 
+             handleDT=new handleData(responseText,getMapObject());
+               state={                        
+                        NAME:handleDT.mapArray[0].NAME.fValue,
+						ID:handleDT.mapArray[0].ID.fValue,
+						shouldComponentUpdate:true,
+                       } 
+              }                                                       
                 findMySelf().setState(state);
          })  
          
      }
      //////////////////////
+	 shouldComponentUpdate(nextProps, nextState)
+      {
+        
+          if (!nextState.shouldComponentUpdate  )
+          {
+			  this.getUserData();
+			  
+		  }
+		 return nextState.shouldComponentUpdate;
+	 }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+	 }
      componentDidMount()
      {
          super. componentDidMount();
          this.getUserData();
      }
      render ()
-     {   if (this.props.isMobile)
+     {   
+	   try{
+		    if (Number(this.state.ID)>0)
+			{
+				this.state.inOutIconClass="gi gi-log_out";
+				this.state.inOutIconTitle="Вийти";
+			}else
+			{
+				this.state.inOutIconClass="gi gi-log_in";
+				this.state.inOutIconTitle="Авторизація";
+			}
+	      }catch(e)
+		  {
+			  this.state.inOutIconClass="gi gi-log_in";
+			  this.state.inOutIconTitle="Авторизація";
+		  }
+	   
+	     if (this.props.isMobile)
          {
+		   	 
            return(  <div className="sidebar-section sidebar-user clearfix" style={{"paddingLeft":"20px"}}>
                   
                   <div className="row">  
@@ -144,20 +190,15 @@ export class Sidebar_userinfo extends Extends
                                             </a>
                                 </div>
                                  <div className="col-xs-6 col-sm-6"> 
-                                       <Link to="/user_info"><i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}}  ></i></Link>
+                                       <Link to="/user_info" data-toggle="tooltip"  data-original-title="Настройки"><i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}}  ></i></Link>
                                  </div>
                                  <div className="col-xs-6 col-sm-6">
-                                     <a id="user-settings" data-toggle="modal" data-target="#modal-user-auth" >
-                                                <i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}} ></i>
+                                     <a href="#" id="user-settings" data-toggle="modal" data-target="#modal-user-auth" data-original-title={this.state.inOutIconTitle}>
+                                                <i className={this.state.inOutIconClass} style={{"fontSize":"40px","height":"1em"}} ></i>
                                       </a>
                                   </div> 
                                  
-                                 <div className="col-xs-6 col-sm-6">
                                  
-                                      <a href="login.html" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Вийти">
-                                                <i className="gi gi-exit" style={{"fontSize":"40px","height":"1em"}}  ></i>
-                                            </a>
-                                  </div> 
                                  
                                  
                             </div>

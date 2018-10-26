@@ -17,13 +17,11 @@ export class Auth extends Extends
     }  
     auth(request)
     { 
-         var findMySelf=this.findMySelf(this.constructor.name);
+        
          var Prom=this.makeRequestToRecieveData("POST","/ws/auth.php",false,request)
-         
-         Prom.then(function(responseText){
-              
-               if (Number(responseText)>0)
-               {
+		 
+		 var authRequest=function(responseText){              
+               if (Number(responseText)>0)               {
                    authComp=<Auth_done />; 
                    isAuthed=true;
                }                                       
@@ -32,11 +30,15 @@ export class Auth extends Extends
                     authComp=<Auth_need />;
                     isAuthed=false;
                }
-               findMySelf().setState({renderIn:React.createElement(authComp.type),
+			   var updateAll=this.updateAll.bind(this);
+               this.setState({renderIn:React.createElement(authComp.type),
                                       isAuthed:isAuthed
-                                     })
+                                     },updateAll);
              
-         })
+         }.bind(this)
+		 
+         
+         Prom.then(authRequest)
          
     }
     autoAuth()
@@ -89,7 +91,7 @@ export class Auth_done extends Extends
     ///////////////////////////////////
     componentDidMount()
     {
-        this.updateAll();
+       // this.updateAll();
     }
     
     render(){
@@ -105,7 +107,7 @@ export class Auth_done extends Extends
                              </fieldset>
                               <div className="form-group form-actions">
                                 <div className="col-xs-12 text-right">
-                                    <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>OK</font></font></button>
+                                    <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>Відміна</font></font></button>
                                     <button type="button" onClick={this.logOut}  className="btn btn-sm btn-primary"><font><font>Вийти з акаунту</font></font></button>
                                  </div>                           
                                </div>
@@ -162,9 +164,13 @@ export class Auth_need extends Extends
         
     }
     /////////////////////////////////////////
+	componentDidUpdate()
+	{
+		//this.updateAll();
+	}
      componentDidMount()
     {
-        this.updateAll();
+       // this.updateAll();
     } 
     render()
     {

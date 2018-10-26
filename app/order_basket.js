@@ -2,6 +2,8 @@ var ReactDOM = require('react-dom');
 var React = require('react'); 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Extends} from './main_component.js'
+import {Order_detail} from './order_detail.js' 
+import {handleData} from './data_convert.js'
 
 
 
@@ -11,6 +13,7 @@ export class Order_basket extends Extends
     {
         super(props);
         this.state=this.props.match;
+		this.state.id=0;
         
         
     }
@@ -18,19 +21,48 @@ export class Order_basket extends Extends
     {
         
          var Prom=this.makeRequestToRecieveData("POST","/ws/autodoc/process_order.php",false,this.makePostDataFromState())
-         
-         Prom.then(function(data){
-             
-             alert(data);
-             
-         })
+         var busket=function(responseText)
+		 {
+           handleOrders=new handleData(responseText,undefined,"ORDERS");
+		   handleOrderNum=new handleData(responseText,undefined,"NUM_ORDERS");
+		   this.setState({mapArray:handleOrders.mapArray,ordersNum:handleOrderNum.mapArray});
+		   
+         }.bind(this)
+		 
+         Prom.then(busket)
     }
+	//////////////////////////////////////
+	componentDidMount()
+	{
+		this.orderBusket();
+	}
     render()
-    {   this.orderBusket();
+    {   
+	    var madeOrders=[];
+		try
+		{
+			
+		
+		var idS=this.state.mapArray.map
+		  (function(item)
+		    {
+			  return item.ORDER.ID
+		    }
+		   
+		  )
+		   madeOrders=idS.map(function(item)
+		  {
+			  return (<Order_detail id={item}/>)
+		  })
+		}catch(e)
+		{
+			
+		}		
         return (
                  <div class="block full">
           
                     {this.props.match.params.DELIVERY}
+					{madeOrders}
                  </div>
               
                ) 

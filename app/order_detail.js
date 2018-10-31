@@ -723,11 +723,13 @@ export class Price_td extends Extends
      } 
      render()
      {
+	   dataConvert = new handleData(null,null); 
+        var fN=	dataConvert.formatNumberRet;   
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
 				   {this.state.proto.PRICE.fValue}<br/>
 				   {"x "}<strong><span class="badge">{this.state.proto.QUANTITY.fValue}</span></strong><br/>
-				   {"= "}{}<br/>
+				   {"= "}{fN(Number(this.state.proto.PRICE.fValue)*Number(this.state.proto.QUANTITY.fValue),".","2")}<br/>
 					   {this.state.proto.CURRENCY.fValue}
 				   
 				   </td> 

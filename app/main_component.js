@@ -287,22 +287,33 @@ export class Extends extends React.Component
            linkA=document.createElement("a"); 
            linkA.setAttribute("data-toggle","modal");
            linkA.setAttribute("data-target","#info_message");
-           linkA.id="showMess";          
+           linkA.id="showMess";
+		   var body=document.getElementsByTagName("body")[0];
+		   body.appendChild(linkA);          
          }
          
         
          
          
-        
+         if (header == undefined || message==undefined)
+		 {
+			 
+		 }else
+		 {		 
          Uobject=window.objectReg["Info_message"];
          Uobject.setState({header:header,body:message});
-         var body=document.getElementsByTagName("body")[0]; 
-         body.appendChild(linkA);
+          
          
+         }
          linkA.click(); 
          
          
      }
+	 fullInfoMassage(header,message)
+	 {
+		 Uobject=window.objectReg["Info_message"];
+         Uobject.setState({header:header,body:message});
+	 }
      updateAll()
      {
          for (item in window.objectReg )

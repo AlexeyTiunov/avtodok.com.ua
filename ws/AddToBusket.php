@@ -230,7 +230,7 @@ $_GET['currency']="UAH";
            
            if ($checkItem==false && $checkRegion==false && $checkBrand==false) 
            {  
-               if (isset($_GET['item_duplicate_check'])) 
+               if (isset($_REQUEST['item_duplicate_check'])) 
                {
                   exit("".$arItemQuantity); 
                } 
@@ -244,7 +244,7 @@ $_GET['currency']="UAH";
            } 
             else
             {  
-               if (isset($_GET['item_duplicate_check'])) 
+               if (isset($_REQUEST['item_duplicate_check'])) 
                {
                   exit("0"); 
                } 

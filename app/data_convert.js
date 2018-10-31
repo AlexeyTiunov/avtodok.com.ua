@@ -236,6 +236,16 @@ export function handleData(jsonData,standMap=undefined,jsonSubDataName=undefined
         
         
     }
+	this.formatNumberRet=function(number,pointDelimeter,quantityAfterPoint)
+	{
+		if (typeof number!= "string" )
+		var newObj={fValue:String(number)};
+	else var newObj={fValue:number};
+		var fN=this.formatNumber.bind(newObj);
+		fN(pointDelimeter,quantityAfterPoint);
+		return newObj.fValue;
+	}.bind(this);
+	
     this.addSuffix=function (suffix)
     {
         if (suffix==undefined) suffix="";

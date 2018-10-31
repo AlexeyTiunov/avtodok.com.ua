@@ -667,7 +667,7 @@ export class Price_td extends Extends
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
 				   {this.state.proto.PRICE.fValue}<br/>
 				   {"x "}<strong><span class="badge">{this.state.proto.QUANTITY.fValue}</span></strong><br/>
-				   {"= "}{}
+				   {"= "}{}<br/>
 					   {this.state.proto.CURRENCY.fValue}
 				   
 				   </td> 
@@ -694,7 +694,7 @@ export class Summ_td extends Extends
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
 				   {}<br/>
 				   {"x "}<strong><span class="badge">{this.state.proto.QUANTITY.fValue}</span></strong><br/>
-				   {"= "}{this.state.proto.SUMM.fValue}
+				   {"= "}{this.state.proto.SUMM.fValue}<br/>
 					   {this.state.proto.CURRENCY.fValue}
 				   
 				   </td> 

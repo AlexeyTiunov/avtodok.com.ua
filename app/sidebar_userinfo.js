@@ -85,8 +85,13 @@ export class Sidebar_userinfo extends Extends
        super(props);      
        this.state.inOutIconClass="gi gi-log_in";  
 	   this.state.ID=0;
+	   this.onclick=this.onclick.bind(this);
          
      }
+	 onclick(e)
+	 {
+		  getWorkPage().setState({renderIN:"",defineRoutes:true});
+	 }
      ///////////////////////////////////////
      componentDidMount()
      {
@@ -190,10 +195,10 @@ export class Sidebar_userinfo extends Extends
                                             </a>
                                 </div>
                                  <div className="col-xs-6 col-sm-6"> 
-                                       <Link to="/user_info" data-toggle="tooltip"  data-original-title="Настройки"><i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}}  ></i></Link>
+                                       <Link  onClick={this.onclick} to="/user_info" data-toggle="tooltip"  data-original-title="Настройки"><i className="gi gi-cogwheel" style={{"fontSize":"40px","height":"1em"}}  ></i></Link>
                                  </div>
                                  <div className="col-xs-6 col-sm-6">
-                                     <a href="#" id="user-settings" data-toggle="modal" data-target="#modal-user-auth" data-original-title={this.state.inOutIconTitle}>
+                                     <a href="#"  id="user-settings" data-toggle="modal" data-target="#modal-user-auth" data-original-title={this.state.inOutIconTitle}>
                                                 <i className={this.state.inOutIconClass} style={{"fontSize":"40px","height":"1em"}} ></i>
                                       </a>
                                   </div> 

@@ -28,7 +28,7 @@ export var items = [
   {name:"Про нас",href:"", className:"fa fa-users sidebar-nav-icon" ,inner:null},
   {name:"Умови роботи",href:"", className:"gi gi-file sidebar-nav-icon" ,inner:null},
   {name:"Скачати прайс",href:"", className:"gi gi-download_alt sidebar-nav-icon" ,inner:null}, 
-  {name:"Контакти",href:"", className:"gi gi-phone_alt sidebar-nav-icon" ,inner:null},  
+  {name:"Контакти",href:"/contacts", className:"gi gi-phone_alt sidebar-nav-icon" ,inner:null},  
   
   
   
@@ -106,10 +106,7 @@ export class Sidebar_nav  extends Extends
                           
                          
                      }
-                     
-                     
-                   
-                     
+
                  } else
                  {
                     const f=   (<li class="sidebar-header">

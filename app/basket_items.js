@@ -24,7 +24,8 @@ function getMapObject()
       Caption:{functions:{sFunc,defineColumnName,defineTd},params:["1","Название",<Common_td />]},
       QUANTITY:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Кол-во",[".","0"],<Quantity_td />]},
       DeliveryDays:{functions:{sFunc,formatNumber,addSuffix},params:["Срок Поставки",[".","0"]," дні"]},
-      PRICE:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Цена",[".","2"],<Common_td />]},
+      PRICE:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Цена",[".","2"],<Price_td />]},
+	  Currency:{functions:{},params:[]},
       Sum:{},
       PriceUSD:{},
       SumUSD:{},
@@ -189,12 +190,24 @@ export class Basket_items extends Extends
        
                )
                 var summ=0;
+				var currency="";
                 for (i=0;i<this.state.mapArray.length;i++)
                 {
                    summ+=(Number(this.state.mapArray[i].QUANTITY.fValue)*Number(this.state.mapArray[i].PRICE.fValue)); 
                     
                 }
-               
+				dataConvert = new handleData(null,null); 
+                var formatNumber=dataConvert.formatNumber;
+				wrapObject={fValue:String(summ)}
+				formatNumber.call(wrapObject,".","2");
+               summ=wrapObject.fValue;
+			   try
+			   {
+				   currency=this.state.mapArray[0].Currency.fValue;
+			   }catch(e)
+			   {
+				   
+			   }
                var rows=this.state.mapArray.map(function(tr) 
                            {
                                var mas=[];
@@ -212,13 +225,13 @@ export class Basket_items extends Extends
                                 
                
                const tableBody= rows.map(function(item){                                  
-                                  return (<tr key={item[6].props.proto.ID.fValue}>{item}</tr>)  
+                                  return (<tr key={item[item.length-1].props.proto.ID.fValue}>{item}</tr>)  
                                    })  
                                 
                const  tableFooter=( <tr className="active">
                                        
                                         <td colspan="4" className="text-right"><span className="h4">Сума замовлення</span></td>
-                                        <td className="text-right"><span className="h3"><span className="label label-primary">{summ}</span></span></td>
+                                        <td className="text-right"><span className="h3"><span className="label label-primary">{summ+" "+currency}</span></span></td>
                                     </tr>
                                      
                                    )
@@ -478,8 +491,7 @@ export class Basket_order_button extends Extends
      {
       return(  <div className="clearfix">
                             <div className="btn-group pull-right">
-                                <Link className="btn btn-primary" to={`/Order_basket/${this.state.DELIVERY}/${this.state.PAYS}`}><i class="fa fa-angle-right"></i> Оформити замовлення</Link>
-                                <a href="javascript:void(0)" className="btn btn-primary"> <i class="fa fa-angle-right"></i> Оформити замовлення </a>
+                                <Link className="btn btn-primary" to={`/Order_basket/${this.state.DELIVERY}/${this.state.PAYS}`}><i class="fa fa-angle-right"></i> Оформити замовлення</Link>                                
                             </div>
                         </div> 
                  )
@@ -566,6 +578,33 @@ export class Basket_items_forModal extends Extends
          
          
      } 
-    
-    
+}	 
+export class Price_td extends Extends
+{
+	 constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+       return(
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
+				   {this.state.proto.PRICE.fValue}<br/>				   
+				   <strong><span class="badge">
+				   {this.state.proto.Currency.fValue}
+				   </span></strong>
+				   
+				   </td> 
+        
+        
+         
+             )   
+         
+         
+     }
+	
 }
+    
+    

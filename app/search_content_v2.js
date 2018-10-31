@@ -1130,7 +1130,52 @@ export class Region_td extends Extends
      }
     
 }
-
+export class ItemDuplicateMassage extends Extends
+{
+	constructor(props) 
+   {
+	   super(props);
+	   this.state=this.props;
+	   
+	   this.addToBasket=this.addToBasket.bind(this);
+   }
+   ////////////////////////////////
+   addToBasket(e)
+   {   
+      var updateMassage= function(data)
+      {
+	    this.fullInfoMassage("",data);
+      }
+	  updateMassage=updateMassage.bind(this);
+       var aToBusket= function ()
+	   {
+		  // var actionComAddToBasket= this.state.info.actionCom.addToBasket.bind(this);
+		  var actionComAddToBasket= Action_td.prototype.addToBasket.bind(this);
+		   actionComAddToBasket(false).then(updateMassage);
+		   //this.showInforMassage();
+	   }
+       aToBusket=aToBusket.bind(this);
+       this.setState({Quantity:e.target.getAttribute("count")},aToBusket);
+	   
+	   
+   }
+   
+   render()
+   {
+	   
+	  var a=(
+	     <div>
+		   <p align="center">Ув. Пользователь.</p>  
+			<p align="center">В корзине уже имеется аналогичный товар.</p> 
+			<p align="center">{this.props.info.itemCode} -{this.props.info.caption}  в количестве {this.props.info.firstQuantity} шт. </p>
+		    <button type="button" onClick={this.addToBasket} className="btn btn-primary" count={this.props.info.firstQuantity+this.props.info.secondQuantity} ><i className="fa fa-search"></i> Замовити {this.props.info.firstQuantity+this.props.info.secondQuantity}</button>
+		    <button type="button"  onClick={this.addToBasket} className="btn btn-primary" count={this.props.info.firstQuantity} data-dismiss="modal"><i className="fa fa-search"></i> Залишити {this.props.info.firstQuantity}</button>
+		 </div>
+	   )
+	   return a;
+   }
+	
+}
 export class Action_td extends Extends
 {
     constructor(props) 
@@ -1141,10 +1186,11 @@ export class Action_td extends Extends
       this.state.inputs=props.inputs;     
       this.state.Quantity=1;
       this.updateQuantity=this.updateQuantity.bind(this);
-       
+      this.itemBasketQuantityCheck=this.itemBasketQuantityCheck.bind(this);
+	  
    }
   
-   addToBasket()
+   addToBasket(notify)
    {
        var mas=[];
        for (input in this.state.proto)
@@ -1158,13 +1204,49 @@ export class Action_td extends Extends
         //alert(data) ; 
         obj=window.objectReg["Basket_icon"];
         obj.setState({getBasketPartsQuantity:true});
-        this.showInforMassage("ADD",data)  
+		if (notify)
+         this.showInforMassage("ADD",data) 
+         return data;	
       }
       updateBasketIcon=updateBasketIcon.bind(this);
-      Pro.then( updateBasketIcon ); 
+      return Pro.then( updateBasketIcon ); 
     
         
        
+   }
+   itemBasketQuantityCheck()
+   {
+	    var mas=[];
+       for (input in this.state.proto)
+       {
+           if(this.state.proto[input].fValue )           
+           mas.push(input+"="+this.state.proto[input].fValue);
+       } 
+       
+       var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity+"&item_duplicate_check=Y");
+	    var updateBasketIcon=function(data)
+		{
+			var firstQuantity=Number(data);
+			var secondQuantity=(this.state.Quantity==undefined)?1:this.state.Quantity;
+			if (firstQuantity>0)
+			{
+				var info = {itemCode:this.state.proto.ItemCode.fValue,
+				            caption:this.state.proto.Caption.fValue,
+							firstQuantity:firstQuantity,
+							secondQuantity:secondQuantity,
+							actionCom:this,
+							}
+				var infoMassage=(<ItemDuplicateMassage info={info} proto={this.state.proto} />);
+				this.showInforMassage("ADD",infoMassage);
+			}else
+			{
+				this.addToBasket(true);
+			}
+		}
+	   updateBasketIcon=updateBasketIcon.bind(this);
+	   Pro.then( updateBasketIcon ); 
+      
+	   
    }
    updateQuantity(event)
    {
@@ -1196,6 +1278,8 @@ export class Action_td extends Extends
        }
        
    }
+   /////
+   
    render()
    {   
        return (
@@ -1203,7 +1287,7 @@ export class Action_td extends Extends
                  <div className="btn-group btn-group-xs">
                   <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={(("Quantity" in this.state)==false)?1:this.state.Quantity} style={{width:"3em"}} />
                   <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
-                  <a href="#" onClick={this.addToBasket} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
+                  <a href="#" onClick={this.itemBasketQuantityCheck} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                 
                  </div>
             </td>

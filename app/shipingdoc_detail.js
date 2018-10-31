@@ -388,7 +388,7 @@ export class Shiping_td extends Extends
           
                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
 				  <Link to={"/shiping_detail/"+this.state.proto.ID.fValue}>{this.state.proto[this.state.NAME].fValue}</Link><br/>
-					  {this.state.proto.NUMBER.fValue}
+					  {this.state.proto.NUMBER.fValue}<br/>
 					  {this.state.proto.DATE.fValue}
 				  
 				  </td>  

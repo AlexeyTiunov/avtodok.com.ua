@@ -549,7 +549,7 @@ export class Action_td extends Extends
 	 
 	 getActionQueryStatusChangeInWait()
 	 {
-		 return ( <a href='####'>
+		 return ( <a >
 		   <img  style={this.style} title='' src={this.imagePath+"user_deny_wait.png"} />
 		 </a>)
 	 }
@@ -585,6 +585,21 @@ export class Action_td extends Extends
 		  
 	  }
 	 /////////////////////////////////////////////////////////
+	 componentWillUnmount()
+	 {
+		// alert("unmounted"+this.id);
+	 }
+	 shouldComponentUpdate(nextProps, nextState)
+	 {
+		 if ("updateFromOtherTD" in nextState  )
+		 {
+			 if (nextState.updateFromOtherTD &&(nextState.otherTd==undefined || nextState.otherTd==null))
+			 {
+				 return false;
+			 }
+		 }
+		 return true;
+	 }
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
 		var action= null;  

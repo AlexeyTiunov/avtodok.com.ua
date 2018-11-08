@@ -100,7 +100,7 @@ export class  Search_content_startpage extends Search_content_header
                                 <hr/>
                                 <h4 className="text-center">Введіть номер потрібної запчастини!</h4>
                                 <div className="input-group text-center" style={{width:"50%",marginLeft: "25%"}}>
-                                        <input id="example-input1-group2" onChange={this.onchange} value={this.state.itemCode} name="example-input1-group2" className="form-control" placeholder="Введіть номер запчастини" type="text"/>
+                                        <input id="example-input1-group2" onChange={this.onchange} value={(this.state.itemCode==undefined)?"":this.state.itemCode} name="example-input1-group2" className="form-control" placeholder="Введіть номер запчастини" type="text"/>
                                         <span className="input-group-btn">
                                             <a href="#"><button type="button" onClick={this.onclick} className="btn btn-primary"><i className="fa fa-search"></i> Пошук</button></a>
                                         </span>

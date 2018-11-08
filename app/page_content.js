@@ -26,8 +26,18 @@ export class Page_content  extends Extends
        //this.state={renderIN:""};
        //this.state={parentMod:props.parentMod}; 
        this.state.defineRoutes=true; 
+	   this.touchMove=this.touchMove.bind(this) 
          
      }
+	 
+	 touchMove(e)
+	 {
+		 var x = e.touches[0].clientX;
+       var y = e.touches[0].clientY;
+	   alert(x);
+	   
+	 }
+	 ////////////////////////////
       componentDidMount()
      {
          super.componentDidMount();
@@ -77,7 +87,7 @@ export class Page_content  extends Extends
      render ()
      {
          const routes=this.defineRoutes(this.state.defineRoutes);
-         return (<div id="page-content" style={ {'min-height': '977px'} } > 
+         return (<div id="page-content"  style={ {'min-height': '977px'} } > 
                  
                    {routes}
                    {this.state.renderIN}

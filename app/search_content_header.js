@@ -17,6 +17,7 @@ export class Search_content_header extends Extends
           this.analogAdd=this.analogAdd.bind(this);
           this.state.searchTableComponent=null;
           this.state.analogAdd="checked";
+		  this.state.itemCode=this.props.itemCode;
       }
       onchange(e)
       {
@@ -29,7 +30,8 @@ export class Search_content_header extends Extends
             {itemCode:this.state.itemCode,
             shouldComponentUpdate:false,
             showAnalogs:(this.state.analogAdd=="checked")?true:false,
-            
+            showBrandList:true,
+			brandCode:undefined,
             });    
         }
       analogAdd()

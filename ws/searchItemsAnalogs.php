@@ -97,11 +97,11 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
                                  'arBrands'=>$arBrands['id'],
                                  'region'=>$arRegions['Code'],
                                  'regionID'=>$arRegions['id'],
-                                'AnalogsForOurStock'=>(isset($_GET['AnalogsForOurStock']) and $_GET['AnalogsForOurStock']=='YES')?true:false)
+                                'AnalogsForOurStock'=>(isset($_REQUEST['AnalogsForOurStock']) and $_REQUEST['AnalogsForOurStock']=='YES')?true:false)
                                 
                                 );
                                   
-        if (isset($_GET['AnalogsForOurStock']) and $_GET['AnalogsForOurStock']=='YES')   
+        if (isset($_REQUEST['AnalogsForOurStock']) and $_REQUEST['AnalogsForOurStock']=='YES')   
         {
           $sAnalogs->AnalogForOurStock=true;
            #echo "-------------------<br /><pre>";

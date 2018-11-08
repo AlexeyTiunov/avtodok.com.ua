@@ -3612,8 +3612,67 @@ p, .table, .alert, .carousel {
 (#m09res) RESPONSIVE
 =================================================================
 */
+@media screen and (max-width: 380px)
+{
+   body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #394263;
+    font-size: 12px;
+    background-color: #222222;
+}
+.sidebar-nav a {
+    display: block;
+    color: #eaedf1;
+    padding: 0 10px;
+    min-height: 45px;
+    line-height: 35px;
+}
+.sidebar-nav ul a {
+    margin: 0;
+    font-size: 15px;
+    padding-left: 15px;
+    min-height: 42px;
+    line-height: 32px;
+}
+
+.label, .badge {
+    font-weight: normal;
+    font-size: 65%;}
+
+#page-content {
+    padding: 60px 5px 1px;
+}
+.btn-success{
+    display: none;
+}
+
+.navbar-form-custom {
+        width: 75%;
+    }
+
+      .table thead > tr > th {
+    font-size: 12px;
+    font-weight: 400;
+}
+.widget .widget-image, .widget .widget-icon {
+    width: 32px;
+    height: 32px;
+}
+.widget .widget-icon {
+    display: inline-block;
+    line-height: 32px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 32px;
+}
+.widget-simple .widget-content {
+    font-size: 14px;
+    margin: 10px 0px 10px 0px;
+}
+}
 /* Mobile devices, Tablets (>767px) */
-@media screen and (max-width: 550px) {
+@media screen and (min-width: 381px) and (max-width: 550px) {
     body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #394263;

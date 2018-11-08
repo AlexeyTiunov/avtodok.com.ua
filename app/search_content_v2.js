@@ -91,11 +91,13 @@ function getMapObject()
         return mas; 
           
       }
+	 
       
       render()
       {
         var mas=this.renderBrandInfo();  
-        return(
+		
+        const massage=(
                <div className="row">
                 
                    <div className="col-sm-12" key={unickKey++}>
@@ -109,8 +111,10 @@ function getMapObject()
                   </div>
                 
                </div>
-              );  
-          
+              );
+			
+             
+          return massage;
           
       }
   }
@@ -149,7 +153,7 @@ function getMapObject()
                   function (mainComp){
                     this.state.searchTableComponent=mainComp;   
                   return(  <div>
-                      <a key={unickKey++} onClick={this.onclick}>{this.state.brandName}</a>
+                      <a key={unickKey++} onClick={this.onclick} data-dismiss="modal">{this.state.brandName} </a>
                     </div> ) 
                   }.bind(this)  
                 } 
@@ -524,6 +528,7 @@ function getMapObject()
          super(props);         
          this.state.mapArray=[];
          this.state.analogInfo=[];
+		 this.state.analogForOurStock=[];
          this.state.mapArrayBrand=[];
          this.state.numberOfrow=5;   
          this.state.page=1;
@@ -532,6 +537,8 @@ function getMapObject()
          this.state.page=1;
          this.state.dataQuantity=1;
          this.state.showAnalogs=false;
+		 this.state.showBrandList=true;
+		 
        if (this.props.match)
        {          
          if ("params" in this.props.match)
@@ -592,21 +599,40 @@ function getMapObject()
         return data; 
      }
      getAnalogsAsync(itemCode,brandCode)
-     {  
+     {   var getAnalogs= function (responseText)
+         { 
+		   try
+		   {
+			  handleDT=new handleData(responseText,getMapObject());  
+		   }catch(e)
+		   {
+			   handleDT={mapArray:[]};
+		   }
+          
+		   this.state.analogInfo=[];
+		    this.state.analogForOurStock=[];
+           for (var i=0;i<handleDT.mapArray.length;i++)
+           {
+			 if (handleDT.mapArray[i].RegionCode.fValue=="1")
+			 {
+				  this.state.analogForOurStock.push(handleDT.mapArray[i]);
+			 }				 
+             this.state.analogInfo.push(handleDT.mapArray[i]);            
+           }
+             
+			 this.setState({analogInfo:this.state.analogInfo,analogForOurStock:this.state.analogForOurStock,shouldComponentUpdate:true});                             
+         }
+        getAnalogs=getAnalogs.bind(this); 
+	     if (!this.state.showAnalogs) 
+		 {
+			 getAnalogs.responseText="";
+			 return new Promise((resolve,reject)=>{resolve("")}).then(()=>{return getAnalogs});
+		 }
          if (itemCode== undefined || brandCode==undefined || itemCode==null || brandCode==null  )  return;
          var data="ItemCode="+itemCode+"&BrandCode="+brandCode;
             var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/searchItemsAnalogs.php",data);
             
-      var getAnalogs= function (responseText)
-         { 
-           handleDT=new handleData(responseText,getMapObject());
-           for (var i=0;i<handleDT.mapArray.length;i++)
-           {
-             this.state.analogInfo.push(handleDT.mapArray[i]);  
-           }
-                                        
-         }
-        getAnalogs=getAnalogs.bind(this); 
+      
        return  Prom.then(function(responseText)
          {  
              getAnalogs.responseText=responseText; 
@@ -616,8 +642,9 @@ function getMapObject()
      }
      getSearchData()
      {
+		 
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
-         var findMySelf=this.findMySelf(this.constructor.name);
+         window.objectReg['Search_content_header'].setState({itemCode:this.state.itemCode})         
          var data="ItemCode="+this.state.itemCode+"";
          if (this.state.brandCode==undefined || this.state.brandCode==null )
          {
@@ -638,26 +665,44 @@ function getMapObject()
          
          var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/searchItems.php",data)
         
-         Prom.then(function(responseText){
+        var searchData=function(responseText){
              
                      handleBR= new  handleData(responseText,undefined,"BRANDS");             
                      handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
-                     findMySelf().dataSortAsync(handleDT.mapArray).then( function(mapArray){
-                         
-                         findMySelf().setState({ mapArray:mapArray,shouldComponentUpdate:true});
-                     })
+					 
+					 var brandInfoNamesArray=Object.getOwnPropertyNames(handleBR.mapArray);
+					 var brandInfoLength=brandInfoNamesArray.length;
+					 if (brandInfoLength==1 && (this.state.brandCode==undefined || this.state.brandCode==null ) )
+					 {
+						 this.getAnalogsAsync(this.state.itemCode,brandInfoNamesArray[0]).then(
+                          function (getAnalogs)
+                          {
+                           var responseText=getAnalogs.responseText;
+                           getAnalogs(responseText);
+                          }
+             
+             )
+					 }
+					 var dataSort=function(mapArray){                         
+                         this.setState({ mapArray:mapArray,shouldComponentUpdate:true});
+                     }.bind(this)
+                     this.dataSortAsync(handleDT.mapArray).then(dataSort) 
                      
                      
-                     findMySelf().setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
-                     findMySelf().setCookie("PHPSESSID",findMySelf().state.PHPSESSID);
+                    this.setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
+                     this.setCookie("PHPSESSID",this.state.PHPSESSID);
                      
                       
                      
                      
-         })
+         }.bind(this)
+		 Prom.then(searchData)
          
      }
-     
+     cleanData(callBack)
+	 {
+		 this.setState({analogInfo:[],analogForOurStock:[],mapArray:[],brandInfo:{},shouldComponentUpdate:true},callBack);
+	 }
      /////////////////////////////////////    && this.state.itemCode!=nextState.itemCode
       shouldComponentUpdate(nextProps, nextState)
       {
@@ -666,24 +711,32 @@ function getMapObject()
           {
               this.state.itemCode=nextState.itemCode;
               this.state.brandCode=nextState.brandCode; 
-              this.getSearchData();   
+			  this.cleanData(this.getSearchData)
+                
           } 
           
           
           return nextState.shouldComponentUpdate;
       }
-     
+     componentDidMount()
+	 {
+		 super.componentDidMount();
+		 
+	 }
      componentDidUpdate(prevProps, prevState)
      {
-           // here the main_component function (componentDidUpdate) is overrided
-           // so this.state.shouldComponentUpdate is stay unchanged;
-        // super.componentDidUpdate(prevProps, prevState); 
-       
-       
-         // debugger;
-        //this.state.tableBody=[];
-       // this.makeDataForRender(this.state.dataRecieved);
-       
+		  
+		  var brandInfoLength=Object.getOwnPropertyNames(this.state.brandInfo).length;
+		  
+        if ((this.state.brandCode==undefined || this.state.brandCode==null) && this.state.showBrandList && brandInfoLength>1)
+         {
+            this.showInforMassage("Brands", <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>)
+         } else
+         {
+			 
+			 
+		 }
+        
           
      }
      componentWillUpdate()
@@ -693,20 +746,38 @@ function getMapObject()
      render()
      { 
 	     var V2_table=getV2_table();
-		 V2_table.mapArray=this.state.mapArray;
+		 var mergeMapArrays=function(item)
+		 {
+			 this.state.analogForOurStock.push(item)
+		 }.bind(this)
+		 this.state.mapArray.map(mergeMapArrays);
+		 V2_table.mapArray=this.state.analogForOurStock;
+		 
 		 
 		 var V2_table_analogs=getV2_table();
 		 V2_table_analogs.mapArray=this.state.analogInfo;
+		 var analogsTableCaption="";
+		 if ( this.state.showAnalogs && this.state.analogInfo.length>0)
+		 {
+			  analogsTableCaption="Аналогі";
+		 }
+		 else if (this.state.showAnalogs && this.state.analogInfo.length==0)
+		 {
+			  analogsTableCaption="Аналогі не знайдені.";
+		 }
+		 
+		 
+		 
 		 return (
                    <div class="block">  
-                   <ComContext.Provider value={this}><Search_content_header/> </ComContext.Provider>
+                   <ComContext.Provider value={this}><Search_content_header itemCode={this.state.itemCode}/> </ComContext.Provider>
                      <div className="table-responsive">
                      
                      <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
-                       <V2_table/>
+                       <V2_table />
                      </div><br/>
                       <div className="table-responsive analogs table-striped">
-					    <div className="col-xs-12"><p>{"Аналогі"}</p></div>
+					    <div className="col-xs-12"><p align="center"><strong>{analogsTableCaption}</strong></p></div>
                         <V2_table_analogs/>
                       </div>
                    </div>
@@ -1168,7 +1239,7 @@ export class ItemDuplicateMassage extends Extends
 		   <p align="center">Ув. Пользователь.</p>  
 			<p align="center">В корзине уже имеется аналогичный товар.</p> 
 			<p align="center">{this.props.info.itemCode} -{this.props.info.caption}  в количестве {this.props.info.firstQuantity} шт. </p>
-		    <button type="button" onClick={this.addToBasket} className="btn btn-primary" count={this.props.info.firstQuantity+this.props.info.secondQuantity} ><i className="fa fa-search"></i> Замовити {this.props.info.firstQuantity+this.props.info.secondQuantity}</button>
+		    <button type="button" onClick={this.addToBasket} className="btn btn-primary" count={Number(this.props.info.firstQuantity)+Number(this.props.info.secondQuantity)} ><i className="fa fa-search"></i> Замовити {Number(this.props.info.firstQuantity)+Number(this.props.info.secondQuantity)}</button>
 		    <button type="button"  onClick={this.addToBasket} className="btn btn-primary" count={this.props.info.firstQuantity} data-dismiss="modal"><i className="fa fa-search"></i> Залишити {this.props.info.firstQuantity}</button>
 		 </div>
 	   )
@@ -1176,6 +1247,36 @@ export class ItemDuplicateMassage extends Extends
    }
 	
 }
+export class AddToBasketReturnMassage extends Extends
+{
+	constructor(props) 
+	{
+		 super(props);
+		 this.statusInfo={"0":"не виконано.","1":"виконано"};
+		 this.actionInfo={"0":"Оновлення","1":"Додавання"};
+		 
+	}
+	
+	
+	render()
+	{
+		
+		const a=(
+	     <div>
+		   <p align="center">Шановний  Клієнт.</p>  
+			<p align="center">{this.actionInfo[this.props.actionInfo] } {this.statusInfo[this.props.statusInfo]}! </p> 
+			<p align="center"> </p>
+		    <button align="center" type="button" className="btn btn-primary" data-dismiss="modal"> ОК </button>
+		    
+		 </div>
+	   )
+		   
+		
+		return a;
+		
+	}
+}
+
 export class Action_td extends Extends
 {
     constructor(props) 
@@ -1189,24 +1290,34 @@ export class Action_td extends Extends
       this.itemBasketQuantityCheck=this.itemBasketQuantityCheck.bind(this);
 	  
    }
-  
+   
    addToBasket(notify)
    {
        var mas=[];
        for (input in this.state.proto)
        {
+		   if (input=="Pic64Base") continue;
            if(this.state.proto[input].fValue )           
            mas.push(input+"="+this.state.proto[input].fValue);
        } 
        
        var Pro=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,mas.join('&')+"&Quantity="+this.state.Quantity);
-       var updateBasketIcon=function(data){
+       var parseData=function(data)
+	   {
+		   var requestInfo= new  handleData(data,undefined,"REQUEST");
+		   var statusInfo=new  handleData(data,undefined,"STATUS");
+		   var actionInfo=new  handleData(data,undefined,"ACTION");
+		   
+		   return <AddToBasketReturnMassage statusInfo={statusInfo.mapArray} actionInfo={actionInfo.mapArray}/>
+		   
+	   }.bind(this);
+	   var updateBasketIcon=function(data){
         //alert(data) ; 
         obj=window.objectReg["Basket_icon"];
         obj.setState({getBasketPartsQuantity:true});
 		if (notify)
-         this.showInforMassage("ADD",data) 
-         return data;	
+         this.showInforMassage("ADD",parseData(data)) 
+         return parseData(data);	
       }
       updateBasketIcon=updateBasketIcon.bind(this);
       return Pro.then( updateBasketIcon ); 
@@ -1283,11 +1394,11 @@ export class Action_td extends Extends
    render()
    {   
        return (
-            <td className={this.state.proto["Action"].className+" text-center" }> 
+            <td onTouchMove={this.stopTouchMovePropagation} className={this.state.proto["Action"].className+" text-center" }> 
                  <div className="btn-group btn-group-xs">
                   <input type="number" name="number" onChange={this.updateQuantity} data-toggle="tooltip"  className="btn btn-default visible-lg-block" value={(("Quantity" in this.state)==false)?1:this.state.Quantity} style={{width:"3em"}} />
                   <Select_quantity typeOfSelectNumber={"int"} parentComponent={this}/>
-                  <a href="#" onClick={this.itemBasketQuantityCheck} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
+                  <a  onClick={this.itemBasketQuantityCheck} data-toggle="tooltip" title="Edit"  className="btn btn-default"><i className="gi gi-shopping_cart"></i></a>
                 
                  </div>
             </td>
@@ -1385,7 +1496,7 @@ export class Select_quantity extends Extends
    {
        this.makeOptions();
        return(      
-            <select className="visible-xs-block" onChange={this.updateQuantity}>
+            <select className="visible-xs-block visible-sm-block visible-md-block" onChange={this.updateQuantity}>
                 {this.state.optionsMas.map(function(item){
                     
                      return item;

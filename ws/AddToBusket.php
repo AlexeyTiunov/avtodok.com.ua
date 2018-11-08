@@ -109,6 +109,7 @@ $_GET['caption']=$_POST['Caption'];
 $_GET['price']=$_POST['PriceUAH'];
 //$_GET['currency']=$_POST['Currency'];
 $_GET['currency']="UAH";
+
 //$_GET['bscode']=$_GET['BrandShortCode'];
 //$_GET['item_duplicate_check'] =$_GET[''];
 // var_dump($_GET);
@@ -239,8 +240,16 @@ $_GET['currency']="UAH";
                          );  */
                 $arFieldsUpdates= array(
                         "QUANTITY" => intval($_GET['quantity']) 
-                         );         
-                CSaleBasket::Update($arItemId, $arFieldsUpdates);
+                         ); 
+                  $answer["REQUEST"]=$_REQUEST;
+                  $answer["ACTION"]=0;// to update
+                                 
+               if ( CSaleBasket::Update($arItemId, $arFieldsUpdates)) $answer["STATUS"]=1; 
+               else $answer["STATUS"]=0; 
+           
+                   
+              echo (json_encode($answer,JSON_UNESCAPED_UNICODE)); 
+                
            } 
             else
             {  
@@ -260,8 +269,20 @@ $_GET['currency']="UAH";
                                     WHERE 
                                         ID='{$basketItemID}'";
                     $tmpRes = $DB->Query($sql);
+               
+                   $answer["REQUEST"]=$_REQUEST;
+                   $answer["ACTION"]=1;// to add
+                   $answer["STATUS"]=1; // done 
+               if  ($basketItemID!="" && $basketItemID!=0) 
+               {
+                     $answer["STATUS"]=1;
+               }else
+               {
+                       $answer["STATUS"]=0;
+               }  
+               echo (json_encode($answer,JSON_UNESCAPED_UNICODE));  
            }
-        if($redirect) header("Location: /autodoc/mycart.php");
+      /*  if($redirect) header("Location: /autodoc/mycart.php");
         else
         {
                //echo "Basket ID: ".$basketItemID;
@@ -281,11 +302,11 @@ $_GET['currency']="UAH";
                                                     false,
                                                     array("ID")
                     );
-            echo $dbBasketItems->SelectedRowsCount().'|<div id="search_name">Артикул <b>'.$_GET['icode'].'</b> добавлен в корзину</div>';
+          //  echo $dbBasketItems->SelectedRowsCount()."--".$basketItemID.'|<div id="search_name">Артикул <b>'.$_GET['icode'].'</b> добавлен в корзину</div>';
                                  
            // $statObj = new CStats();
            // $statObj->StoreLine($_GET['bcode'],$_GET['icode']);
-        }  
+        }  */
     }
 }
 if (isset($_POST['basket_ID']) && isset($_POST['VALUE']))

@@ -12,11 +12,17 @@ export class Info_message extends Extends
         this.state.header=""; 
         this.state.body="";
         this.state.footer="";
-         
+		this.state.isOn=false;
+        this.offMassage=this.offMassage.bind(this); 
      }
+	 offMassage(e)
+	 {
+		 if (this.state.isOn)
+		 this.setState({isOn:false})
+	 }
      render()
      {
-           return ( <div id="info_message" className="modal fade" role="dialog">
+           return ( <div onClick={this.offMassage} id="info_message" className="modal fade" role="dialog">
                      <div className="modal-dialog">                     
                        <div className="modal-content">
                           <div className="modal-header">

@@ -28,9 +28,10 @@ class Sidebar_control_button extends Extends
      
      press (e)
      {
-         console.log(e);
+         /*console.log(e);
          App.App.sidebar('toggle-sidebar');
-         $("body").css("width","100%");
+         $("body").css("width","100%");*/
+		 this.sideBarToogle();
      }
     
     
@@ -104,7 +105,7 @@ class Search_form extends Extends
                    event.preventDefault();
                    return;  
                   }
-                  window.objectReg['Search_table_v2'].setState({itemCode:itemCode,shouldComponentUpdate:false})
+                  window.objectReg['Search_table_v2'].setState({itemCode:itemCode,shouldComponentUpdate:false,brandCode:undefined,showBrandList:false})
             }
              );   
           } else
@@ -116,7 +117,7 @@ class Search_form extends Extends
                {
                    Console.log(e)
                }
-               window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc(),shouldComponentUpdate:false});
+               window.objectReg['Search_table_v2'].setState({itemCode:getItemCodeFunc(),shouldComponentUpdate:false,brandCode:undefined,showBrandList:false});
           }
              
            

@@ -86,7 +86,7 @@ export function handleData(jsonData,standMap=undefined,jsonSubDataName=undefined
              {   
                    
                 // map[item]={};
-                if (typeof itemsObject[item]=="object" ) 
+                if (typeof itemsObject[item]=="object" && itemsObject[item]!=null) 
                 {
                       
                     for ( subItem in itemsObject[item])

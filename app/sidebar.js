@@ -39,8 +39,10 @@ import './css/plugins.css';
 
 require ('bootstrap/dist/js/bootstrap.js');
 require ('bootstrap/dist/css/bootstrap.min.css');
+var App=require('./js/app.js'); 
 
 require ('./js/app.js');
+
 //require('style-loader!css-loader!./css/plugins.css');         
  
  
@@ -64,13 +66,81 @@ export class Sidebar  extends Extends
     constructor(props) 
      {  
        super(props);      
-         
+       this.touchMove=this.touchMove.bind(this);
+	   this.touchMoveXCoords=[];
+	   this.touchMoveYCoords=[];
+	   this.isSideBarOpened=false;
          
      } 
-     
+	 getWindowWidth(){
+        return window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth;
+    }
+	 sideBarToogle()
+	 {   
+		  this.isSideBarOpened=!this.isSideBarOpened;		  
+		  App.App.sidebar('toggle-sidebar');
+          $("body").css("width","100%");
+	 }
+	 touchMove(e)
+	 {
+	   /* if (e.target.id=="sidebar") 
+		{
+			e.preventDefault();
+			return;
+		}*/
+				  
+	   var x = e.touches[0].clientX;
+       var y = e.touches[0].clientY;
+	   this.touchMoveXCoords.push(Number(x));
+	   this.touchMoveYCoords.push(Number(y));
+	   var ln=2
+	   var lnY=30
+	   if (this.touchMoveXCoords.length==ln)
+	   {
+		   
+		   if (Number(this.touchMoveXCoords[0])>Number(this.touchMoveXCoords[ln-1]) 
+			&& Math.abs(Number(this.touchMoveYCoords[0])-Number(this.touchMoveYCoords[ln-1]))<lnY   
+		   && this.isSideBarOpened==true)
+	       {
+			/*   this.isSideBarOpened=false;
+		   //alert(this.touchMoveXCoords[1])
+		    App.App.sidebar('toggle-sidebar');
+            $("body").css("width","100%");*/
+			this.sideBarToogle();
+		   
+	       }
+		   else if(Number(this.touchMoveXCoords[0])<Number(this.touchMoveXCoords[ln-1]) 
+			&& Math.abs(Number(this.touchMoveYCoords[0])-Number(this.touchMoveYCoords[ln-1]))<lnY  
+		   && this.isSideBarOpened==false)
+		   {
+			  /* this.isSideBarOpened=true;
+			    App.App.sidebar('toggle-sidebar');
+              $("body").css("width","100%");*/
+			  this.sideBarToogle();
+		   }
+		  this.touchMoveXCoords=[];
+          this.touchMoveYCoords=[];		  
+		 
+	   }else
+	   {
+		   
+	   }
+	   
+	   
+	   
+	 }
+	 touchDenyMove(e)
+	 {
+		 e.stopPropagation();
+		 return;
+	 }
+     /////////////////////////////////////
      componentDidMount()
      {
-       
+       super.componentDidMount();
+	   this.isSideBarOpened=this.getWindowWidth()>991
      }
      
      childUpdate(obj)
@@ -90,10 +160,10 @@ export class Sidebar  extends Extends
      {          
        return (<Router>
 	            
-                <div id="page-container" className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
+                <div id="page-container" onTouchMove={this.touchMove} className="header-fixed-top sidebar-partial sidebar-visible-lg sidebar-visible-lg sidebar-no-animations">            
                   <Progress_bar/>				  
 				  
-				  <div id="sidebar" className="">        
+				  <div id="sidebar" onTouchMove={this.touchDenyMove} className="">        
                     <div className='sidebar-scroll'> 
                       <div id='sidebar-content' className='sidebar-content'>                         
                         <Sidebar_brand/>    

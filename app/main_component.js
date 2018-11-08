@@ -21,11 +21,15 @@ export class Extends extends React.Component
                      };
         
          this.xhr = new XMLHttpRequest();
-         
+         this.stopTouchMovePropagation=this.stopTouchMovePropagation.bind(this)
          //this.objectReg={};
   
         
     }
+	stopTouchMovePropagation(e)
+	{
+		e.stopPropagation();
+	}
     
    
      componentDidUpdate(prevProps, prevState)
@@ -303,9 +307,16 @@ export class Extends extends React.Component
          Uobject=window.objectReg["Info_message"];
          Uobject.setState({header:header,body:message});
           
+		  if (!Uobject.state.isOn)
+		  {
+			  linkA.click();
+		  }
+		  Uobject.setState({isOn:true});
          
          }
-         linkA.click(); 
+		 
+		
+         
          
          
      }
@@ -385,5 +396,10 @@ export class Extends extends React.Component
   deActivateProgressBar()
   {    var progressBar=window.objectReg["Progress_bar"];
 	  progressBar.deActivateBar();
+  }
+  sideBarToogle()
+  {
+	  var sideBar=window.objectReg["Sidebar"];
+      sideBar.sideBarToogle();	  
   }
 }

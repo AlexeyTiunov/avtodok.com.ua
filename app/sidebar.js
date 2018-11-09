@@ -34,6 +34,7 @@ import {Auth} from './auth.js'
 import {Balance} from './balance.js' 
 import {Pay_notification} from './balance.js'
 import {Progress_bar} from './progress_bar.js'
+import {Check} from './check.js'
  
 import './css/plugins.css'; 
 
@@ -140,8 +141,14 @@ export class Sidebar  extends Extends
      componentDidMount()
      {
        super.componentDidMount();
-	   this.isSideBarOpened=this.getWindowWidth()>991
+	   this.isSideBarOpened=this.getWindowWidth()>991;
+	   this.deActivateProgressBar();
      }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+		 
+	 }
      
      childUpdate(obj)
      {
@@ -183,6 +190,7 @@ export class Sidebar  extends Extends
                     <Info_message/>  
                     <Auth /> 
                     <Pay_notification/>        
+					
                 </div>  
                
               </Router> 

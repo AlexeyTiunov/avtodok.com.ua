@@ -50,6 +50,7 @@ export class Page_content  extends Extends
      componentDidUpdate(prevProps, prevState)
      {
         super.componentDidUpdate(prevProps, prevState);
+		
      }
      
      defineRoutes(defRoutes)

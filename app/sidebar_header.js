@@ -84,8 +84,9 @@ class Search_form extends Extends
          } */
         // Uobject=window.objectReg['Page_content'];
         
-        if (window.isMobile)
-        {   var itemCode=event.target.value; 
+        //if (window.isMobile)
+        //{   
+	       var itemCode=event.target.value; 
             getItemCodeFunc=function()
             {
               return  itemCode; 
@@ -122,8 +123,8 @@ class Search_form extends Extends
              
            
             
-        }
-        else
+        //}
+       /* else
         {
             
         
@@ -144,7 +145,7 @@ class Search_form extends Extends
          
          
          
-        }
+        }*/
          // alert(this.state.dataRecieved);
          
          
@@ -282,6 +283,41 @@ class Search_form extends Extends
      }
  }
 
+ export class Preloader_icon extends Extends
+ {
+	 constructor(props)
+	 {
+		 super(props);
+		 this.state.preloader=false;
+	 }
+	 ////////////////////////////////////////
+	 componentDidMount()
+	 {
+		 super.componentDidMount();
+	 }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+	 }
+	 render()
+	 {
+		 if (this.state.preloader)
+		 {
+			 return (<div>
+			          <img style={{"width":"40px","height":"40px"}}src='/app/img/preloader_m.gif'/>
+			         </div>
+                      )
+		 }else
+		 {
+			return ( 
+			          <Basket_icon/>
+					 
+			       )
+		 }
+	 }
+	 
+ }
+ 
 
 export class Sidebar_header  extends Extends
 {
@@ -311,7 +347,7 @@ export class Sidebar_header  extends Extends
 					    <Currency_rates/>
 					 </li>
 					 <li>
-                       <Basket_icon/> 
+                       <Preloader_icon/> 
                       
                      </li> 
 					 

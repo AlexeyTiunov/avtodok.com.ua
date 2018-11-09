@@ -24,7 +24,8 @@ export class Progress_bar extends Extends
 	 {
 		 if (func==undefined)
 		 func=function(){};
-		 this.setState({display:"block"},func)
+		 this.setState({display:"block",width:0},func);
+		 
 		 this.interval=setInterval(this.moveBarAsync,this.intervalDuration);
 	 }
 	 deActivateBar()
@@ -73,6 +74,8 @@ export class Progress_bar extends Extends
 	 stopBar()
 	 {
 		 clearInterval(this.interval);
+         this.duration=0;		 
+		 this.width=0;
 		 this.setState({display:"none",width:0});
 		 
 	 }

@@ -390,12 +390,17 @@ export class Extends extends React.Component
   
   activateProgressBar(func)
   {
-	  var progressBar=window.objectReg["Progress_bar"];
-	  progressBar.activateBar(func);
+	  //var progressBar=window.objectReg["Progress_bar"];
+	 // progressBar.activateBar(func);
+	 var progressBar=window.objectReg["Preloader_icon"];
+	 progressBar.setState({preloader:true})
+	 
   }
   deActivateProgressBar()
-  {    var progressBar=window.objectReg["Progress_bar"];
-	  progressBar.deActivateBar();
+  {  //  var progressBar=window.objectReg["Progress_bar"];
+	 // progressBar.deActivateBar();
+	 var progressBar=window.objectReg["Preloader_icon"];
+	 progressBar.setState({preloader:false})
   }
   sideBarToogle()
   {

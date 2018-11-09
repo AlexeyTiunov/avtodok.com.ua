@@ -159,7 +159,7 @@ export class Order_detail extends Extends
 		if (this.state.mapArray.length!=0)
 		{
 			
-		    this.deActivateProgressBar();
+		    //this.deActivateProgressBar();
 		}
         
     }

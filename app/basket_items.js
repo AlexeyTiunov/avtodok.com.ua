@@ -21,16 +21,16 @@ function getMapObject()
       ID:{functions:{sFunc},params:[]},  
       BrandName:{functions:{sFunc,defineColumnName,defineTd},params: ["1","Бренд",<BrandCode_td/>] },
       ItemCodeTamplate:{functions:{sFunc,defineColumnName,defineTd},params:["1","Номер",<Common_td />]},      
-      Caption:{functions:{sFunc,defineColumnName,defineTd},params:["1","Название",<Common_td />]},
-      QUANTITY:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Кол-во",[".","0"],<Quantity_td />]},
-      DeliveryDays:{functions:{sFunc,formatNumber,addSuffix},params:["Срок Поставки",[".","0"]," дні"]},
-      PRICE:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Цена",[".","2"],<Price_td />]},
+      Caption:{functions:{sFunc,defineColumnName,defineTd},params:["1","Найменування",<Common_td />]},
+      QUANTITY:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Кіл-ть",[".","0"],<Quantity_td />]},
+      DeliveryDays:{functions:{sFunc,formatNumber,addSuffix},params:["Термін поставки",[".","0"]," дні"]},
+      PRICE:{functions:{sFunc,defineColumnName,formatNumber,defineTd},params:["1","Ціна",[".","2"],<Price_td />]},
 	  Currency:{functions:{},params:[]},
       Sum:{},
       PriceUSD:{},
       SumUSD:{},
       Props:{},
-      DELETE:{functions:{sFunc,defineColumnName,defineTd},params:["1","Удалить",<Delete_td />],addNew:true},
+      DELETE:{functions:{sFunc,defineColumnName,defineTd},params:["1","Видалити",<Delete_td />],addNew:true},
         
         
         
@@ -349,7 +349,7 @@ export class Delete_td extends Extends
           var Pro=this.makeRequestToRecieveData("POST","/ws/Basket.php",false,mas.join('&'));
           
           Pro.then(function(data){
-            alert(data) ; 
+            //alert(data) ; 
             obj=window.objectReg["Basket_items"];
             obj.getBasketItems();
              obj=window.objectReg["Basket_icon"];
@@ -428,6 +428,7 @@ export class Basket_info extends Extends
        this.updateBasketOrderButton();
        
      } 
+	 
      updateBasketOrderButton()
      {
         Uobject=window.objectReg['Basket_order_button']; 
@@ -486,12 +487,20 @@ export class Basket_order_button extends Extends
         //Uobject=window.objectReg['Basket_info'];
         this.state.DELIVERY="N";
         this.state.PAYS="N"; 
+		this.onclick=this.onclick.bind(this);
      } 
+	 onclick(e)
+     {
+		
+		 this.activateProgressBar();
+		       
+		 
+     }
      render ()
      {
       return(  <div className="clearfix">
                             <div className="btn-group pull-right">
-                                <Link className="btn btn-primary" to={`/Order_basket/${this.state.DELIVERY}/${this.state.PAYS}`}><i class="fa fa-angle-right"></i> Оформити замовлення</Link>                                
+                                <Link onClick={this.onclick} className="btn btn-primary" to={`/Order_basket/${this.state.DELIVERY}/${this.state.PAYS}`}><i class="fa fa-angle-right"></i> Оформити замовлення</Link>                                
                             </div>
                         </div> 
                  )

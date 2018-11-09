@@ -54,6 +54,9 @@ export class Sidebar_nav  extends Extends
      } 
      onclick()
      {
+		 if (window.isMobile) this.sideBarToogle();
+		 
+		 this.deActivateProgressBar();
 		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 		 

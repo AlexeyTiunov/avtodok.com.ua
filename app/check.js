@@ -9,6 +9,7 @@ export class Check extends Extends
 	constructor(props)
 	{
 		super(props);
+		this.state.update=false;
 	}
 	////////////////////////////////////////
 	componentDidUpdate()

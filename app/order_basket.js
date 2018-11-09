@@ -20,7 +20,7 @@ export class Order_basket extends Extends
     orderBusket()
     {
         
-         var Prom=this.makeRequestToRecieveData("POST","/ws/autodoc/process_order.php",false,this.makePostDataFromState())
+         var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/autodoc/process_order.php",this.makePostDataFromState())
          var busket=function(responseText)
 		 {
            handleOrders=new handleData(responseText,undefined,"ORDERS");
@@ -29,9 +29,14 @@ export class Order_basket extends Extends
 		   
          }.bind(this)
 		 
-         Prom.then(busket)
+         Prom.then(busket);
+		 
     }
 	//////////////////////////////////////
+	componentDidUpdate()
+	{
+		this.deActivateProgressBar();
+	}
 	componentDidMount()
 	{
 		this.orderBusket();
@@ -60,8 +65,6 @@ export class Order_basket extends Extends
 		}		
         return (
                  <div class="block full">
-          
-                    {this.props.match.params.DELIVERY}
 					{madeOrders}
                  </div>
               

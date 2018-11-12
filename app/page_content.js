@@ -17,6 +17,7 @@ import {Shiping_docs} from './shipingdocs.js'
 import {Shiping_detail} from './shiping_detail.js'
 import {Shipingdoc_detail} from './shipingdoc_detail.js'
 import {Contacts} from './contacts.js'
+import {Catalogs_auto} from './catalogs_auto.js'
 
 export class Page_content  extends Extends
 {
@@ -73,6 +74,7 @@ export class Page_content  extends Extends
                          <Route path="/user_info" component={Sidebar_usersettings} />
                          <Route path="/search/:id?" component={Search_table_v2} /> 
 						 <Route path="/contacts" component={Contacts} />
+						 <Route path="/catalogs" component={Catalogs_auto} />
                      </Switch>
                   
                 )

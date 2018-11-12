@@ -829,7 +829,7 @@ function getV2_table()
 		 }*/
 		 
 		 $(thisElement).dataTable({
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 2 ] } ],
+                "aoColumnDefs": [  ],
                 "iDisplayLength": 5,
                 "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
             });

@@ -50,8 +50,18 @@ export class Sidebar_nav  extends Extends
        super(props);
        this.state={items:this.props.items};      
        this.onclick=this.onclick.bind(this);  
-         
+       this.ontouchstart=this.ontouchstart.bind(this);
+       this.stPropagation=this.stPropagation.bind(this);   
      } 
+	 ontouchstart(e)
+	 {
+		
+		 e.stopPropagation();
+	 }
+	 stPropagation(e)
+	 {
+		 e.stopPropagation();
+	 }	 
      onclick()
      {
 		 if (window.isMobile) this.sideBarToogle();
@@ -89,7 +99,7 @@ export class Sidebar_nav  extends Extends
                                      
                          
                          const c = (<li>
-                                     <a href={item.href} className={item.className+" open"}><i className="fa fa-angle-left sidebar-nav-indicator"></i><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
+                                     <a onClick={self.onclick} href={item.href} className={item.className+" open"}><i className="fa fa-angle-left sidebar-nav-indicator"></i><i className='gi gi-home sidebar-nav-icon'></i><font><font>{item.name}</font></font></a>
                                     <ul style={{"display":"block"}}>
                                         
                                        {gg}
@@ -103,7 +113,7 @@ export class Sidebar_nav  extends Extends
                      }
                      {
                          const ff=  ( <li>
-                               <a  href={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></a>
+                               <Link onClickCapture={self.onclick} onMouseOutCapture={self.stPropagation} onMouseOverCapture={self.stPropagation} onTouchStartCapture={self.stPropagation} onTouchMoveCapture={self.stPropagation} to={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></Link>
                               </li> ) 
                       return ff;        
                           

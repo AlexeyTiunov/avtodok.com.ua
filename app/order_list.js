@@ -28,7 +28,7 @@ function getMapObject()
       BRAND:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Бренд","hidden-xs",<Common_td />,]}, 
       REGIONCODE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Регион","hidden-xs hidden-sm hidden-md",<Common_td />,]}, 
       ARTICLE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Номер","hidden-xs hidden-sm hidden-md",<Common_td />,]}, 
-      NAME:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Название","hidden-xs",<Common_td />,]},
+      NAME:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Название","",<Name_td />,]},
       QUANTITY:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Количество","hidden-xs",<Common_td/>,]},
       PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd},params:[[".","2"],"Цена","hidden-xs",<Common_td />,]}, 
       ORDER_PRICE:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Сумма","hidden-xs",<Common_td />,]},
@@ -214,7 +214,31 @@ export class Orderid_td extends Extends
      {
          return (
           
-                  <td className={this.state.proto[this.state.NAME].className+" text-center" }><Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>{this.state.proto[this.state.NAME].fValue}</Link></td>  
+                  <td className={this.state.proto[this.state.NAME].className+" text-center" }>
+				  <Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>
+				  {this.state.proto[this.state.NAME].fValue}</Link><br/>				  
+				  </td>  
+          
+          
+                )
+     }
+    
+}
+export class Name_td extends Extends 
+{
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+         
+     } 
+     render()
+     {
+         return (
+          
+                  <td className={this.state.proto[this.state.NAME].className+" text-center" }>				  
+				  {this.state.proto[this.state.NAME].fValue}
+				  </td>  
           
           
                 )
@@ -233,7 +257,10 @@ export class Common_td extends Extends
      render()
      {
        return(
-                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> {this.state.proto[this.state.NAME].fValue}</td> 
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
+				   {this.state.proto[this.state.NAME].fValue}				   
+				   
+				   </td> 
         
         
          

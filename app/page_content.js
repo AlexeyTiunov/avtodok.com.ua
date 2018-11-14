@@ -73,6 +73,7 @@ export class Page_content  extends Extends
                          <Route path="/shipingdoc_detail/:id" component={Shipingdoc_detail} /> 						 
                          <Route path="/user_info" component={Sidebar_usersettings} />
                          <Route path="/search/:id?" component={Search_table_v2} /> 
+						 <Route path="/avtodok.com.ua/search/:id?" component={Search_table_v2} /> 
 						 <Route path="/contacts" component={Contacts} />
 						 <Route path="/catalogs" component={Catalogs_auto} />
                      </Switch>

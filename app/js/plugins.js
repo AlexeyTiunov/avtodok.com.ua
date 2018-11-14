@@ -7322,7 +7322,7 @@ this.wysihtml5 = this.wysihtml5 || {}, this.wysihtml5.tpl = this.wysihtml5.tpl |
  * Version: 1.3.2
  *
  */
-(function(f){jQuery.fn.extend({slimScroll:function(g){var a=f.extend({width:"auto",height:"250px",size:"7px",color:"#000",position:"right",distance:"1px",start:"top",opacity:0.4,alwaysVisible:!1,disableFadeOut:!1,railVisible:!1,railColor:"#333",railOpacity:0.2,railDraggable:!0,railClass:"slimScrollRail",barClass:"slimScrollBar",wrapperClass:"slimScrollDiv",allowPageScroll:!1,wheelStep:20,touchScrollStep:200,borderRadius:"7px",railBorderRadius:"7px"},g);this.each(function(){function u(d){if(r){d=d||
+/*(function(f){jQuery.fn.extend({slimScroll:function(g){var a=f.extend({width:"auto",height:"250px",size:"7px",color:"#000",position:"right",distance:"1px",start:"top",opacity:0.4,alwaysVisible:!1,disableFadeOut:!1,railVisible:!1,railColor:"#333",railOpacity:0.2,railDraggable:!0,railClass:"slimScrollRail",barClass:"slimScrollBar",wrapperClass:"slimScrollDiv",allowPageScroll:!1,wheelStep:20,touchScrollStep:200,borderRadius:"7px",railBorderRadius:"7px"},g);this.each(function(){function u(d){if(r){d=d||
 window.event;var c=0;d.wheelDelta&&(c=-d.wheelDelta/120);d.detail&&(c=d.detail/3);f(d.target||d.srcTarget||d.srcElement).closest("."+a.wrapperClass).is(b.parent())&&m(c,!0);d.preventDefault&&!k&&d.preventDefault();k||(d.returnValue=!1)}}function m(d,f,g){k=!1;var e=d,h=b.outerHeight()-c.outerHeight();f&&(e=parseInt(c.css("top"))+d*parseInt(a.wheelStep)/100*c.outerHeight(),e=Math.min(Math.max(e,0),h),e=0<d?Math.ceil(e):Math.floor(e),c.css({top:e+"px"}));l=parseInt(c.css("top"))/(b.outerHeight()-c.outerHeight());
 e=l*(b[0].scrollHeight-b.outerHeight());g&&(e=d,d=e/b[0].scrollHeight*b.outerHeight(),d=Math.min(Math.max(d,0),h),c.css({top:d+"px"}));b.scrollTop(e);b.trigger("slimscrolling",~~e);v();p()}function C(){window.addEventListener?(this.addEventListener("DOMMouseScroll",u,!1),this.addEventListener("mousewheel",u,!1)):document.attachEvent("onmousewheel",u)}function w(){s=Math.max(b.outerHeight()/b[0].scrollHeight*b.outerHeight(),D);c.css({height:s+"px"});var a=s==b.outerHeight()?"none":"block";c.css({display:a})}
 function v(){w();clearTimeout(A);l==~~l?(k=a.allowPageScroll,B!=l&&b.trigger("slimscroll",0==~~l?"top":"bottom")):k=!1;B=l;s>=b.outerHeight()?k=!0:(c.stop(!0,!0).fadeIn("fast"),a.railVisible&&h.stop(!0,!0).fadeIn("fast"))}function p(){a.alwaysVisible||(A=setTimeout(function(){a.disableFadeOut&&r||x||y||(c.fadeOut("slow"),h.fadeOut("slow"))},1E3))}var r,x,y,A,z,s,l,B,D=30,k=!1,b=f(this);if(b.parent().hasClass(a.wrapperClass)){var n=b.scrollTop(),c=b.parent().find("."+a.barClass),h=b.parent().find("."+
@@ -7331,7 +7331,231 @@ overflow:"hidden",width:a.width,height:a.height});b.css({overflow:"hidden",width
 "block":"none","border-radius":a.borderRadius,BorderRadius:a.borderRadius,MozBorderRadius:a.borderRadius,WebkitBorderRadius:a.borderRadius,zIndex:99}),q="right"==a.position?{right:a.distance}:{left:a.distance};h.css(q);c.css(q);b.wrap(n);b.parent().append(c);b.parent().append(h);a.railDraggable&&c.bind("mousedown",function(a){var b=f(document);y=!0;t=parseFloat(c.css("top"));pageY=a.pageY;b.bind("mousemove.slimscroll",function(a){currTop=t+a.pageY-pageY;c.css("top",currTop);m(0,c.position().top,!1)});
 b.bind("mouseup.slimscroll",function(a){y=!1;p();b.unbind(".slimscroll")});return!1}).bind("selectstart.slimscroll",function(a){a.stopPropagation();a.preventDefault();return!1});h.hover(function(){v()},function(){p()});c.hover(function(){x=!0},function(){x=!1});b.hover(function(){r=!0;v();p()},function(){r=!1;p()});b.bind("touchstart",function(a,b){a.originalEvent.touches.length&&(z=a.originalEvent.touches[0].pageY)});b.bind("touchmove",function(b){k||b.originalEvent.preventDefault();b.originalEvent.touches.length&&
 (m((z-b.originalEvent.touches[0].pageY)/a.touchScrollStep,!0),z=b.originalEvent.touches[0].pageY)});w();"bottom"===a.start?(c.css({top:b.outerHeight()-c.outerHeight()}),m(0,!0)):"top"!==a.start&&(m(f(a.start).position().top,null,!0),a.alwaysVisible||c.hide());C()}});return this}});jQuery.fn.extend({slimscroll:jQuery.fn.slimScroll})})(jQuery);
+*/
+/*   Вставьте Ваш код и нажмите на кнопку "Раскодировать"   */
+(function (f) {
+    jQuery.fn.extend({
+        slimScroll: function (g) {
+            var a = f.extend({
+                width: "auto",
+                height: "250px",
+                size: "7px",
+                color: "#000",
+                position: "right",
+                distance: "1px",
+                start: "top",
+                opacity: 0.4,
+                alwaysVisible: !1,
+                disableFadeOut: !1,
+                railVisible: !1,
+                railColor: "#333",
+                railOpacity: 0.2,
+                railDraggable: !0,
+                railClass: "slimScrollRail",
+                barClass: "slimScrollBar",
+                wrapperClass: "slimScrollDiv",
+                allowPageScroll: !1,
+                wheelStep: 20,
+                touchScrollStep: 200,
+                borderRadius: "7px",
+                railBorderRadius: "7px"
+            }, g);
+            this.each(function () {
+                function u(d) {
+                    if (r) {
+                        d = d || window.event;
+                        var c = 0;
+                        d.wheelDelta && (c = -d.wheelDelta / 120);
+                        d.detail && (c = d.detail / 3);
+                        f(d.target || d.srcTarget || d.srcElement).closest("." + a.wrapperClass).is(b.parent()) && m(c, !0);
+                        d.preventDefault && !k && d.preventDefault();
+                        k || (d.returnValue = !1)
+                    }
+                }
+                function m(d, f, g) {
+                    k = !1;
+                    var e = d,
+                        h = b.outerHeight() - c.outerHeight();
+                    f && (e = parseInt(c.css("top")) + d * parseInt(a.wheelStep) / 100 * c.outerHeight(), e = Math.min(Math.max(e, 0), h), e = 0 < d ? Math.ceil(e) : Math.floor(e), c.css({
+                        top: e + "px"
+                    }));
+                    l = parseInt(c.css("top")) / (b.outerHeight() - c.outerHeight());
+                    e = l * (b[0].scrollHeight - b.outerHeight());
+                    g && (e = d, d = e / b[0].scrollHeight * b.outerHeight(), d = Math.min(Math.max(d, 0), h), c.css({
+                        top: d + "px"
+                    }));
+                    b.scrollTop(e);
+                    b.trigger("slimscrolling", ~~e);
+                    v();
+                    p()
+                }
+                function C() {
+                    window.addEventListener ? (this.addEventListener("DOMMouseScroll", u, !1), this.addEventListener("mousewheel", u, !1)) : document.attachEvent("onmousewheel", u)
+                }
+                function w() {
+                    s = Math.max(b.outerHeight() / b[0].scrollHeight * b.outerHeight(), D);
+                    c.css({
+                        height: s + "px"
+                    });
+                    var a = s == b.outerHeight() ? "none" : "block";
+                    c.css({
+                        display: a
+                    })
+                }
 
+                function v() {
+                    w();
+                    clearTimeout(A);
+                    l == ~~l ? (k = a.allowPageScroll, B != l && b.trigger("slimscroll", 0 == ~~l ? "top" : "bottom")) : k = !1;
+                    B = l;
+                    s >= b.outerHeight() ? k = !0 : (c.stop(!0, !0).fadeIn("fast"), a.railVisible && h.stop(!0, !0).fadeIn("fast"))
+                }
+                function p() {
+                    a.alwaysVisible || (A = setTimeout(function () {
+                        a.disableFadeOut && r || x || y || (c.fadeOut("slow"), h.fadeOut("slow"))
+                    }, 1E3))
+                }
+                var r, x, y, A, z, s, l, B, D = 30,
+                    k = !1,
+                    b = f(this);
+                if (b.parent().hasClass(a.wrapperClass)) {
+                    var n = b.scrollTop(),
+                        c = b.parent().find("." + a.barClass),
+                        h = b.parent().find("." + a.railClass);
+                    w();
+                    if (f.isPlainObject(g)) {
+                        if ("height" in g && "auto" == g.height) {
+                            b.parent().css("height", "auto");
+                            b.css("height", "auto");
+                            var q = b.parent().parent().height();
+                            b.parent().css("height", q);
+                            b.css("height", q)
+                        }
+                        if ("scrollTo" in g) n = parseInt(a.scrollTo);
+                        else if ("scrollBy" in g) n += parseInt(a.scrollBy);
+                        else if ("destroy" in g) {
+                            c.remove();
+                            h.remove();
+                            b.unwrap();
+                            return
+                        }
+                        m(n, !1, !0)
+                    }
+                } else {
+                    a.height = "auto" == g.height ? b.parent().height() : g.height;
+                    n = f("<div></div>").addClass(a.wrapperClass).css({
+                        position: "relative",
+                        overflow: "hidden",
+                        width: a.width,
+                        height: a.height
+                    });
+                    b.css({
+                        overflow: "hidden",
+                        width: a.width,
+                        height: a.height
+                    });
+                    var h = f("<div></div>").addClass(a.railClass).css({
+                        width: a.size,
+                        height: "100%",
+                        position: "absolute",
+                        top: 0,
+                        display: a.alwaysVisible && a.railVisible ? "block" : "none",
+                        "border-radius": a.railBorderRadius,
+                        background: a.railColor,
+                        opacity: a.railOpacity,
+                        zIndex: 90
+                    }),
+                        c = f("<div></div>").addClass(a.barClass).css({
+                            background: a.color,
+                            width: a.size,
+                            position: "absolute",
+                            top: 0,
+                            opacity: a.opacity,
+                            display: a.alwaysVisible ? "block" : "none",
+                            "border-radius": a.borderRadius,
+                            BorderRadius: a.borderRadius,
+                            MozBorderRadius: a.borderRadius,
+                            WebkitBorderRadius: a.borderRadius,
+                            zIndex: 99
+                        }),
+                        q = "right" == a.position ? {
+                            right: a.distance
+                        } : {
+                            left: a.distance
+                        };
+                    h.css(q);
+                    c.css(q);
+                    b.wrap(n);
+                    b.parent().append(c);
+                    b.parent().append(h);
+                    a.railDraggable && c.bind("mousedown", function (a) {
+                        var b = f(document);
+                        y = !0;
+                        t = parseFloat(c.css("top"));
+                        pageY = a.pageY;
+                        b.bind("mousemove.slimscroll", function (a) {
+                            currTop = t + a.pageY - pageY;
+                            c.css("top", currTop);
+                            m(0, c.position().top, !1)
+                        });
+                        b.bind("mouseup.slimscroll", function (a) {
+                            y = !1;
+                            p();
+                            b.unbind(".slimscroll")
+                        });
+                        return !1
+                    }).bind("selectstart.slimscroll", function (a) {
+                        a.stopPropagation();
+                        a.preventDefault();
+                        return !1
+                    });
+                    h.hover(function () {
+                        v()
+                    }, function () {
+                        p()
+                    });
+                    c.hover(function () {
+                        x = !0
+                    }, function () {
+                        x = !1
+                    });
+					if (!window.isMobile)
+					{
+						
+					
+                     b.hover(function () {
+						
+                        r = !0;
+                        v();
+                        p();
+						
+                     }, function () {
+                       r = !1;
+                        p();
+						
+                     });
+					}
+                    b.bind("touchstart", function (a, b) {
+                        a.originalEvent.touches.length && (z = a.originalEvent.touches[0].pageY)
+                    });
+                    b.bind("touchmove", function (b) {
+                        k || b.originalEvent.preventDefault();
+                        b.originalEvent.touches.length && (m((z - b.originalEvent.touches[0].pageY) / a.touchScrollStep, !0), z = b.originalEvent.touches[0].pageY)
+                    });
+                    w();
+                    "bottom" === a.start ? (c.css({
+                        top: b.outerHeight() - c.outerHeight()
+                    }), m(0, !0)) : "top" !== a.start && (m(f(a.start).position().top, null, !0), a.alwaysVisible || c.hide());
+                    C()
+                }
+            });
+            return this
+        }
+    });
+    jQuery.fn.extend({
+        slimscroll: jQuery.fn.slimScroll
+    })
+})(jQuery);
 /*! http://mths.be/placeholder v2.0.7 by @mathias */
 !function(e,t,n){function i(e){var t={},i=/^jQuery\d+$/;return n.each(e.attributes,function(e,n){n.specified&&!i.test(n.name)&&(t[n.name]=n.value)}),t}function r(e,t){var i=this,r=n(i);if(i.value==r.attr("placeholder")&&r.hasClass("placeholder"))if(r.data("placeholder-password")){if(r=r.hide().next().show().attr("id",r.removeAttr("id").data("placeholder-id")),e===!0)return r[0].value=t;r.focus()}else i.value="",r.removeClass("placeholder"),i==o()&&i.select()}function a(){var e,t=this,a=n(t),o=this.id;if(""==t.value){if("password"==t.type){if(!a.data("placeholder-textinput")){try{e=a.clone().attr({type:"text"})}catch(s){e=n("<input>").attr(n.extend(i(this),{type:"text"}))}e.removeAttr("name").data({"placeholder-password":a,"placeholder-id":o}).bind("focus.placeholder",r),a.data({"placeholder-textinput":e,"placeholder-id":o}).before(e)}a=a.removeAttr("id").hide().prev().attr("id",o).show()}a.addClass("placeholder"),a[0].value=a.attr("placeholder")}else a.removeClass("placeholder")}function o(){try{return t.activeElement}catch(e){}}var s,l,c="placeholder"in t.createElement("input"),u="placeholder"in t.createElement("textarea"),d=n.fn,h=n.valHooks,f=n.propHooks;c&&u?(l=d.placeholder=function(){return this},l.input=l.textarea=!0):(l=d.placeholder=function(){var e=this;return e.filter((c?"textarea":":input")+"[placeholder]").not(".placeholder").bind({"focus.placeholder":r,"blur.placeholder":a}).data("placeholder-enabled",!0).trigger("blur.placeholder"),e},l.input=c,l.textarea=u,s={get:function(e){var t=n(e),i=t.data("placeholder-password");return i?i[0].value:t.data("placeholder-enabled")&&t.hasClass("placeholder")?"":e.value},set:function(e,t){var i=n(e),s=i.data("placeholder-password");return s?s[0].value=t:i.data("placeholder-enabled")?(""==t?(e.value=t,e!=o()&&a.call(e)):i.hasClass("placeholder")?r.call(e,!0,t)||(e.value=t):e.value=t,i):e.value=t}},c||(h.input=s,f.value=s),u||(h.textarea=s,f.value=s),n(function(){n(t).delegate("form","submit.placeholder",function(){var e=n(".placeholder",this).each(r);setTimeout(function(){e.each(a)},10)})}),n(e).bind("beforeunload.placeholder",function(){n(".placeholder").each(function(){this.value=""})}))}(this,document,jQuery);
 

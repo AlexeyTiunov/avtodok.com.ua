@@ -83,6 +83,11 @@ export class Sidebar  extends Extends
 		  this.isSideBarOpened=!this.isSideBarOpened;		  
 		  App.App.sidebar('toggle-sidebar');
           $("body").css("width","100%");
+		  /*if (this.isSideBarOpened==true)
+		  {
+			 var sidebar_brand=window.objectReg["Sidebar_brand"];
+			 sidebar_brand.startMouseEnterEvent();
+		  }*/
 	 }
 	 touchMove(e)
 	 {
@@ -96,7 +101,7 @@ export class Sidebar  extends Extends
        var y = e.touches[0].clientY;
 	   this.touchMoveXCoords.push(Number(x));
 	   this.touchMoveYCoords.push(Number(y));
-	   var ln=2
+	   var ln=3
 	   var lnY=30
 	   if (this.touchMoveXCoords.length==ln)
 	   {
@@ -119,7 +124,7 @@ export class Sidebar  extends Extends
 			  /* this.isSideBarOpened=true;
 			    App.App.sidebar('toggle-sidebar');
               $("body").css("width","100%");*/
-			  this.sideBarToogle();
+			  //this.sideBarToogle();
 		   }
 		  this.touchMoveXCoords=[];
           this.touchMoveYCoords=[];		  
@@ -224,6 +229,14 @@ window.getWorkPage= function ()
     return window.objectReg['Page_content'];
     
 }
+
+/*var aCollection=document.getElementsByTagName("a")
+for (var a in aCollection)
+{
+	aCollection[a].removeEventListener('mouseenter mouseleave');
+}*/
+
+
 
  //debugger
  //require ('./js/app.js');     

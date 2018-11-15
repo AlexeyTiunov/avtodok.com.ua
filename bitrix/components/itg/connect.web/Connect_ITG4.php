@@ -794,8 +794,8 @@ if ((isset($product['Quantity']) && intval($product['Quantity']) == 1000)||(isse
                     $this->InfoFromTehnomirToDBase($product,$DB);
                     if  ($product['Brand']== "MERCEDES BENZ")$product['Brand']="MERCEDES-BENZ" ;
                     if  ($product['Brand']== "VAG")$product['Brand']="VW" ;
-                      
-					$product['CAPTION'] = iconv('cp1251','utf8',$product['Name']);
+                    $product['Name']=iconv('cp1251','utf8',$product['Name']);   
+					$product['CAPTION'] = $product['Name'];
                      #$product['CAPTION'] =$product['Name']; 
                     # echo "-------------------<br /><pre>";
                       #print_r($product['Name']);

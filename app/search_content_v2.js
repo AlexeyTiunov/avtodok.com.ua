@@ -578,6 +578,7 @@ function getMapObject()
      }
     async dataSortAsync(data)
      {
+		 
          if (data.length==1) return data;
          for (  var i=0;i<data.length;i++)
          {
@@ -598,6 +599,33 @@ function getMapObject()
          
         return data; 
      }
+	 async dataSortForRegionAsync(data)
+	 {
+		 var regionRangeObjectValue={
+              "0-1":[],
+              "2-4":[],
+              "980-999":[], 
+              "default":[],
+              
+          };
+		 
+		 if (data.length==1) return data;
+		 for (  var i=0;i<data.length;i++)
+         {
+			 this.getRangeObjectValue(regionRangeObjectValue,data[i].RegionCode.fValue).push(data[i])
+			 
+		 }
+		 var mapArray=[];
+		 for   (range in regionRangeObjectValue)
+		 {
+			 for (item in regionRangeObjectValue[range])
+			 {
+				 mapArray.push(regionRangeObjectValue[range][item]);
+			 }
+		 }
+		 return mapArray;
+	 }
+	 
      getAnalogsAsync(itemCode,brandCode)
      {   var getAnalogs= function (responseText)
          { 
@@ -619,8 +647,17 @@ function getMapObject()
 			 }				 
              this.state.analogInfo.push(handleDT.mapArray[i]);            
            }
+		   var dataSort=function(analogInfo)
+		   {
+			   this.setState({analogInfo:analogInfo,analogForOurStock:this.state.analogForOurStock,shouldComponentUpdate:true});                             
+  
+		   }
+		   dataSort=dataSort.bind(this);
+		   this.dataSortForRegionAsync(this.state.analogInfo).then(dataSort)
+		   
+		   
              
-			 this.setState({analogInfo:this.state.analogInfo,analogForOurStock:this.state.analogForOurStock,shouldComponentUpdate:true});                             
+			 //this.setState({analogInfo:this.state.analogInfo,analogForOurStock:this.state.analogForOurStock,shouldComponentUpdate:true});                             
          }
         getAnalogs=getAnalogs.bind(this); 
 	     if (!this.state.showAnalogs) 
@@ -679,17 +716,18 @@ function getMapObject()
                           {
                            var responseText=getAnalogs.responseText;
                            getAnalogs(responseText);
-                          }
+                          })
              
-             )
+             
 					 }
 					 var dataSort=function(mapArray){                         
-                         this.setState({ mapArray:mapArray,shouldComponentUpdate:true});
+                         //this.setState({ mapArray:mapArray,shouldComponentUpdate:true});
+						 this.setState({mapArray:mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
                      }.bind(this)
-                     this.dataSortAsync(handleDT.mapArray).then(dataSort) 
+                     //this.dataSortAsync(handleDT.mapArray).then(dataSort) 
+                     this.dataSortForRegionAsync(handleDT.mapArray).then(dataSort);
                      
-                     
-                    this.setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
+                   // this.setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
                      this.setCookie("PHPSESSID",this.state.PHPSESSID);
                      
                       
@@ -829,6 +867,7 @@ function getV2_table()
 		 }*/
 		 
 		 $(thisElement).dataTable({
+			    /*"order": [[ 2, 'desc' ]],*/ 
                 "aoColumnDefs": [  ],
                 "iDisplayLength": 5,
                 "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]

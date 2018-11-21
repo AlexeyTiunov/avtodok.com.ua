@@ -10,6 +10,16 @@ error_reporting(0);
 ignore_user_abort(false);  
 //session_start();  
 
+function shutdown()
+{
+    // Это наша завершающая функция, 
+    // здесь мы можем выполнить все последние операции
+    // перед тем как скрипт полностью завершится.
+
+    echo 'Скрипт успешно завершился', PHP_EOL;
+}
+
+//register_shutdown_function('shutdown');
 
  
 global $USER; 
@@ -27,20 +37,20 @@ function GetUserID_1CByID( $ID )
 
 
  
-                require ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/IBPropertyAdvanced1.php"); 
-                 $regionID = 17;
-                 $brandID = 14;
-                 $oRegion = new IBPropertyAdvanced_ITG(array('IB'=>$regionID));
-                 $arRegions = $oRegion->getArray();
-                 $oBrand = new IBPropertyAdvanced_ITG(array('IB'=>$brandID));
-                 $arBrands = $oBrand->getArray();
+    require ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/IBPropertyAdvanced1.php"); 
+     $regionID = 17;
+     $brandID = 14;
+     $oRegion = new IBPropertyAdvanced_ITG(array('IB'=>$regionID));
+     $arRegions = $oRegion->getArray();
+     $oBrand = new IBPropertyAdvanced_ITG(array('IB'=>$brandID));
+     $arBrands = $oBrand->getArray();
                   
            
     
 
  if(!$USER->IsAuthorized())                                                                 
  {
-   die("ERROR");
+   //die("ERROR");
  }       
 if (!isset($_REQUEST['ItemCode']) || !isset($_REQUEST['BrandCode']))
 {
@@ -66,7 +76,7 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
 }     
     
   
-  if ($_GET['bgroup'] && $_GET['bgroup']!="")
+  if (isset($_GET['bgroup']) && $_GET['bgroup']!="")
     {
        $bcode =$_GET['bgroup']; 
     } else
@@ -76,7 +86,7 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
     $icode = preg_replace("/[^A-Za-z0-9]*/i",'', $_GET['icode']);
     $oAnalogs = new Analogs(array('icode'=>$icode,'bcode'=>$bcode));
     $arAnalogs = $oAnalogs->getArrItems();
-   // var_dump($arAnalogs);
+   # var_dump($arAnalogs);
      $_REQUEST["CURRENCY"]="USD";    
      $products_arr=Array();
       $UID = GetUserID_1CByID($USER->GetID());
@@ -112,7 +122,7 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
         {
            //   var_dump($analog['icode']);
            //  var_dump($analog['bcode']);
-           //  var_dump($sAnalogs->getArrItems());  
+           #  var_dump($sAnalogs->getArrItems());  
               $products_arr[] = $sAnalogs->getArrItems();
              
             #echo "-------------------<br /><pre>";
@@ -120,13 +130,13 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
             #echo "</pre>";
             # $infoArray=$sAnalogs->GetInfoFromMegaP() ;
        }                         
-        
+       
     // var_dump($sAnalogs->getArrItems());   
         
-      unset($sAnalogs); 
+     // unset($sAnalogs); 
     } 
    
-    //var_dump($products_arr); 
+    // var_dump($products_arr);  
    
      $products_m=Array();   
      foreach  ($products_arr as $key=>$value)
@@ -140,7 +150,8 @@ if (!isset($_GET['icode']) || !isset($_GET['bcode']))
          
      }
      
-      $products=$products_m; 
+      $products=$products_m;  
+      //var_dump($products_m);
        echo (json_encode($products,JSON_UNESCAPED_UNICODE));
-      //var_dump($products);
+     
 ?>

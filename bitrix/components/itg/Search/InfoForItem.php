@@ -6,7 +6,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Search/Search_ITG
     function manualConnect()
     {
              $port=31006;
-        $DB = new mysqli("localhost","bitrix","a251d851","avtodok.com.ua",$port);
+        $DB = new mysqli("localhost","bitrix","a251d851","bitrix",$port);
         $DB->set_charset("utf8");
               $DB->query("SET NAMES 'utf8'");
         return $DB;

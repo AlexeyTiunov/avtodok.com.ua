@@ -1,11 +1,15 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');         
   global $USER ;
+  if(!$USER->IsAuthorized())                                                                 
+ {
+   die("ERROR");
+ }       
   
  CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');     
   
   
-  function GetUserID_1CByID( $ID )
+ function GetUserID_1CByID( $ID )
 {
 
   global $DB;

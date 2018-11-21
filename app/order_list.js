@@ -77,11 +77,23 @@ export class Order_list extends Extends
          var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/order_list.php",this.makePostDataFromState())
          
          Prom.then(function(responseText){
+             try
+			 {
+			   handleDT=new handleData(responseText,getMapObject());
+               findMySelf().setState({mapArray:handleDT.mapArray,shouldComponentUpdate:true}); 
+			 }catch(e)
+			 {
+				 //findMySelf().cleanData();
+				 //var Element=ReactDOM.findDOMNode(findMySelf());
+				// ReactDOM.unmountComponentAtNode(Element);
+			 }
              
-                     handleDT=new handleData(responseText,getMapObject());
-             findMySelf().setState({mapArray:handleDT.mapArray}); 
          })
     }
+	cleanData()
+	 {
+		 this.setState({mapArray:[],shouldComponentUpdate:true});
+	 }
     initOrderList() {
             /* Initialize Bootstrap Datatables Integration */
             App.datatables();
@@ -101,8 +113,20 @@ export class Order_list extends Extends
             $('.dataTables_filter input').attr('placeholder', 'Пошук');
         }
     /////////////////////////////////////
-	 
-      componentDidUpdate(prevProps, prevState)
+	 shouldComponentUpdate(nextProps, nextState)
+	 {
+		  if (!nextState.shouldComponentUpdate  )
+          {
+             var getOrderListData=function(){ this.getOrderListData();}
+		     getOrderListData=getOrderListData.bind(this);		
+		     getOrderListData();
+                
+          } 
+          
+          
+          return nextState.shouldComponentUpdate;
+	 }
+    componentDidUpdate(prevProps, prevState)
     {
         super.componentDidUpdate(prevProps, prevState);
 		for (state in regTDStatus)
@@ -123,9 +147,10 @@ export class Order_list extends Extends
     componentDidMount()
     {
         super.componentDidMount();
-		var getOrderListData=function(){ this.getOrderListData();}
+		/*var getOrderListData=function(){ this.getOrderListData();}
 		getOrderListData=getOrderListData.bind(this);		
-		getOrderListData();
+		getOrderListData();*/
+		this.setState({shouldComponentUpdate:false});
 		
        
 		//TablesDatatables.init();

@@ -43,7 +43,14 @@ export class Extends extends React.Component
      {
         // debugger;
        window.objectReg[this.constructor.name]=this;   
-         
+	   try
+	   {
+		   this.deActivateProgressBar();
+	   }catch(e)
+	   {
+		   
+	   }
+       
          
      }
      componentWillUnmount()
@@ -320,6 +327,30 @@ export class Extends extends React.Component
          
          
      }
+	 checkAuth()
+	 {
+		 Uobject=window.objectReg["Auth"];
+		 return Uobject.state.isAuthed;
+	 }
+	 showAuthWindow()
+	 {
+		 
+			 var linkA=document.getElementById("showAuthWindow");
+			  if (linkA==null)
+             {
+               linkA=document.createElement("a"); 
+               linkA.setAttribute("data-toggle","modal");
+               linkA.setAttribute("data-target","#modal-user-auth");
+               linkA.id="showAuthWindow";
+		       var body=document.getElementsByTagName("body")[0];
+		       body.appendChild(linkA);          
+             }
+			 
+			 linkA.click();
+		
+		 
+		 
+	 }
 	 fullInfoMassage(header,message)
 	 {
 		 Uobject=window.objectReg["Info_message"];
@@ -388,6 +419,10 @@ export class Extends extends React.Component
           document.cookie = updatedCookie;
   }
   
+   getUserLoginCookie()
+   {
+	  return this.getCookie("BITRIX_SM_LOGIN");
+   }
   activateProgressBar(func)
   {
 	  //var progressBar=window.objectReg["Progress_bar"];

@@ -65,8 +65,13 @@ export class Sidebar_nav  extends Extends
      onclick()
      {
 		 if (window.isMobile) this.sideBarToogle();
+		if (!this.checkAuth())
+		{
+			//e.preventDefault();
+			this.showAuthWindow();
+		}
 		 
-		 this.deActivateProgressBar();
+		 //this.deActivateProgressBar();
 		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 		 

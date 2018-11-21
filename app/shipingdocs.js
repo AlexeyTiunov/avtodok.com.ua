@@ -85,7 +85,8 @@ export class Shiping_docs extends Extends
 	componentDidMount()
 	{
 		super.componentDidMount();
-		 this.deActivateProgressBar();
+		this.deActivateProgressBar();
+		 
 		
 	}
 	 

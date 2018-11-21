@@ -491,8 +491,12 @@ export class Basket_order_button extends Extends
      } 
 	 onclick(e)
      {
-		
-		 this.activateProgressBar();
+		if (!this.checkAuth())
+		{
+			e.preventDefault();
+			this.showAuthWindow();
+		}
+		this.activateProgressBar();
 		       
 		 
      }

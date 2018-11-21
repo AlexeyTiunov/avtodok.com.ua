@@ -40,7 +40,7 @@ function GetUserID_1CByID( $ID )
 
  if(!$USER->IsAuthorized())                                                                 
  {
-   die("ERROR");
+   //die("ERROR");
  }       
 if (!isset($_REQUEST['ItemCode']) || !isset($_REQUEST['BrandCode']))
 {

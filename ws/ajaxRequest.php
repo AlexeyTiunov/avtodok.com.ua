@@ -47,24 +47,37 @@ function prepareItemRow($itemRow)
     return  $newItemRow;    
     
 }
+function GetUserID_1CByID( $ID )
+{
+
+  global $DB;
+  $sql = "SELECT ID_1C FROM b_user WHERE ID='".$ID."'";
+
+  $res = $DB->Query( $sql );
+
+  if( $arRes = $res->Fetch() )
+    return $arRes["ID_1C"];
+  else
+    return false;
+}   
   
  if (isset($_SESSION['arBrands_ITG']) && isset ($_SESSION['arRegion_ITG']))
-           {
-                $arRegions = $_SESSION['arRegion_ITG'];
-                $arBrands = $_SESSION['arBrands_ITG'];
-               
-           } else
-           {
-                require ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/IBPropertyAdvanced1.php"); 
-                 $regionID = 17;
-                 $brandID = 14;
-                 $oRegion = new IBPropertyAdvanced_ITG(array('IB'=>$regionID));
-                 $arRegions = $oRegion->getArray();
-                 $oBrand = new IBPropertyAdvanced_ITG(array('IB'=>$brandID));
-                 $arBrands = $oBrand->getArray();
-                  $_SESSION['arRegion_ITG'] = $arRegions;
-                 $_SESSION['arBrands_ITG'] = $arBrands;
-           }
+   {
+        $arRegions = $_SESSION['arRegion_ITG'];
+        $arBrands = $_SESSION['arBrands_ITG'];
+       
+   } else
+   {
+        require ($_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/IB.property/IBPropertyAdvanced1.php"); 
+         $regionID = 17;
+         $brandID = 14;
+         $oRegion = new IBPropertyAdvanced_ITG(array('IB'=>$regionID));
+         $arRegions = $oRegion->getArray();
+         $oBrand = new IBPropertyAdvanced_ITG(array('IB'=>$brandID));
+         $arBrands = $oBrand->getArray();
+          $_SESSION['arRegion_ITG'] = $arRegions;
+         $_SESSION['arBrands_ITG'] = $arBrands;
+   }
 
    
        

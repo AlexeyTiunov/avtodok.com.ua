@@ -68,6 +68,7 @@ export class Auth extends Extends
 		this.setState({renderIn:React.createElement(authComp.type),
                                       isAuthed:isAuthed
                                      },updateAll);
+	     
 	}
 	auth_registerNeed()
 	{
@@ -77,6 +78,7 @@ export class Auth extends Extends
 		this.setState({renderIn:React.createElement(authComp.type),
                                       isAuthed:isAuthed
                                      },updateAll);
+		
 	}
 	auth_done()
 	{
@@ -348,6 +350,7 @@ export class Register_need extends Extends
 	
 	onInputChange(e)
     {
+		if (e.target.name=="LOGIN")this.checkInput(e);
          var input= e.target.name
          var id = e.target.id;
          var inputValue=e.target.value;
@@ -361,6 +364,41 @@ export class Register_need extends Extends
          this.setState({ str:inputValue});
         
     }
+	checkInput(e)
+	{
+		var phoneNumber=e.target.value;
+		if (phoneNumber!="")
+       {
+         if (phoneNumber.match(/^.*[\+\-\D]+/)) 
+         {
+            phoneMod= phoneNumber.replace(/[\+\-\D]/g,''); 
+           e.target.value=phoneMod;
+           return;
+         } 
+		 if  (!phoneNumber.match(/^(38)([0-9]*)/g ) && !phoneNumber.match(/^(3)([0-9]*)/g ) )
+         {
+           phoneMod="38"+phoneNumber;
+          
+          phoneMod= phoneMod.replace(/[\+\-\D]+/g,''); 
+           e.target.value=phoneMod;
+         }
+		
+	   }
+	   if (phoneNumber.match(/^(39)([0-9]*)/g ) ||
+           phoneNumber.match(/^(37)([0-9]*)/g )  ||
+           phoneNumber.match(/^(34)([0-9]*)/g ) ||
+           phoneNumber.match(/^(35)([0-9]*)/g ) ||
+           phoneNumber.match(/^(36)([0-9]*)/g )
+       
+       )
+       {
+         shortFoneNumber=phoneNumber.replace(/^(38|39|36|35|34|37)([0-9]*)/g,'38$2'); 
+         shortFoneNumber= shortFoneNumber.replace(/[\+\-\D]+/g,'');
+         e.target.value=shortFoneNumber; 
+        // alert(shortFoneNumber);  
+       }
+	}
+	
 	
 	///////////////////////////////////////////////////////
 	
@@ -394,7 +432,7 @@ export class Register_need extends Extends
 								
 								</legend>
                                 <div className="form-group">
-                                    <label className="col-md-4 control-label" for="user-settings-password"><font><font>Логин</font></font></label>
+                                    <label className="col-md-4 control-label" for="user-settings-password"><font><font>Логін(моб. номер)</font></font></label>
                                     <div className="col-md-8">
                                         <input type="text" onChange ={this.onInputChange} id="login" name="LOGIN" className="form-control" placeholder="Введіть Ваш логин..."/>
                                     </div>

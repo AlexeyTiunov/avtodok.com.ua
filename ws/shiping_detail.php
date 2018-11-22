@@ -4,6 +4,10 @@
   global $USER ;
   
   if (!isset($_REQUEST["ID"])) exit();
+  if(!$USER->IsAuthorized())                                                                 
+ {
+   die("");
+ }       
   
  CModule::IncludeModule("sale"); CModule::IncludeModule('iblock');     
 if (!function_exists(GetUserID_1CByID)) 

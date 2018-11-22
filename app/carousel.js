@@ -22,7 +22,7 @@ export class Carousel_item extends Extends
     {
         return(  
                     <div className={"item "+this.props.active}>
-                        <img  src={this.props.src} alt="image"/>
+                        <a href={"/search/"+this.props.searchCode}><img  src={this.props.src} alt="image"/></a>
                         <div className="carousel-caption">
                              {this.props.caption}
                         </div>
@@ -95,7 +95,8 @@ export class Carousel extends Extends
                 activeSetClass="active";
                 this.state.isActiveSet=true;
             }
-           return React.createElement(Carousel_item,{src:this.state.route+"/"+item,caption:"",active:activeSetClass},null)
+			searchCode=item.replace(/^(.*?)(\.{1})(png|jpg|jpeg)$/,"$1");
+           return React.createElement(Carousel_item,{src:this.state.route+"/"+item,searchCode:searchCode,caption:"",active:activeSetClass},null)
        } 
        var carouselItemsFunc=carouselItemsFunc.bind(this);
        try

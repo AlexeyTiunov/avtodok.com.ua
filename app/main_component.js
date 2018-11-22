@@ -347,7 +347,7 @@ export class Extends extends React.Component
              }
 			 
 			 linkA.click();
-		
+		     
 		 
 		 
 	 }

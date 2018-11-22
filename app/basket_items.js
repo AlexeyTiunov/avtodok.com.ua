@@ -419,21 +419,54 @@ export class Basket_info extends Extends
      } 
      defineFirstState()
      {
-         this.state.DELIVERY="N";
+		 
+        this.state.DELIVERY="N";
         this.state.PAYS="N";  
      }
+	 defineDefaultUserExtraInfo()
+	 {
+		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/getUserExtraInfo.php","");
+		 var infoIds={"0":"N","1":"Y"}
+		 var defaultUserExtraInfo= (function(responseText)
+		 {
+			 var deliveryId=new handleData(responseText).mapArray.DELIVERY;
+			 var payId=new handleData(responseText).mapArray.PAY;
+			 this.setState({DELIVERY:infoIds[deliveryId],PAYS:infoIds[payId]})
+			 
+		 }).bind(this)
+		 Prom.then(defaultUserExtraInfo);
+	 }
      onselect(e)
      {
        this.state[e.target.name]=e.target.value;
        this.updateBasketOrderButton();
+	   var obj={};
+	   obj[e.target.name]=e.target.value;
+	   this.setState(obj);
        
-     } 
+     }
+    defineCheckedStatus(inputName,value)
+	{
+		if (this.state[inputName]==value)
+		{
+			return "checked";
+		}
+		else
+		{
+			return "";
+		}
+	}	
 	 
      updateBasketOrderButton()
      {
         Uobject=window.objectReg['Basket_order_button']; 
         Uobject.setState({DELIVERY:this.state.DELIVERY,PAYS:this.state.PAYS}); 
      }
+	 ////////////////////////////////////
+	 componentDidMount()
+	 {
+		 this.defineDefaultUserExtraInfo();
+	 }
      render()
      {
          return( <div class="row block-section">  
@@ -443,12 +476,12 @@ export class Basket_info extends Extends
                                 <div className="form-group">
                                             <div className="radio">
                                                 <label for="example-radio1">
-                                                    <input onChange={this.onselect} name="DELIVERY" value="Y" type="radio"/> Доставка
+                                                    <input onChange={this.onselect} name="DELIVERY" value="Y" checked={this.defineCheckedStatus("DELIVERY","Y")} type="radio"/> Доставка
                                                 </label>
                                             </div>
                                             <div className="radio">
                                                 <label for="example-radio2">
-                                                    <input onChange={this.onselect} name="DELIVERY" value="N" type="radio"/>Самовивіз 
+                                                    <input onChange={this.onselect} name="DELIVERY" value="N" checked={this.defineCheckedStatus("DELIVERY","N")} type="radio"/>Самовивіз 
                                                 </label>
                                              </div>
                                 </div>
@@ -460,12 +493,12 @@ export class Basket_info extends Extends
                                 <div className="form-group">
                                             <div className="radio">
                                                 <label for="example-radio1">
-                                                    <input onChange={this.onselect} name="PAYS" value="N" type="radio"/> Готівка
+                                                    <input onChange={this.onselect} name="PAYS" value="N" checked={this.defineCheckedStatus("PAYS","N")} type="radio"/> Готівка
                                                 </label>
                                             </div>
                                             <div className="radio">
                                                 <label for="example-radio2">
-                                                    <input onChange={this.onselect} name="PAYS" value="Y" type="radio"/>Безготівка 
+                                                    <input onChange={this.onselect} name="PAYS" value="Y" checked={this.defineCheckedStatus("PAYS","Y")} type="radio"/>Безготівка 
                                                 </label>
                                              </div>
                                 </div>
@@ -495,8 +528,11 @@ export class Basket_order_button extends Extends
 		{
 			e.preventDefault();
 			this.showAuthWindow();
+		}else
+		{
+			this.activateProgressBar();
 		}
-		this.activateProgressBar();
+		
 		       
 		 
      }
@@ -518,6 +554,7 @@ export class Basket extends Extends
      constructor(props) 
      {  
         super(props); 
+		
          
      } 
      
@@ -530,7 +567,7 @@ export class Basket extends Extends
      }
      render()
      {
-       return ( <div className="block full"> 
+       return ( <div   className="block full"> 
        
                    <Basket_header /> 
                    <Basket_info />

@@ -183,8 +183,8 @@ export class Sidebar_userinfo extends Extends
                   </div>
                   
                   <div className="row">
-                         <div className="col-xs-3 col-sm-3"></div>   
-                         <div className="sidebar-user-name col-xs-6 col-sm-6"><font><font>{this.state.NAME}</font></font></div>  
+                        
+                         <div className="sidebar-user-name col-xs-12 col-sm-12"><p align="center"><font>{this.state.NAME}</font></p></div>  
                    </div>  
                   <div className="row">
                         <div className="sidebar-user-links col-xs-12 col-sm-12">

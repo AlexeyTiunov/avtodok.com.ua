@@ -59,6 +59,8 @@ function getMapObjectOrder()
    DARE_UPDATE:{functions:{},params:[]}, 
    REGIONCODE:{functions:{},params:[]}, 
    ALLOW_DELIVERY:{functions:{},params:[]}, 
+   REGION_SHORT_NAME:{functions:{},params:[]},
+   REGION_NAME:{functions:{},params:[]},
    COMMENTS:{functions:{},params:[]}, 
    STATUS:{functions:{},params:[],ignore:true},
    PERSON_TYPE:{functions:{},params:[],ignore:true},
@@ -88,7 +90,9 @@ function getMapObjectItems()
    PRICE:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Ціна/Кіл-ть/Сума","",<Price_td />,[<Common_th/>,"Ціна/Кіл-ть/Сума"]]},
    QUANTITY:{functions:{},params:[]},  
    CURRENCY:{functions:{},params:[]},     
-   RegionCode:{functions:{},params:[]},  
+   RegionCode:{functions:{},params:[]},
+   REGION_SHORT_NAME:{functions:{},params:[]},
+   REGION_NAME:{functions:{},params:[]},   
    ItemStatus:{functions:{},params:[]},     
    ItemStatusQuantity:{functions:{},params:[]},  
    ItemStatus2:{functions:{},params:[]},  
@@ -252,6 +256,27 @@ export class Order_header extends Extends
         this.state.info=this.props.info
          
      } 
+	 getRegionName()
+     {
+          var regionRangeObjectValue={
+              "0-1":this.state.info["REGION_NAME"],
+              "2-4":this.state.info["REGION_SHORT_NAME"],
+              "980-999":this.state.info["REGION_SHORT_NAME"], 
+              "default": "Украина",
+              
+          };
+          
+          var RegionCode=this.state.info["REGIONCODE"];
+         return this.getRangeObjectValue(regionRangeObjectValue,RegionCode);
+     }
+	 getDeliveryName()
+	 {
+		 var deliveryNames=
+		 {
+			 "N":"Самовивіз","Y":"Доставка/Відправка"
+		 }
+		 return deliveryNames[this.state.info.ALLOW_DELIVERY];
+	 }
 	 render()
 	 {
 		 return(<div>
@@ -274,7 +299,7 @@ export class Order_header extends Extends
 				<p className="form-control-label"><h5><strong>{"Регіон"}</strong></h5></p>
 			    </div>
 			    <div className='col-xs-6 '>
-				 <p className="form-control-label"><h3>{this.state.info.REGIONCODE}</h3></p>
+				 <p className="form-control-label"><h3>{this.getRegionName()}</h3></p>
 			    </div>
 			 </div>
 			 
@@ -283,7 +308,7 @@ export class Order_header extends Extends
 				<p className="form-control-label"><h5><strong>{"Спосіб доставки"}</strong></h5></p>
 			    </div>
 			    <div className='col-xs-6'>
-				 <p className="form-control-label"><h5>{this.state.info.ALLOW_DELIVERY}</h5></p>
+				 <p className="form-control-label"><h5>{this.getDeliveryName()}</h5></p>
 			    </div>
 			 </div>
 			 

@@ -109,7 +109,7 @@ export class  Search_content_startpage extends Search_content_header
                               <h4 className="text-center">Або перейдіть у каталог!</h4>
                               <div className="input-group text-center" style={{width: "50%",marginLeft: "25%",marginBottom: "1em"}}>
                                         <span className="input-group-btn">
-                                            <a href="catalog.html"><button type="button" className="btn btn-primary"> Каталог автозапчастин</button></a>
+                                            <Link to={"/catalogs"}><button type="button" className="btn btn-primary"> Каталог автозапчастин </button></Link>
                                         </span>
                               </div>
 

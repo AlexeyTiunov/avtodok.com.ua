@@ -18,6 +18,7 @@ import {Shiping_detail} from './shiping_detail.js'
 import {Shipingdoc_detail} from './shipingdoc_detail.js'
 import {Contacts} from './contacts.js'
 import {Catalogs_auto} from './catalogs_auto.js'
+import {Return_docs} from './return_docs.js'
 
 export class Page_content  extends Extends
 {
@@ -76,6 +77,7 @@ export class Page_content  extends Extends
 						 <Route path="/avtodok.com.ua/search/:id?" component={Search_table_v2} /> 
 						 <Route path="/contacts" component={Contacts} />
 						 <Route path="/catalogs" component={Catalogs_auto} />
+						 <Route path="/retdocs" component={Return_docs} />
                      </Switch>
                   
                 )

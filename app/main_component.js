@@ -1,6 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 import {Sidebar} from './sidebar.js'
+import {handleData} from './data_convert.js'
 
 window.objectReg={};
 
@@ -21,7 +22,8 @@ export class Extends extends React.Component
                      };
         
          this.xhr = new XMLHttpRequest();
-         this.stopTouchMovePropagation=this.stopTouchMovePropagation.bind(this)
+         this.stopTouchMovePropagation=this.stopTouchMovePropagation.bind(this);
+		 
          //this.objectReg={};
   
         
@@ -442,4 +444,5 @@ export class Extends extends React.Component
 	  var sideBar=window.objectReg["Sidebar"];
       sideBar.sideBarToogle();	  
   }
+  
 }

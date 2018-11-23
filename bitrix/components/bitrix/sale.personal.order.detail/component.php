@@ -1,6 +1,7 @@
 <?
  require($_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/include/autodoc_globals.php");
   require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/sale/general/export.autodoc.php");
+   CModule::IncludeModule('iblock');    
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 global $rateCurrency;
 if (!CModule::IncludeModule("sale"))
@@ -325,7 +326,10 @@ else
     }
    
    $OrderDetailed["ORDER"]= $arResult;
+   $allRegionsProperty=GetAllRegionsProperties();
    $OrderDetailed["ORDER"]["REGIONCODE"]=GetRegionCodeForOrder($arResult["ID"]);
+   $OrderDetailed["ORDER"]["REGION_SHORT_NAME"]=$allRegionsProperty[$OrderDetailed["ORDER"]["REGIONCODE"]]['ShortName'];
+   $OrderDetailed["ORDER"]["REGION_NAME"]=$allRegionsProperty[$OrderDetailed["ORDER"]["REGIONCODE"]]['Caption'];
  //  $OrderDetailed["ORDER_ID"]= $arResult["ID"];
 //   $OrderDetailed["ORDER_STATUS_ID"]=$arResult["STATUS"]["ID"];  
  //  $OrderDetailed["ORDER_STATUS_NAME"]=$arResult["STATUS"]["NAME"];

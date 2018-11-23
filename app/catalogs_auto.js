@@ -18,6 +18,7 @@ export class Catalogs_auto extends Extends
 		var script=document.createElement("script");
 		script.src="http://gui.parts-catalogs.com/parts-catalogs.js";
 		head.appendChild(script);
+		this.deActivateProgressBar();
  
 
 	}
@@ -29,6 +30,7 @@ export class Catalogs_auto extends Extends
 		var script=document.createElement("script");
 		script.src="http://gui.parts-catalogs.com/parts-catalogs.js";
 		head.appendChild(script);
+		this.deActivateProgressBar();
 
 	}
 	componentWillUnmount()

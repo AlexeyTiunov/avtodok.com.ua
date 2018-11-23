@@ -35,6 +35,8 @@ import {Balance} from './balance.js'
 import {Pay_notification} from './balance.js'
 import {Progress_bar} from './progress_bar.js'
 import {Check} from './check.js'
+import {Regions} from './regions_info.js'
+
  
 import './css/plugins.css'; 
 
@@ -194,7 +196,8 @@ export class Sidebar  extends Extends
                     <Basket_items_forModal/>  
                     <Info_message/>  
                     <Auth /> 
-                    <Pay_notification/>        
+                    <Pay_notification/>
+                     <Regions />					
 					
                 </div>  
                

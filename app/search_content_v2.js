@@ -45,8 +45,8 @@ function getMapObject()
       Caption:{functions:{},params:[]}, 
       DeliveryDays:{functions:{formatNumber},params:[[".","0"]]},
       Quantity:{functions:{},params:[]},
-      RegionFullName:{functions:{},params:[]}, 
-      RegionShortName:{functions:{},params:[]},
+      //RegionFullName:{functions:{},params:[]}, 
+      //RegionShortName:{functions:{},params:[]},
       RegionCode: {functions:{},params:[]},
       RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Region_td/>,[<Common_th/>,"Регион/Дни"]],addNew:true},  
       PercentSupp:{functions:{},params:[]},
@@ -887,6 +887,7 @@ function getV2_table()
 	 {
 		 if (this.state.mapArray.length>0)
 		 this.initDataTable();
+	     this.deActivateProgressBar();
 	 }
 	 render()
 	 {
@@ -1195,7 +1196,7 @@ export class Region_td extends Extends
         this.state=this.props;
          
      }
-      getRegionName()
+     getRegionName_OLD()
      {
           var regionRangeObjectValue={
               "0-1":this.state.proto["RegionFullName"].fValue,
@@ -1208,6 +1209,11 @@ export class Region_td extends Extends
           var RegionCode=this.state.proto["RegionCode"].fValue;
          return this.getRangeObjectValue(regionRangeObjectValue,RegionCode);
      }
+	 getRegionName()
+	 {
+		 var regionName=this.getRegionNameById(this.state.proto["RegionCode"].fValue);
+		return  (regionName=="")?"УКРАИНА":regionName;
+	 }
      getRegionColor()
      {
         var regionRangeObjectValue={

@@ -233,14 +233,18 @@ export class Orderid_td extends Extends
      {  
         super(props);
         this.state=this.props;
-         
+        this.onclick=this.onclick.bind(this);
      } 
+	 onclick()
+	 {
+		 this.activateProgressBar();
+	 }
      render()
      {
          return (
           
                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>
-				  <Link to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>
+				  <Link onClick={this.onclick} to={"/order_detail/"+this.state.proto[this.state.NAME].fValue}>
 				  {this.state.proto[this.state.NAME].fValue}</Link><br/>				  
 				  </td>  
           

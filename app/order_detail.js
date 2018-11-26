@@ -136,7 +136,7 @@ export class Order_detail extends Extends
     getOrderDetail(id)
     {
         
-         var Prom=this.makeRequestToRecieveData("POST","/ws/order_detail.php",false,"ID="+this.id)
+         var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/order_detail.php","ID="+this.id)
          var OrderInfo=function(responseText){
             handleOrderHeader=new handleData(responseText,undefined,'ORDER');
 			 handleOrderItems=new handleData(responseText,getMapObjectItems(),'BASKET');
@@ -163,7 +163,7 @@ export class Order_detail extends Extends
 		if (this.state.mapArray.length!=0)
 		{
 			
-		    //this.deActivateProgressBar();
+		    this.deActivateProgressBar();
 		}
         $('[data-toggle="tooltip"]').tooltip(); 
     }

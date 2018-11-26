@@ -193,11 +193,12 @@ class Search_form extends Extends
        
        this.state.partsQuantity=0;
        this.state.getBasketPartsQuantity=false;      
-         
+       this.onclick=this.onclick.bind(this); 
          
      } 
      onclick()
      {
+		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
      }
      getBasketPartsQuantity()

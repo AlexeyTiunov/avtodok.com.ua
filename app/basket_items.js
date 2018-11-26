@@ -103,7 +103,7 @@ export class Basket_items extends Extends
            this.setState({partsQuantity:responseText}); 
         }.bind(this);
        
-        var Prom=this.makeRequestToRecieveData("POST","/ws/AddToBusket.php",false,"getBasketPartsQuantity=getBasketPartsQuantity");       
+        var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/AddToBusket.php","getBasketPartsQuantity=getBasketPartsQuantity");       
        Prom.then(
          (responseText)=>{findMySelf().setState({partsQuantity:responseText})}
          ); 
@@ -111,11 +111,7 @@ export class Basket_items extends Extends
          
      }
      ////////////////////////////////
-      componentDidUpdate()
-      {
-          super.componentDidUpdate();
-           
-      } 
+     
       shouldComponentUpdate(nextProps, nextState)
       {
           if (!this.state.shouldComponentUpdate)
@@ -133,6 +129,7 @@ export class Basket_items extends Extends
       componentDidUpdate(prevProps, prevState)
       {
         super.componentDidUpdate(prevProps, prevState); 
+		 this.deActivateProgressBar();
       }
       componentWillMount()
       {

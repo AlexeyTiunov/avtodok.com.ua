@@ -47,7 +47,7 @@ export class Extends extends React.Component
        window.objectReg[this.constructor.name]=this;   
 	   try
 	   {
-		   this.deActivateProgressBar();
+		  // this.deActivateProgressBar();
 	   }catch(e)
 	   {
 		   
@@ -178,7 +178,14 @@ export class Extends extends React.Component
                 }
                 
             }
-            this.xhr.send(data);    
+			try
+			{
+				this.xhr.send(data);  
+			}catch(e)
+			{
+				this.showInforMassage(e.name,e.message)
+			}
+              
              
              
          })
@@ -218,7 +225,14 @@ export class Extends extends React.Component
             {
               var a=1;
             } 
-            this.xhr.send(data);    
+            //this.xhr.send(data);
+			try
+			{
+				this.xhr.send(data);  
+			}catch(e)
+			{
+				this.showInforMassage(e.name,e.message)
+			}
              
              
          })
@@ -259,7 +273,14 @@ export class Extends extends React.Component
             {
               var a=1;
             } 
-            thisO.xhr.send(data);    
+            //thisO.xhr.send(data);
+             try
+			{
+				thisO.xhr.send(data); 
+			}catch(e)
+			{
+				this.showInforMassage(e.name,e.message)
+			}			
              
              
          })
@@ -444,5 +465,15 @@ export class Extends extends React.Component
 	  var sideBar=window.objectReg["Sidebar"];
       sideBar.sideBarToogle();	  
   }
-  
+  getRegionNameById(id)
+  {   var region=undefined;
+	  try
+	  {
+		 region= window.objectReg["Regions"].regions[id].Caption;  
+	  }catch(e)
+	  {
+		  
+	  }
+	  return region;
+  }
 }

@@ -22,7 +22,7 @@ require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/connect.web/Conne
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Appearance/Appearance.php";
 #require ("/media/Vol/www/bitrix/components/itg/Search/Search_ITG4.php");  
 session_start();
-
+ 
 function prepareItemRow($itemRow)   
 {
     
@@ -33,9 +33,9 @@ function prepareItemRow($itemRow)
       $newItemRow["Caption"]=$itemRow["CAPTION"];  
       $newItemRow["DeliveryDays"]=$itemRow["DELIVERY"];  
       $newItemRow["Quantity"]=$itemRow["QuantityS"]; 
-      $newItemRow["RegionFullName"]= $itemRow["REGIONRR"];
-      $newItemRow["RegionShortName"]= $itemRow["REGION"];
-      $newItemRow["RegionCode"]= $itemRow["REGION"];
+    //  $newItemRow["RegionFullName"]= $itemRow["REGIONRR"];
+    //  $newItemRow["RegionShortName"]= $itemRow["REGION"];
+      $newItemRow["RegionCode"]= $itemRow["RegionCode"];
       $newItemRow["PercentSupp"]= $itemRow["PercentSupp"];    
       $newItemRow["Weight"]=$itemRow["Weight"];
       $newItemRow["Currency"]= $itemRow["CURRREGION"];
@@ -46,6 +46,10 @@ function prepareItemRow($itemRow)
        
     return  $newItemRow;    
     
+}
+function DefineRegionCode($regionShortName,$arRegions)
+{
+  return $arRegions['ShortName'][$regionShortName]['Code'];  
 }
 function GetUserID_1CByID( $ID )
 {
@@ -81,7 +85,8 @@ function GetUserID_1CByID( $ID )
 
    
        
-        $_GET['user'] = ($_GET['user'] == '')?'09999':$_GET['user'];
+       // $_GET['user'] = ($_GET['user'] == '')?'09999':$_GET['user'];
+         $_GET['user']=GetUserID_1CByID( $USER->GetID() ) ;
         $itemsFromWebAll = new Connect_ITG(array(
                                                 'user'=>$_GET['user'],
                                                 #'client'=>'autopalma',
@@ -198,6 +203,7 @@ function GetUserID_1CByID( $ID )
                          $product['Price']= $product['PRICEREGION']*$Koef;
                          $product['CurrencyCode']="UAH";
                          $product['PriceP']=Appearance_ITG::preparePrice($product['PRICEREGION']*$Koef,'UAH');
+                         $product["RegionCode"]=DefineRegionCode($product['REGION'],$arRegions);
                   
                    $ItemsArray[]=prepareItemRow($product);
                    //var_dump($product);

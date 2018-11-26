@@ -526,11 +526,12 @@ class Search_ITG
                $arItem['DeliveryDate']=$this->DefineDeliveryDate($arItem['DeliveryDays'],$arItem['ORDER_END_TIME'],"");  
             }
            
-            $arItem['RegionShortName'] = $this->params['region'][$arItem['RegionCode']]['ShortName'];
+            /*$arItem['RegionShortName'] = $this->params['region'][$arItem['RegionCode']]['ShortName'];
             if (!isset($arItem['RegionFullName']))
             {
              $arItem['RegionFullName'] = $this->params['region'][$arItem['RegionCode']]['FullName'];
-            } 
+            } */
+            
             $arItem['Currency'] = $this->params['region'][$arItem['RegionCode']]['chrCurrencyCode'];
             $brandsFlip = /*array_flip(*/$this->params['arBrands']/*)*/;
             $arItem['BrandName'] = $brandsFlip[$arItem['BrandCode']]['FullName'];

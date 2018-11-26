@@ -85,7 +85,7 @@ export class Shiping_docs extends Extends
 	componentDidMount()
 	{
 		super.componentDidMount();
-		this.deActivateProgressBar();
+		//this.deActivateProgressBar();
 		 
 		
 	}
@@ -145,7 +145,7 @@ function getShipingDocsList()
 		  var shipingDocsList=function(responseText)
 		  {
 			    docsList=new handleData(responseText,this.constructor.mapObject,"SHIPINGDOCS");				
-				this.setState({mapArray:docsList.mapArray,shouldComponentUpdate:true});
+				this.setState({mapArray:docsList.mapArray,shouldComponentUpdate:true},this.deActivateProgressBar);
 			  
 		  }.bind(this)
 		 Prom.then(shipingDocsList);

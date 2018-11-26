@@ -72,6 +72,7 @@ export class Sidebar_nav  extends Extends
 		}
 		 
 		 //this.deActivateProgressBar();
+		 this.scrollToTop();
 		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 		 

@@ -36,11 +36,11 @@ function getMapObject()
    
     var mapObject=
     {
-      Action:{functions:{defineColumnName,defineTd,defineTh},params:["Действие",<Action_td/>,[<Common_th/>,"Действие/Заказать"]],addNew:true},
+      Action:{functions:{defineColumnName,defineTd,defineTh},params:["Действие",<Action_td/>,[<Common_th/>," "]],addNew:true},
       //Info:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Info_td />,[<Common_th/>,"Инфо"]],addNew:true},
       Pic64Base:{functions:{},params:[]},  
       BrandCode:{functions:{},params:[]},     
-      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>,"Бренд/Код/Наимено-/вание"]]}, 
+      BrandName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Brandname_td />,[<Common_th/>," "]]}, 
       ItemCode:{functions:{},params:[]}, 
       Caption:{functions:{},params:[]}, 
       DeliveryDays:{functions:{formatNumber},params:[[".","0"]]},
@@ -48,12 +48,12 @@ function getMapObject()
       //RegionFullName:{functions:{},params:[]}, 
       //RegionShortName:{functions:{},params:[]},
       RegionCode: {functions:{},params:[]},
-      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Region_td/>,[<Common_th/>,"Регион/Дни"]],addNew:true},  
+      RegionCorrectName:{functions:{defineColumnName,defineColumnClass,defineTd,defineTh},params:[" ","",<Region_td/>,[<Common_th/>,"Термін"]],addNew:true},  
       PercentSupp:{functions:{},params:[]},
       Weight:{functions:{},params:[]}, 
       Currency:{functions:{},params:[]}, 
       ReturnableParts:{functions:{},params:[]}, 
-      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Price_td/>,[<Common_th/>,"Цена/Валюта"]]}, 
+      Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Price_td/>,[<Common_th/>,"Ціна"]]}, 
       PriceUAH:{functions:{convertCurrencyToUah,formatNumber},params:[[gProperty("Price"),gProperty("Currency")],[".","2"]],addNew:true}, 
 	  
          
@@ -868,7 +868,7 @@ function getV2_table()
 		 
 		 $(thisElement).dataTable({
 			    /*"order": [[ 2, 'desc' ]],*/ 
-                "aoColumnDefs": [  ],
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [0,1] } ],
                 "iDisplayLength": 5,
                 "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
             });

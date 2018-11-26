@@ -44,10 +44,10 @@ export class Sidebar_brand extends Extends
          
                   ) */  
          return (
-                   <Link to={"/"} className="sidebar-brand">
-                         <i class="gi gi-car"></i><strong><font><font>Автодок-Партс</font></font></strong>
+                   <Link to={"/"} className="sidebar-brand" style={{"fontSize":"13px"}}>
+                         <i className="gi gi-car"></i><strong><font><font>Автодок-Партс-Kиїв</font></font></strong>
                      </Link>
-           
+ 
             
              
                 )        

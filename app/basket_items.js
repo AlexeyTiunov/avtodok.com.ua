@@ -584,7 +584,8 @@ export class Basket extends Extends
     componentDidMount()
     {
         super.componentDidMount();
-        document.title="Basket";
+		//this.setDocTitle("Кошик");
+       
     }
    ///////////////////////////////////// 
     

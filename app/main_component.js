@@ -476,4 +476,14 @@ export class Extends extends React.Component
 	  }
 	  return region;
   }
+  scrollToTop()
+  {
+	  window.document.documentElement.scrollTop=0;
+	  window.scrollTo(0,0);
+  }
+  setDocTitle(title)
+  {
+	   
+	   document.title=title;
+  }
 }

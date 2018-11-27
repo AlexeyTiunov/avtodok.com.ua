@@ -202,6 +202,7 @@ export function handleData(jsonData,standMap=undefined,jsonSubDataName=undefined
     
    this.formatNumber=function (pointDelimeter,quantityAfterPoint)
     {
+		if (typeof this.fValue!= "string" ) this.fValue=String(this.fValue);
         if ((pointDelimeter!="." && pointDelimeter!=",") ||(pointDelimeter==".") )
         {
              pointDelimeter=".";

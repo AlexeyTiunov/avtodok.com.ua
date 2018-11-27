@@ -68,11 +68,20 @@
              $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["DeliveryDays"] = $elem['PROPERTIES']['OrderDays']['VALUE'];
              $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["ShortName"] = $elem['PROPERTIES']['ShortName']['VALUE'];
              if ($addCaption)
-             {
+             {   
+                
                 $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["Caption"] = $elem['PROPERTIES']['Caption']['VALUE'];  
              }else
              {
-                 $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["Caption"] = $elem['PROPERTIES']['ShortName']['VALUE'];
+                 if (($elem['PROPERTIES']['Code']['VALUE']>0 && $elem['PROPERTIES']['Code']['VALUE']<5) || ($elem['PROPERTIES']['Code']['VALUE']>900 && $elem['PROPERTIES']['Code']['VALUE']<=1000))
+                 {
+                     $caption=explode("_",$elem['PROPERTIES']['ShortName']['VALUE'])[0];   
+                  $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["Caption"] =$caption ;   
+                 } else
+                 {
+                      $arRegions[ $elem['PROPERTIES']['Code']['VALUE'] ]["Caption"]="УКРАЇНА";               
+                 }
+                 
              }
            
           }

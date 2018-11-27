@@ -530,6 +530,7 @@ function getMapObject()
          this.state.analogInfo=[];
 		 this.state.analogForOurStock=[];
          this.state.mapArrayBrand=[];
+		 this.state.beToBeMapArray=[];
          this.state.numberOfrow=5;   
          this.state.page=1;
          this.state.dataQuantity=1;
@@ -538,6 +539,8 @@ function getMapObject()
          this.state.dataQuantity=1;
          this.state.showAnalogs=false;
 		 this.state.showBrandList=true;
+		 this.inOurStock=false;
+		 this.inOurStockUSA=false;
 		 
        if (this.props.match)
        {          
@@ -602,8 +605,9 @@ function getMapObject()
 	 async dataSortForRegionAsync(data)
 	 {
 		 var regionRangeObjectValue={
-              "0-1":[],
-              "2-4":[],
+              "1-1":[],
+              "2-3":[],
+			  "4-4":[],
               "980-999":[], 
               "default":[],
               
@@ -615,6 +619,23 @@ function getMapObject()
 			 this.getRangeObjectValue(regionRangeObjectValue,data[i].RegionCode.fValue).push(data[i])
 			 
 		 }
+		 
+		 if (regionRangeObjectValue["1-1"].length>0)
+		 {
+			 this.inOurStock=true;
+		 }else
+		 {
+			 this.inOurStock=false;
+		 }
+		  if (regionRangeObjectValue["4-4"].length>0)
+		 {
+			 this.inOurStockUSA=true;
+		 }else
+		 {
+			 this.inOurStockUSA=false;
+		 }
+		 
+		 
 		 var mapArray=[];
 		 for   (range in regionRangeObjectValue)
 		 {
@@ -625,7 +646,38 @@ function getMapObject()
 		 }
 		 return mapArray;
 	 }
-	 
+	 getSearchDataBeToBeAsync()
+	 {
+		 if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) 
+		 {
+			return new Promise((resolve,reject)=>{resolve("")});
+		 }
+		 var data="";
+		  if (!this.inOurStock)
+		  {
+			  if (!this.inOurStockUSA)
+			  {
+				  data+="OnlyUsa=N";
+			  }else
+			  {
+				    data+="OnlyUsa=W";
+			  }
+		  }else
+		  {
+			  if (!this.inOurStockUSA)
+			  {
+				  data+="OnlyUsa=Y";
+			  }else
+			  {
+				  return new Promise((resolve,reject)=>{resolve("")});
+			  }
+			  
+		  }
+		  data+="&icode="+this.state.itemCode;
+		  var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/ajaxRequest.php",data)
+		   return Prom;
+		 
+	 }
      getAnalogsAsync(itemCode,brandCode)
      {   var getAnalogs= function (responseText)
          { 
@@ -726,7 +778,13 @@ function getMapObject()
                      }.bind(this)
                      //this.dataSortAsync(handleDT.mapArray).then(dataSort) 
                      this.dataSortForRegionAsync(handleDT.mapArray).then(dataSort);
-                     
+					 
+					 var dataBeToBe =function (responseText)
+					 {
+						 handleBTB= new  handleData(responseText,getMapObject());
+						 this.setState({beToBeMapArray:handleBTB.mapArray,shouldComponentUpdate:true});
+					 }.bind(this)
+                     this.getSearchDataBeToBeAsync().then(dataBeToBe);
                    // this.setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
                      this.setCookie("PHPSESSID",this.state.PHPSESSID);
                      
@@ -783,13 +841,18 @@ function getMapObject()
      }
      render()
      { 
+	     var totalMapArray=[];
+		 
 	     var V2_table=getV2_table();
 		 var mergeMapArrays=function(item)
 		 {
-			 this.state.analogForOurStock.push(item)
+			 totalMapArray.push(item)
 		 }.bind(this)
+		 
 		 this.state.mapArray.map(mergeMapArrays);
-		 V2_table.mapArray=this.state.analogForOurStock;
+		 this.state.analogForOurStock.map(mergeMapArrays);
+		 this.state.beToBeMapArray.map(mergeMapArrays);
+		 V2_table.mapArray=totalMapArray;
 		 
 		 
 		 var V2_table_analogs=getV2_table();

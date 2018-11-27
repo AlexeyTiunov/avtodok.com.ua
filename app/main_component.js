@@ -476,6 +476,12 @@ export class Extends extends React.Component
 	  }
 	  return region;
   }
+  updateRegions()
+  {
+	 var regionComp= window.objectReg["Regions"];
+	  regionComp.getRegionsInfo();
+	  
+  }
   scrollToTop()
   {
 	  window.document.documentElement.scrollTop=0;

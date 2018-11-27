@@ -1,7 +1,8 @@
 <?php
 error_reporting(E_ALL);
 ignore_user_abort(false);
-$_GET['OnlyUsa']='N';
+$_GET['OnlyUsa']=$_REQUEST['OnlyUsa'];
+$_GET['icode']=$_REQUEST['icode'];  
 #set_time_limit(1);
 require_once ($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php'); 
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/components/itg/Search/Search_ITG4.php";
@@ -42,6 +43,7 @@ function prepareItemRow($itemRow)
       $newItemRow["ReturnableParts"]= 0;
       $newItemRow["Price"]=$itemRow['PRICEREGION']; 
       $newItemRow["PriceUSD"]=$itemRow['PRICEREGIONINCURRENCY']; 
+      $newItemRow['RegionCorrectName']="";
      
        
     return  $newItemRow;    

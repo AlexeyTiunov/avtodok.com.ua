@@ -55,7 +55,7 @@ export class Auth extends Extends
 			     else
 			       this.auth_authNeed();
 			 }
-         
+              this.updateRegions();
 		 }.bind(this)
          Prom.then(authRequest)
          

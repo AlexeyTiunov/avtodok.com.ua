@@ -8,8 +8,18 @@ export class Sidebar_brand extends Extends
    constructor(props) 
      {  
        super(props);      
+       this.onclick=this.onclick.bind(this);  
          
-         
+     }
+	 onclick()
+     {
+		 if (window.isMobile) this.sideBarToogle();
+		
+		 
+		 //this.deActivateProgressBar();
+		 this.scrollToTop();		 
+         getWorkPage().setState({renderIN:"",defineRoutes:true});
+		 
      }
      startMouseEnterEvent()
 	 {
@@ -44,7 +54,7 @@ export class Sidebar_brand extends Extends
          
                   ) */  
          return (
-                   <Link to={"/"} className="sidebar-brand" style={{"fontSize":"13px"}}>
+                   <Link onClick={this.onclick} to={"/"} className="sidebar-brand" style={{"fontSize":"13px"}}>
                          <i className="gi gi-car"></i><strong><font><font>Автодок-Партс-Kиїв</font></font></strong>
                      </Link>
  

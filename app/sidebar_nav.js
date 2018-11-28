@@ -50,7 +50,8 @@ export class Sidebar_nav  extends Extends
      {  
        super(props);
        this.state={items:this.props.items};      
-       this.onclick=this.onclick.bind(this);  
+       this.onclick=this.onclick.bind(this);
+       this.onclickNoAuthCheck=this.onclickNoAuthCheck.bind(this);	   
        this.ontouchstart=this.ontouchstart.bind(this);
        this.stPropagation=this.stPropagation.bind(this);   
      } 
@@ -66,18 +67,28 @@ export class Sidebar_nav  extends Extends
      onclick()
      {
 		 if (window.isMobile) this.sideBarToogle();
+		 this.activateProgressBar();
 		if (!this.checkAuth())
 		{
 			//e.preventDefault();
 			this.showAuthWindow();
+			this.deActivateProgressBar();
 		}
 		 
 		 //this.deActivateProgressBar();
 		 this.scrollToTop();
-		 this.activateProgressBar();
+		 
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 		 
      }
+	 onclickNoAuthCheck()
+	 {
+		  if (window.isMobile) this.sideBarToogle();		
+		 //this.deActivateProgressBar();
+		 this.scrollToTop();
+		 this.activateProgressBar();
+         getWorkPage().setState({renderIN:"",defineRoutes:true});
+	 }
      componentDidCatch(error, info) 
      {
          console.log(error);
@@ -120,7 +131,7 @@ export class Sidebar_nav  extends Extends
                      }
                      {
                          const ff=  ( <li>
-                               <Link onClickCapture={self.onclick} onMouseOutCapture={self.stPropagation} onMouseOverCapture={self.stPropagation} onTouchStartCapture={self.stPropagation} onTouchMoveCapture={self.stPropagation} to={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></Link>
+                               <Link onClickCapture={self.onclickNoAuthCheck} onMouseOutCapture={self.stPropagation} onMouseOverCapture={self.stPropagation} onTouchStartCapture={self.stPropagation} onTouchMoveCapture={self.stPropagation} to={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></Link>
                               </li> ) 
                       return ff;        
                           

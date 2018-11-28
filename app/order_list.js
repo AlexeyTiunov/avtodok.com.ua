@@ -365,6 +365,8 @@ export class Status_td extends Extends
 		 {
 			 case 0:
 			   return this.getStatusInWork();
+			 case 1:
+               	return 	this.getStatusPayed();	 
 			 case 2:
 			  return this.getStatusDenided();
 			 case 3:

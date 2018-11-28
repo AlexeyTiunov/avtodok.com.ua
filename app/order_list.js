@@ -376,7 +376,7 @@ export class Status_td extends Extends
 			 case 5:
 			   return this.getStatusOnTheWay();
 			  case 7:
-              		this.getStatusDelayed();	  
+              		this.getStatusDelayed(); 	  
 			 default : 
 			   return this.getNullStatus();
 		 }

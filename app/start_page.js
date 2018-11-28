@@ -28,7 +28,16 @@ export class Start_page extends Extends
       super(props);   
         
     }
-    
+	componentDidMount()
+	{
+		super.componentDidMount();
+		this.deActivateProgressBar();
+	}
+    componentDidUpdate()
+	{
+		super.componentDidUpdate();
+		this.deActivateProgressBar();
+	}
     render()
     {
     return (<div className="row">

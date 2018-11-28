@@ -10,7 +10,8 @@ import {Extends} from './main_component.js'
       props.items;
   */  
 export var items = [
-  {name:"Пошук", href:"/search", className:"active gi gi-table sidebar-nav-icon" ,inner:null},  
+  {name:"Головна", href:"/", className:"active gi gi-file sidebar-nav-icon" ,inner:null}, 
+  {name:"Пошук", href:"/search", className:"active gi gi-table sidebar-nav-icon" ,inner:null},   
   {name:"Особистий кабінет", href:"#", className:"sidebar-nav-menu",
     inner:[  {name:"Замовлення", href:"/order_list", className:"gi gi-table sidebar-nav-icon" ,inner:null},
              {name:"Баланс", href:"/balance",className:"gi gi-database_plus sidebar-nav-icon" ,inner:null},

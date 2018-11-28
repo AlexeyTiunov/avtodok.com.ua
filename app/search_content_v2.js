@@ -860,11 +860,11 @@ function getMapObject()
 		 var analogsTableCaption="";
 		 if ( this.state.showAnalogs && this.state.analogInfo.length>0)
 		 {
-			  analogsTableCaption="Аналогі";
+			  analogsTableCaption="Аналоги";
 		 }
 		 else if (this.state.showAnalogs && this.state.analogInfo.length==0)
 		 {
-			  analogsTableCaption="Аналогі не знайдені.";
+			  analogsTableCaption="Аналоги не знайдені.";
 		 }
 		 
 		 

@@ -343,6 +343,14 @@ export class Sidebar_header  extends Extends
 			    <div className="col-xs-12"> 
                   <Sidebar_control_button parentMod={this.props.parentMod}/>
                   <Search_form/>
+				   <ul class="nav navbar-nav-custom">
+                        <li>
+                            <span className="label"><font ><font ><br/> +38 (044) 545 70 17</font></font></span>
+                        </li>
+                        <li>
+                            <span className="label"><font ><font><br/> +38 (097) 025 11 10</font></font></span>
+                        </li>
+                  </ul>
 				  <ul className="nav navbar-nav-custom pull-right">
                      <li>
 					    <Currency_rates/>

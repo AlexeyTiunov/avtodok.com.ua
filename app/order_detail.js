@@ -220,7 +220,7 @@ export class Order_detail extends Extends
                           var i=0;
                     tableBody= rows.map(function(item){                                  
 			                      i++;
-                                  return (  <tr key={i}>{item}</tr>)  
+                                  return (  <ThemeContext.Provider value={i}><tr key={i}>{item}</tr></ThemeContext.Provider>)  
                                    }) 
 		
 	         }catch(e)

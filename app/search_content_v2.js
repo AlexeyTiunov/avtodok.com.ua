@@ -542,6 +542,10 @@ function getMapObject()
 		 this.inOurStock=false;
 		 this.inOurStockUSA=false;
 		 
+		 this.noAnalogsFinded=false; // if no search noAnalogsFinded = false is search but finded 0 then noAnalogsFinded=true
+		 this.noItemsFinded=false    // ------
+		 this.searchIsComplete=false;
+		 
        if (this.props.match)
        {          
          if ("params" in this.props.match)
@@ -684,9 +688,18 @@ function getMapObject()
 		   try
 		   {
 			  handleDT=new handleData(responseText,getMapObject());  
+			  
 		   }catch(e)
 		   {
 			   handleDT={mapArray:[]};
+			   
+		   }
+		   if (handleDT.mapArray.length==0)
+		   {
+			   this.noAnalogsFinded=true;
+		   }else
+		   {
+			   this.noAnalogsFinded=false;
 		   }
           
 		   this.state.analogInfo=[];
@@ -733,11 +746,14 @@ function getMapObject()
      {
 		 
          if (this.state.itemCode=="" || this.state.itemCode==null || this.state.itemCode==undefined) return;
+		 this.noAnalogsFinded=false;
+		 this.noItemFinded=false;
+		 this.searchIsComplete=false;
          window.objectReg['Search_content_header'].setState({itemCode:this.state.itemCode})         
          var data="ItemCode="+this.state.itemCode+"";
          if (this.state.brandCode==undefined || this.state.brandCode==null )
          {
-            
+            this.noAnalogsFinded=true;
          } else
          {
              data+="&BrandCode="+this.state.brandCode; 
@@ -758,6 +774,14 @@ function getMapObject()
              
                      handleBR= new  handleData(responseText,undefined,"BRANDS");             
                      handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
+					 
+					 if (handleBR.mapArray.length==0)
+					 {
+						 this.noItemsFinded=true;
+					 }else
+					 {
+						 this.noItemsFinded=false;
+					 }
 					 
 					 var brandInfoNamesArray=Object.getOwnPropertyNames(handleBR.mapArray);
 					 var brandInfoLength=brandInfoNamesArray.length;
@@ -781,7 +805,18 @@ function getMapObject()
 					 
 					 var dataBeToBe =function (responseText)
 					 {
-						 handleBTB= new  handleData(responseText,getMapObject());
+						 try{
+							 handleBTB= new  handleData(responseText,getMapObject()); 
+						    }catch(e)
+							{
+								this.searchIsComplete=true;
+							}
+						
+						 if (handleBTB.mapArray.length==0)
+						 {
+							 this.searchIsComplete=true;
+						 }							 
+							 
 						 this.setState({beToBeMapArray:handleBTB.mapArray,shouldComponentUpdate:true});
 					 }.bind(this)
                      this.getSearchDataBeToBeAsync().then(dataBeToBe);
@@ -797,7 +832,7 @@ function getMapObject()
      }
      cleanData(callBack)
 	 {
-		 this.setState({analogInfo:[],analogForOurStock:[],mapArray:[],brandInfo:{},shouldComponentUpdate:true},callBack);
+		 this.setState({analogInfo:[],analogForOurStock:[],mapArray:[],brandInfo:{},beToBeMapArray:[],shouldComponentUpdate:true},callBack);
 	 }
      /////////////////////////////////////    && this.state.itemCode!=nextState.itemCode
       shouldComponentUpdate(nextProps, nextState)
@@ -848,24 +883,78 @@ function getMapObject()
 		 {
 			 totalMapArray.push(item)
 		 }.bind(this)
+		 var mergeMapArraysBeToBe=function(item)
+		 {
+			 totalMapArray.push(item);
+			 this.searchIsComplete=true;
+		 }.bind(this)
 		 
 		 this.state.mapArray.map(mergeMapArrays);
 		 this.state.analogForOurStock.map(mergeMapArrays);
-		 this.state.beToBeMapArray.map(mergeMapArrays);
+		 
+		 
+		 this.state.beToBeMapArray.map(mergeMapArraysBeToBe);
 		 V2_table.mapArray=totalMapArray;
 		 
 		 
 		 var V2_table_analogs=getV2_table();
 		 V2_table_analogs.mapArray=this.state.analogInfo;
 		 var analogsTableCaption="";
-		 if ( this.state.showAnalogs && this.state.analogInfo.length>0)
+		if (this.searchIsComplete) 
+		{
+			
+		
+		 if (totalMapArray.length==0 && (this.state.itemCode=="" || this.state.itemCode==undefined || this.state.itemCode==null))
+		 {			 
+			     tableCaption=null;        
+                      
+		 }else if ((totalMapArray.length==0 && this.noItemsFinded) || (totalMapArray.length>0 ))
 		 {
-			  analogsTableCaption="Аналоги";
-		 }
-		 else if (this.state.showAnalogs && this.state.analogInfo.length==0)
+			 tableCaption=(<span><font><strong>{"Знайдено позицій -"+totalMapArray.length+ "шт."}</strong></font></span> );
+		 }else
 		 {
-			  analogsTableCaption="Аналоги не знайдені.";
+			 tableCaption=(<img style={{"width":"40px","height":"40px"}}src='/app/img/preloader_m.gif'/>)
 		 }
+		}else
+		{ 
+	         if (this.state.itemCode=="" || this.state.itemCode==undefined || this.state.itemCode==null)
+		     {
+				 tableCaption=null;  
+			 }else
+			 {			 		 
+			  tableCaption=(<span><img style={{"width":"40px","height":"40px"}}src='/app/img/preloader_m.gif'/><font><strong>{"Знайдено позицій -"+totalMapArray.length+ "шт."}</strong></font></span>)
+			 }
+		}
+		// this.noItemsFinded=false;
+		 
+		 ///////////////////////////////
+		if (this.state.showAnalogs)
+		{			
+	     if (this.state.analogInfo.length==0 && (this.state.itemCode=="" || this.state.itemCode==undefined || this.state.itemCode==null))
+		 {			 
+			     analogsTableCaption=null;
+				 analogsTableCaption_2="";
+				 
+                      
+		 }else if ((this.state.analogInfo.length==0 && this.noAnalogsFinded) || (this.state.analogInfo.length>0 ))
+		 {
+			 analogsTableCaption=(<span><font><strong>{"Знайдено позицій аналогів - "+this.state.analogInfo.length+ "шт."}</strong></font></span>);
+			 analogsTableCaption_2="Аналоги";
+		 }else
+		 {
+			 analogsTableCaption=(<span><img style={{"width":"40px","height":"40px"}}src='/app/img/preloader_m.gif'/><font><strong>{"Пошук аналогів"}</strong></font></span>)
+			 analogsTableCaption_2="Аналоги";
+		 }
+		}else
+		{
+			 analogsTableCaption=null;
+			 analogsTableCaption_2="";
+		}
+		 //this.noAnalogsFinded=false;
+		 
+		
+		 
+		 
 		 
 		 
 		 
@@ -873,12 +962,14 @@ function getMapObject()
                    <div class="block">  
                    <ComContext.Provider value={this}><Search_content_header itemCode={this.state.itemCode}/> </ComContext.Provider>
                      <div className="table-responsive">
-                     
+					     
+                         <div className="row"><div className="col-xs-12 col-sm-12 col-md-12">{tableCaption}</div></div>
                      <ComContext.Provider value={this}> <Search_table_brandheader key={unickKey++}  itemCode={this.state.itemCode} brandInfo={this.state.brandInfo}/></ComContext.Provider>
                        <V2_table />
                      </div><br/>
                       <div className="table-responsive analogs table-striped">
-					    <div className="col-xs-12"><p align="center"><strong>{analogsTableCaption}</strong></p></div>
+					  <div className="row"><div className="col-xs-12 col-sm-12 col-md-12"><p align='center'><font><strong>{analogsTableCaption_2}</strong></font></p></div></div>
+					    <div className="row"><div className="col-xs-12 col-sm-12 col-md-12">{analogsTableCaption}</div></div>
                         <V2_table_analogs/>
                       </div>
                    </div>
@@ -933,7 +1024,8 @@ function getV2_table()
 			    /*"order": [[ 2, 'desc' ]],*/ 
                 "aoColumnDefs": [ { "bSortable": false, "aTargets": [0,1] } ],
                 "iDisplayLength": 5,
-                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
+                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]],
+				 "searching": false
             });
 
             /* Add placeholder attribute to the search input */
@@ -956,7 +1048,8 @@ function getV2_table()
 	 {
 		 //this.state.mapArray=this.props.mapArray;
 		 var tableHead=null;
-         var  tableBody=null; 
+         var  tableBody=null;
+         var tablePrepared=null;		 
          //this.state.dataQuantity=1;                 
           try
           {
@@ -1010,14 +1103,8 @@ function getV2_table()
                           //var i=0;
                 tableBody= rows.map(function(item){                                  
                                   return (  <tr key={unickKey++}>{item}</tr> )  
-                                   })  
-          }catch(e)
-          {
-             tableHead=null;
-             tableBody=null; 
-             this.state.dataQuantity=1;
-          } 
-		  return (<div>
+                                   }) 
+                tablePrepared=(
 		           <table  className="table table-vcenter table-striped"> 
                                <thead>
                                 {tableHead}
@@ -1028,8 +1115,17 @@ function getV2_table()
                                               
                        
                        
-                    </table>
-					</div>)
+                     </table>)								   
+          }catch(e)
+          {
+             tableHead=null;
+             tableBody=null; 
+             this.state.dataQuantity=1;
+			 tablePrepared=(<div></div>)
+          } 
+		  return (<div>
+		             {tablePrepared}
+				 </div>)
 	 }
 	 
 	 

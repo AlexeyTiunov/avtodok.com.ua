@@ -753,7 +753,7 @@ function getMapObject()
          var data="ItemCode="+this.state.itemCode+"";
          if (this.state.brandCode==undefined || this.state.brandCode==null )
          {
-            this.noAnalogsFinded=true;
+            //this.noAnalogsFinded=true;
          } else
          {
              data+="&BrandCode="+this.state.brandCode; 
@@ -775,12 +775,23 @@ function getMapObject()
                      handleBR= new  handleData(responseText,undefined,"BRANDS");             
                      handleDT=new handleData(responseText,getMapObject(),"ITEMS");  
 					 
-					 if (handleBR.mapArray.length==0)
+					 if (handleDT.mapArray.length==0)
 					 {
 						 this.noItemsFinded=true;
 					 }else
 					 {
 						 this.noItemsFinded=false;
+					 }
+					 var brandsQuantity=Object.getOwnPropertyNames(handleBR.mapArray).length
+					 if (brandsQuantity>1)
+					 {
+						 this.noAnalogsFinded=true;
+					 }else if (brandsQuantity==0)
+					 {
+						 this.noAnalogsFinded=true;
+					 }else
+					 {
+						  //this.noAnalogsFinded=false;
 					 }
 					 
 					 var brandInfoNamesArray=Object.getOwnPropertyNames(handleBR.mapArray);
@@ -889,8 +900,9 @@ function getMapObject()
 			 this.searchIsComplete=true;
 		 }.bind(this)
 		 
-		 this.state.mapArray.map(mergeMapArrays);
 		 this.state.analogForOurStock.map(mergeMapArrays);
+		 this.state.mapArray.map(mergeMapArrays);
+		 
 		 
 		 
 		 this.state.beToBeMapArray.map(mergeMapArraysBeToBe);

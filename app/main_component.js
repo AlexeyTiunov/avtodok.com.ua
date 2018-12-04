@@ -224,7 +224,11 @@ export class Extends extends React.Component
             thisO.xhr.onabort = function()
             {
               var a=1;
-            } 
+            }
+             thisO.xhr.onerror=function()
+            {
+             thisO.showInforMassage("ERROR","Помилка підключення!");
+            }			
             //this.xhr.send(data);
 			try
 			{

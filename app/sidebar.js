@@ -63,7 +63,10 @@ require ('./js/app.js');
     
 }  */
      
-
+function afterRender()
+{
+	$('[data-toggle="tooltip"]').tooltip();
+}
 export class Sidebar  extends Extends
 {
     constructor(props) 
@@ -217,7 +220,8 @@ export class Sidebar  extends Extends
    ReactDOM.render(      
      <Sidebar/>     
      ,
-   body[0]
+   body[0],
+   afterRender
 
 )
 

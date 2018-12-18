@@ -1,7 +1,8 @@
 User-agent: *
 Disallow: /bitrix/
-Disallow: /ws/
+Allow: /ws/
 Disallow: /app/  
 Disallow: /node_modules/  
-Disallow: /public/     
+Allow: /public/     
 Allow: /
+Allow : /catalog/

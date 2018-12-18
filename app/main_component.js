@@ -338,15 +338,20 @@ export class Extends extends React.Component
 			 
 		 }else
 		 {		 
-         Uobject=window.objectReg["Info_message"];
-         Uobject.setState({header:header,body:message});
-          
-		  if (!Uobject.state.isOn)
-		  {
-			  linkA.click();
-		  }
-		  Uobject.setState({isOn:true});
          
+		  function updateInfoMassage()
+		  {   Uobject=window.objectReg["Info_message"];
+			  Uobject.setState({header:header,body:message});
+		 
+        
+          
+		   if (!Uobject.state.isOn)
+		   {
+			  linkA.click();
+		   }
+		   Uobject.setState({isOn:true});
+          }
+		  this.clearInforMassage(updateInfoMassage);
          }
 		 
 		
@@ -354,6 +359,11 @@ export class Extends extends React.Component
          
          
      }
+	 clearInforMassage(nextFunc)
+	 {
+		 Uobject=window.objectReg["Info_message"];
+         Uobject.setState({header:"",body:<div></div>},nextFunc)
+	 }
 	 checkAuth()
 	 {
 		 Uobject=window.objectReg["Auth"];

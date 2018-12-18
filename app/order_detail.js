@@ -442,7 +442,7 @@ export class Status_td extends Extends
 	 }
 	 getStatusPayed()
 	 {
-		 this.updateActionTd("getNullAction");
+		 this.updateActionTd("getActionWareHouse");
 		 return (<a href='####'>
 		  <img title='' src={this.imagePath+"vykuplen.png"} style={this.style}/>
 		 </a>)
@@ -675,10 +675,17 @@ export class Action_td extends Extends
 		   <img style={this.style} title='' src={this.imagePath+"user_deny.png"} />
 		 </a>)
 	  }
-      getActionWareHouse()
+      
+	  getActionWareHouse()
 	  {
+		  var dateArr=this.state.proto.WAREHOUSEDATE.fValue.split(/\s/);
+		  var date="";
+		  if (dateArr instanceof Array) 
+		  {
+			  date=dateArr[0];
+		  }
 		  return ( <a href='####'>
-		   <img style={this.style} title='' src={this.imagePath+"date_come.png"} />
+		   <img style={this.style}  data-toggle="tooltip" data-placement="top" data-original-title={date} src={this.imagePath+"date_come.png"} />
 		 </a>)
 	  }
 	  updateStatus(funcName,value)
@@ -710,6 +717,11 @@ export class Action_td extends Extends
 	 {
 		 super.componentDidUpdate();
 		 $('[data-toggle="tooltip"]').tooltip(); 
+	 }
+	 componentDidMount()
+	 {
+		 super.componentDidMount()
+		 $('[data-toggle="tooltip"]').tooltip();
 	 }
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {

@@ -357,7 +357,7 @@ while($arOrder = $dbOrder->GetNext())
         $arBasket["ITEMSTATUSQUANTITY2"]=($BasketItemProperties["ItemStatusQuantity2"]==null)?"":$BasketItemProperties["ItemStatusQuantity2"];
         $arBasket["ITEMSTATUSCHANGEQUERY"]= ($BasketItemProperties["ItemStatusChangeQuery"]==null)?"":$BasketItemProperties["ItemStatusChangeQuery"];
         $arBasket["QUANTITYCHANGEQUERY"]=($BasketItemProperties["QuantityChangeQuery"]==null)?"":$BasketItemProperties["QuantityChangeQuery"];
-        $arBasket["WAREHOUSEDATE"]=$BasketItemProperties["WAREHOUSEDATE"];  
+        $arBasket["WAREHOUSEDATE"]=($BasketItemProperties["WAREHOUSEDATE"]==null)?"":$BasketItemProperties["WAREHOUSEDATE"];  
         $arBasket["PRICE_FORMATED"]=SaleFormatCurrency( $arBasket["PRICE"], $arBasket["CURRENCY"]); 
         $arBasket["SUM"]=DoubleVal($arBasket["PRISE"]*$arBasket["QUANTITY"]);
         $arBasket["SUM_FORMATED"]=SaleFormatCurrency(DoubleVal($arBasket["PRICE"]*$arBasket["QUANTITY"]),$arBasket["CURRENCY"]);

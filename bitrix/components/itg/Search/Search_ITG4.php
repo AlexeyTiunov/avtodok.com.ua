@@ -572,7 +572,12 @@ class Search_ITG
                 if (!$arItem['RegionShortName']) $arItem['RegionShortName'] = '-';
             }
           #  if ( ($arItem['RegionShortName'] == 'СКЛАД' && $this->params['userID']!=1979 ) || ($arItem['RegionShortName'] == 'ДОНЕЦК'&& $this->params['userID']!=1979) ) $this->params['warehouse'] = true;
-             if ( ($arItem['RegionShortName'] == 'СКЛАД' && !in_array($this->params['userID'],$this->spesialUsers) ) || ($arItem['RegionShortName'] == 'ДОНЕЦК'&& !in_array($this->params['userID'],$this->spesialUsers)) ) $this->params['warehouse'] = true;
+             #if ( ($arItem['RegionShortName'] == 'СКЛАД' && !in_array($this->params['userID'],$this->spesialUsers) ) || ($arItem['RegionShortName'] == 'ДОНЕЦК'&& !in_array($this->params['userID'],$this->spesialUsers)) ) $this->params['warehouse'] = true;
+            if ( $arItem['RegionCode']==1 && !in_array($this->params['userID'],$this->spesialUsers))
+            {
+                $this->params['warehouse'] = true;
+            }
+           
             if ($arItem['RegionShortName'] == 'USA' && $this->params['userID']!=1979) $this->params['warehouseUSA'] = true; 
            #if (in_array(4,$this->params['usergrouparray'],true) )
             #{

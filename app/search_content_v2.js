@@ -818,17 +818,20 @@ function getMapObject()
 					 {
 						 try{
 							 handleBTB= new  handleData(responseText,getMapObject()); 
+							 this.setState({beToBeMapArray:handleBTB.mapArray,shouldComponentUpdate:true});
+							 if (handleBTB.mapArray.length==0)
+						     {
+							  this.searchIsComplete=true;
+						     }		
 						    }catch(e)
 							{
 								this.searchIsComplete=true;
+								this.setState({beToBeMapArray:[],shouldComponentUpdate:true});
 							}
 						
-						 if (handleBTB.mapArray.length==0)
-						 {
-							 this.searchIsComplete=true;
-						 }							 
+						 					 
 							 
-						 this.setState({beToBeMapArray:handleBTB.mapArray,shouldComponentUpdate:true});
+						// this.setState({beToBeMapArray:handleBTB.mapArray,shouldComponentUpdate:true});
 					 }.bind(this)
                      this.getSearchDataBeToBeAsync().then(dataBeToBe);
                    // this.setState({mapArray:handleDT.mapArray,brandInfo:handleBR.mapArray,shouldComponentUpdate:true});
@@ -1289,21 +1292,30 @@ export class Brandname_td extends Extends
      render()
      {
        var src="";
-       var img=<div></div>
+       var img=<div></div>;
+	   var weight=<div></div>;
+	   var br="";
        if ("Pic64Base" in this.state.proto )
        {
          if (this.state.proto.Pic64Base.fValue!="" && this.state.proto.Pic64Base.fValue!=undefined)
          { 
           src= "data:image/png;base64,"+this.state.proto.Pic64Base.fValue; 
-          img=<img onClick={this.showPic}style={{width:"30px",height:"30px"}} src={src} />
+          img=<img onClick={this.showPic}style={{width:"30px",height:"30px"}} src={src} /> 
+		  br=<br/>
          }  
        }
+	   if (this.state.proto.Weight.fValue!="" && this.state.proto.Weight.fValue!=undefined)
+	   {
+		   weight="вага: "+this.state.proto.Weight.fValue+" кг."
+		  
+	   }
          
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
                    {this.state.proto[this.state.NAME].fValue}<br/>
                    {this.state.proto["ItemCode"].fValue}<br/>
-                   {img}
+                   {img}{br}
+				   {weight}
                    </td> 
         
         

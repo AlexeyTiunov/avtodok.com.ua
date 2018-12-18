@@ -1,9 +1,15 @@
 <?
-  require($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');  
+  require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');
   global $DB;
+  
+  $item_cards_root="/catalog/BROTHER/";
+  $HTTP_HOST=$_SERVER["HTTP_HOST"];
+  
+  
+  
   function getMainPicDrectorySite()
   {
-      return "/ws/";
+      return "/images/";    
   }
   function getPicturePath($item_code,$suffix,$pictureBase64)
   {
@@ -51,17 +57,23 @@
   }
   
   $sql="SELECT * FROM b_autodoc_items_m WHERE BrandCode=39415105";   
-  $result->Query($sql);
+  $result=$DB->Query($sql);
   
-  
+  $itemsInfoArray=Array();
   
   while ($itemRow=$result->Fetch())
   {
+      $itemCode= $itemRow["ItemCode"];
+      $pic_base64code= $itemRow["Base64"];
       
+      $itemInfoArray['LOC_TEXT']="http://".$HTTP_HOST.$item_cards_root.$itemCode; 
+      $itemInfoArray['IMG_PATH']="http://".$HTTP_HOST.getPicturePath($itemCode,"",$itemRow['Base64']);
+      $itemInfoArray['IMG_CAPTION']=$itemCode; 
       
+      $itemsInfoArray[]=$itemInfoArray;
   }
   
-     
+  include "create_xml_sitemapfile.php";   
     
     
     

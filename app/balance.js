@@ -398,7 +398,7 @@ export class Pay_notification extends Extends
                                         <div className="col-md-6">
                                             <select id="example-select" name="example-select" className="form-control" size="1">
                                                 <option value="0">Оберіть карту</option>
-                                                <option value="1">5168 7572 8738 3568  Атаманенко Оксана Аркадіївна</option>
+                                                <option value="1">5168 7456 0201 4604  Атаманенко Оксана Аркадіївна</option>
                                                 
                                             </select>
                                         </div>
@@ -428,7 +428,7 @@ export class Pay_notification extends Extends
                             <div className="form-group form-actions">
                                 <div class="col-xs-12 text-right">
                                     <button type="button" className="btn btn-sm btn-default" data-dismiss="modal"><font><font>Відміна</font></font></button>
-                                    <button type="submit" className="btn btn-sm btn-primary"><font><font>Сповістити</font></font></button>
+                                    <button type="submit" className="btn btn-sm btn-primary"><font><font>Сервіс поки не працює</font></font></button>
                                 </div>
                             </div>
                         </form>

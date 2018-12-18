@@ -23,7 +23,7 @@ export var items = [
   },
   
   {name:"Каталоги",href:null,className:"sidebar-header" ,inner:null},
-  {name:"Каталог автозапчастин",href:"/catalogs", className:"gi gi-cars sidebar-nav-icon" ,inner:null},
+  {name:"Каталог автозапчастин",href:"/catalogs_auto", className:"gi gi-cars sidebar-nav-icon" ,inner:null},
   {name:"Каталог аксесуарів",href:"#", className:"gi gi-beach_umbrella sidebar-nav-icon" ,inner:null},
   {name:"Корисне",href:null, className:"" ,inner:null},
   {name:"Про нас",href:"", className:"fa fa-users sidebar-nav-icon" ,inner:null},

@@ -1,31 +1,35 @@
 <?
-   require($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php'); 
+   require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php'); 
    
         
 
-    function createUrlElement($arrTextNodes)
+    function createUrlElement($arrTextNodes,$doc)
     {
-        $url= new DOMElement("url");
+        $url= $doc->createElement("url");
         
-        $loc= new DomElemnt("loc");
+        $loc= new DOMElement("loc");  
+        $url->appendChild($loc);        
         $locTextNode= new DOMText($arrTextNodes['LOC_TEXT']);
+       
         $loc->appendChild($locTextNode); 
         
-        $img=createImageElement($arrTextNodes['IMG_PATH'],$arrTextNodes['IMG_CAPTION']);
+        $img=createImageElement($arrTextNodes['IMG_PATH'],$arrTextNodes['IMG_CAPTION'],$doc);
         
-        $url->appendChild($loc);
+       
         $url->appendChild($img);
         
-    }
-    function createImageElement($path,$caption)
-    {
-        $img=new DOMElement("image:image");
+        return $url;
         
-        $imgLock= new DOMElement("image:loc"); 
+    }
+    function createImageElement($path,$caption,$doc)
+    {
+        $img=$doc->createElementNS("http://www.google.com/schemas/sitemap-image/1.1","image:image");
+        
+        $imgLock= $doc->createElementNS("http://www.google.com/schemas/sitemap-image/1.1","image:loc"); 
         $locTextNode= new DOMText($path);
         $imgLock->appendChild($locTextNode);
         
-        $imgCaption= new DOMElement("image:caption"); 
+        $imgCaption= $doc->createElementNS("http://www.google.com/schemas/sitemap-image/1.1","image:caption"); 
         $locTextNode= new DOMText($caption);
         $imgCaption->appendChild($locTextNode);
         
@@ -46,13 +50,13 @@
     $urlSetAtrXmlnsVideo=$urlSet->setAttribute("xmlns:video","http://www.google.com/schemas/sitemap-video/1.1");
     
    
-     foreach ($itemInfoArray as $key=>$value)
+     foreach ($itemsInfoArray as $itemInfoArray)
      {
-         
-         
+         $url=createUrlElement($itemInfoArray,$doc);
+         $urlSet->appendChild($url);
      } 
     
-    
+    echo $doc->saveXML($urlSet);
     
       
     

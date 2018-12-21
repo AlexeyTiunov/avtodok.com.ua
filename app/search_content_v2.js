@@ -19,6 +19,7 @@ function getMapObject()
     var defineTh=dataConvert.defineTh; 
    var parceDate=dataConvert.parceDate;
    var convertCurrencyToUah=dataConvert.convertCurrencyToUah;
+   var convertCurrencyFromTo=dataConvert.convertCurrencyFromTo;
    
    function gProperty(name)
    {
@@ -54,7 +55,9 @@ function getMapObject()
       Currency:{functions:{},params:[]}, 
       ReturnableParts:{functions:{},params:[]}, 
       Price:{functions:{formatNumber,defineColumnName,defineColumnClass,defineTd,defineTh},params:[[".","2"],"Цена","",<Price_td/>,[<Common_th/>,"Ціна"]]}, 
-      PriceUAH:{functions:{convertCurrencyToUah,formatNumber},params:[[gProperty("Price"),gProperty("Currency")],[".","2"]],addNew:true}, 
+     // PriceUAH:{functions:{convertCurrencyToUah,formatNumber},params:[[gProperty("Price"),gProperty("Currency")],[".","2"]],addNew:true}, 
+	   PriceUAH:{functions:{convertCurrencyFromTo,formatNumber},params:[[gProperty("Price"),gProperty("Currency"),"UAH"],[".","2"]],addNew:true}, 
+	   PriceUSD:{functions:{convertCurrencyFromTo,formatNumber},params:[[gProperty("Price"),gProperty("Currency"),"USD"],[".","2"]],addNew:true}, 
 	  
          
         
@@ -1771,9 +1774,9 @@ export class Price_td extends Extends
    formatNumber.call(priceObject,".","2");*/
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }>
-				   {this.state.proto.Price.fValue}<br/>
+				   {this.state.proto.PriceUSD.fValue}<br/>
 				   <strong><span class="badge">
-				   {this.state.proto.Currency.fValue}
+				   {"USD"}
 				   </span></strong><br/>				   
 				   {this.state.proto.PriceUAH.fValue}					
 				   <br/>

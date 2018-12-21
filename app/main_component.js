@@ -3,6 +3,7 @@ var React = require('react');
 import {Sidebar} from './sidebar.js'
 import {handleData} from './data_convert.js'
 
+
 window.objectReg={};
 
 export class Extends extends React.Component
@@ -307,7 +308,87 @@ export class Extends extends React.Component
          return fms;
             
      }
-     getCurrencyRate(currency)
+     makeTableFromMapArray(mapArray)
+	 {
+		  var tableHead=null;
+         var  tableBody=null;
+         var tablePrepared=null;		 
+         //this.state.dataQuantity=1;                 
+          try
+          {
+              
+                           
+           var names=mapArray.map(function(tr) {
+               
+                     var mas=[];
+                             for (th in tr)
+                             {
+                                 if (tr[th].THH)
+                                 mas.push(tr[th].THH);  
+                             }
+                              return mas;    
+               
+           })[0]                 
+                           
+          tableHead= (  
+                                    <tr>
+                                     {
+                                       names.map(function(item){
+                                         return  item;
+                                       })  
+                                     } 
+                                    </tr>
+                             
+                     )  
+            
+                                      
+                                   
+                          
+                      
+                     
+                                
+           var rows=mapArray.map(function(tr) 
+                           {
+                               var mas=[];
+                             for (td in tr)
+                             {
+                                
+                                mas.push(tr[td].TD)
+                             } 
+                              
+                             return mas;
+                              
+                             //return <th className="text-center">{item.Name}</th> 
+                           });
+           
+              
+                                
+                          var unickKey=0;
+                tableBody= rows.map(function(item){                                  
+                                  return (  <tr key={unickKey++}>{item}</tr> )  
+                                   }) 
+                tablePrepared=(
+		           <table  className="table table-vcenter table-striped"> 
+                               <thead>
+                                {tableHead}
+                               </thead> 
+                                <tbody>
+                                    {tableBody}                                   
+                                  </tbody>
+                                              
+                       
+                       
+                     </table>)								   
+          }catch(e)
+          {
+             tableHead=null;
+             tableBody=null;            
+			 tablePrepared=(<div></div>)
+          } 
+		  return tablePrepared;
+	 }
+	 
+	 getCurrencyRate(currency)
 	 {
 		 var curComp=window.objectReg["Currency_rates"];
 		 if (curComp==null || curComp== undefined)
@@ -489,6 +570,45 @@ export class Extends extends React.Component
 		  
 	  }
 	  return region;
+  }
+  getBrandFullNameByID(id)
+  {
+	  var brand=undefined;
+	  try
+	  {
+		 brand= window.objectReg["Brands"].brandsId[id].FullName;  
+	  }catch(e)
+	  {
+		  
+	  }
+	  return brand;
+	  
+  }
+  getBrandFullNameByShortName(shortName)
+  {
+	  var brand=undefined;
+	  try
+	  {
+		 brand= window.objectReg["Brands"].brandsShortName[shortName].FullName;  
+	  }catch(e)
+	  {
+		  
+	  }
+	  return brand;
+	  
+  }
+  getBrandIdByFullName(fullName)
+  {
+	   var brandId=undefined;
+	   try
+	   {
+		 
+		 brandId= window.objectReg["Brands"].brandsFullName[FullName].id;  
+	  }catch(e)
+	  {
+		  
+	  }
+	  return brandId;
   }
   updateRegions()
   {

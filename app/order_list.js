@@ -5,6 +5,9 @@ import {Extends} from './main_component.js';
 import {handleData} from './data_convert.js'
 import {TablesDatatables} from './js/pages/tablesDatatables.js'
 import {App} from './js/app.js';   
+import {Order_Action} from './order_action_status.js'
+import {ItemStatusChange_Query} from './order_action_status.js'
+
 
 function getMapObject()
 {
@@ -41,6 +44,7 @@ function getMapObject()
 	  SHIPPING_DOCUMENT:{functions:{},params:[]},
 	  ISRETURNABLE:{functions:{},params:[]},
 	  DELIVERYMETHODTOUA:{functions:{},params:[]},
+	  WAREHOUSEDATE:{functions:{},params:[]},
       action:{functions:{defineColumnName,defineColumnClass,defineTd},params:["Дія" ," ", <Action_td />,],addNew:true},
       state:{functions:{defineColumnName,defineTd},params:["Статус",<Status_td />,],addNew:true},
         
@@ -101,6 +105,7 @@ export class Order_list extends Extends
 			{
 				return;
 			}
+			 $('[data-toggle="tooltip"]').tooltip();
             /* Initialize Datatables */
             $('#example-datatable').dataTable({
 			"order": [[ 0, 'desc' ]],
@@ -108,10 +113,19 @@ export class Order_list extends Extends
                 "iDisplayLength": 10,
                 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "Всі"]]
             });
-
+             
+			  $('.pagination').on( 'click', function () 
+			  {
+				  $('[data-toggle="tooltip"]').tooltip();
+			  })
+			 
             /* Add placeholder attribute to the search input */
             $('.dataTables_filter input').attr('placeholder', 'Пошук');
         }
+	  initToolTip()
+	  {
+		   $('[data-toggle="tooltip"]').tooltip();
+	  }	  
     /////////////////////////////////////
 	 shouldComponentUpdate(nextProps, nextState)
 	 {
@@ -127,7 +141,7 @@ export class Order_list extends Extends
           return nextState.shouldComponentUpdate;
 	 }
     componentDidUpdate(prevProps, prevState)
-    {
+    {  
         super.componentDidUpdate(prevProps, prevState);
 		for (state in regTDStatus)
 		{
@@ -142,16 +156,16 @@ export class Order_list extends Extends
 			this.initOrderList();	    
 		    this.deActivateProgressBar();
 		}
-        
+       
     }
     componentDidMount()
-    {
+    {   
         super.componentDidMount();
 		/*var getOrderListData=function(){ this.getOrderListData();}
 		getOrderListData=getOrderListData.bind(this);		
 		getOrderListData();*/
 		this.setState({shouldComponentUpdate:false});
-		
+		 
        
 		//TablesDatatables.init();
 		//this.setState({twiceUpdated:true,shouldComponentUpdate:true});
@@ -261,11 +275,21 @@ export class Name_td extends Extends
         this.state=this.props;
          
      } 
+	 
+	 
      render()
      {
+		 var article="";
+	     var br="";
+	     if (window.isMobile)
+	    {
+		 article=(this.state.proto["ARTICLE"].fValue);
+		 br=<br/>;
+	    }
          return (
           
                   <td className={this.state.proto[this.state.NAME].className+" text-center" }>				  
+				  {article}{br}
 				  {this.state.proto[this.state.NAME].fValue}
 				  </td>  
           
@@ -404,7 +428,7 @@ export class Status_td extends Extends
 	 }
 	 getStatusPayed()
 	 {
-		 this.updateActionTd("getNullAction");
+		 this.updateActionTd("getActionWareHouse");
 		 return (<a href='####'>
 		  <img title='' src={this.imagePath+"vykuplen.png"} style={this.style}/>
 		 </a>)
@@ -513,7 +537,7 @@ export class Status_td extends Extends
      }
     
 }  
-export class Action_td extends Extends
+export class Action_td_old extends Extends
 {
     
     constructor(props) 
@@ -536,7 +560,7 @@ export class Action_td extends Extends
 		this.itemStatusChangeQuery=this.itemStatusChangeQuery.bind(this)
          
      } 
-	 itemStatusChangeQuery(e)
+	 itemStatusChangeQueryOld(e)
 	 {
 		 // /ws/ItemStatusChangeQuery.php
 		 var basketId=this.state.proto.ID.fValue;
@@ -570,7 +594,18 @@ export class Action_td extends Extends
 		 
 		 
 	 }
-	 getRegTd()
+	itemStatusChangeQuery(e)
+	{   this.clearInforMassage();
+		getItemStatusChangeQueryComponent=function()
+		{
+			ItemStatusChange_Query.actionComponent=this;
+			return ItemStatusChange_Query;
+		}.bind(this)
+		var ItemStatusChangeQuery=getItemStatusChangeQueryComponent();
+		
+		this.showInforMassage("Інфо",<ItemStatusChangeQuery / >)
+	}
+	getRegTd()
 	 {
 		 return regTD;
 	 }
@@ -628,8 +663,14 @@ export class Action_td extends Extends
 	  }
       getActionWareHouse()
 	  {
+		  var dateArr=this.state.proto.WAREHOUSEDATE.fValue.split(/\s/);
+		  var date="";
+		  if (dateArr instanceof Array) 
+		  {
+			  date=dateArr[0];
+		  }
 		  return ( <a href='####'>
-		   <img style={this.style} title='' src={this.imagePath+"date_come.png"} />
+		   <img style={this.style}  data-toggle="tooltip" data-placement="top" data-original-title={date} src={this.imagePath+"date_come.png"} />
 		 </a>)
 	  }
 	  updateStatus(funcName,value)
@@ -660,6 +701,16 @@ export class Action_td extends Extends
 		 }
 		 return true;
 	 }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+		 
+	 }
+	 componentDidMount()
+	 {
+		 super.componentDidMount()
+		
+	 }
      render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
      {
 		var action= null;  
@@ -688,7 +739,7 @@ export class Action_td extends Extends
 						  {   this.id=id;
 							  this.getRegTd()[id]=this;
 							  //return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)							  
-							  return (<td className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
+							  return (<td  className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
 						  }.bind(this)
 					  }
 					  
@@ -707,5 +758,290 @@ export class Action_td extends Extends
      }
     
 }              
+
+export class Action_td extends Order_Action
+{
+    
+    constructor(props) 
+     {  
+        super(props);
+        this.state=this.props;
+		this.state.updateFromOtherTD=false;
+		this.state.otherTd=null;
+        this.bClasses=window.configObject["Action_td"].bClasses
+        this.style={"width":"20px","height":"20px"};
+       // this.bClasses={"2":"label label-primary" };
+        this.iClasses={"2":"gi gi-remove_2"};
+        this.statusNames={
+            "0":"В работе",
+            "2":"Отказ",
+            "5": "В пути",
+        };
+		this.imagePath='/app/img/order_list/';
+		
+		this.itemStatusChangeQuery=this.itemStatusChangeQuery.bind(this)
+         
+     } 
+	 itemStatusChangeQueryOld(e)
+	 {
+		 // /ws/ItemStatusChangeQuery.php
+		 var basketId=this.state.proto.ID.fValue;
+		 var data ="BASKET_ID="+basketId+"&STATUS_CODE=2";
+		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/ItemStatusChangeQuery.php",data);
+		 
+		 var updateIcon=function(responseText)
+		    {
+			  try
+			  {
+				  var answer= Number(responseText);
+				  if (!isNaN(answer) && answer>0)
+				  {
+					 var inWait= this.getActionQueryStatusChangeInWait();
+					 this.setState({updateFromOtherTD:true,otherTd:inWait})
+				  }else{
+					  this.showInforMassage("ERROR","Операция не прошла");
+				  }
+			  }catch(e)
+			  {
+				  this.showInforMassage("ERROR","Операция не прошла");
+			  }
+				
+			 
+			 
+		    }.bind(this)
+		    
+		 Prom.then(updateIcon)
+		  
+		  
+		 
+		 
+	 }
+	itemStatusChangeQuery(e)
+	{   this.clearInforMassage();
+		getItemStatusChangeQueryComponent=function()
+		{
+			ItemStatusChange_Query.actionComponent=this;
+			return ItemStatusChange_Query;
+		}.bind(this)
+		var ItemStatusChangeQuery=getItemStatusChangeQueryComponent();
+		
+		this.showInforMassage("Інфо",<ItemStatusChangeQuery / >)
+	}
+	getRegTd()
+	 {
+		 return regTD;
+	 }
+	 getRegTdStatus()
+	 {
+		 return regTDStatus;
+	 }
+	 defineAction()
+	 {
+		 
+		 var itemStatusChangeQuery=this.state.proto.ITEMSTATUSCHANGEQUERY.fValue;
+			if (itemStatusChangeQuery=="") return this.getActionCanQueryStatusChange();
+			changeQueryArray=itemStatusChangeQuery.split(/#/);
+			if (changeQueryArray.length!=2) return this.getActionCanQueryStatusChange();
+			var statusToChange=changeQueryArray[0];
+			var answerStatus=changeQueryArray[1];
+			if (answerStatus=="?") return this.getActionQueryStatusChangeInWait();
+			else if(answerStatus=="X") return this.getActionQueryStatusChangeDined();
+			else if (statusToChange==answerStatus) return this.getActionQueryStatusChangeApproved();
+			else return this.getNullAction();
+			
+			
+		 
+		 
+	 }
+	 /////////////////////////////////////////////////////////
+	 componentWillUnmount()
+	 {
+		// alert("unmounted"+this.id);
+	 }
+	 shouldComponentUpdate(nextProps, nextState)
+	 {
+		 if ("updateFromOtherTD" in nextState  )
+		 {
+			 if (nextState.updateFromOtherTD &&(nextState.otherTd==undefined || nextState.otherTd==null))
+			 {
+				 return false;
+			 }
+		 }
+		 return true;
+	 }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+		 
+	 }
+	 componentDidMount()
+	 {
+		 super.componentDidMount()
+		
+	 }
+     render()                                                                      // <td className={"text-center"+" "+this.state.proto.action.className+" "+this.bClasses[this.state.proto.ITEMSTATUS.fValue]} >{this.state.proto.ITEMSTATUS.fValue}</td>  
+     {
+		var action= null;  
+        if ("updateFromOtherTD" in this.state)
+		{
+			if (this.state.updateFromOtherTD)
+			{
+				 action=this.state.otherTd;
+			}else
+			{
+				 action=this.defineAction();
+	            
+			}
+		}else
+		{
+			action=this.defineAction();
+		}      
+	         /*return (
+		         <td className={this.state.proto.action.className}>{action}</td>		  
+		         )*/
+				 
+				 return (
+			          <ThemeContext.Consumer>
+					  {
+						  function(id)
+						  {   this.id=id;
+							  this.getRegTd()[id]=this;
+							  //return (<td className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}>{action}</td>)							  
+							  return (<td  className={this.getRangeObjectValue(this.bClasses,this.state.proto.ITEMSTATUS.fValue)}>{action}</td>)
+						  }.bind(this)
+					  }
+					  
+					  </ThemeContext.Consumer>
+			
+			       )
+		
+	   /*return(
+                
+               <td className={this.state.proto.action.className}><span className={this.bClasses[this.state.proto.ITEMSTATUS.fValue]}><i className={this.iClasses[this.state.proto.ITEMSTATUS.fValue]}></i>{this.statusNames[this.state.proto.ITEMSTATUS.fValue]}</span></td> 
+                   
+         
+             )*/   
+         
+         
+     }
+    
+}              
+
+/*export class ItemStatusChange_Query extends Extends
+{
+	 constructor(props)
+	 {
+		 super(props);
+		 this.actionComponent=this.constructor.actionComponent;
+		 this.itemStatusChangeQuery=this.itemStatusChangeQuery.bind(this);
+		 this.answerState=false;
+		 this.queryText="Чи відправити запит на відмову від позиції?";
+		 this.unMount=this.unMount.bind(this);
+		 
+	 }
+	 itemStatusChangeQuery(e)
+	 {
+		 // /ws/ItemStatusChangeQuery.php
+		 var basketId=this.actionComponent.state.proto.ID.fValue;
+		 var data ="BASKET_ID="+basketId+"&STATUS_CODE=2";
+		 var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/ItemStatusChangeQuery.php",data);
+		 
+		 var updateIcon=function(responseText)
+		    {
+			  try
+			  {
+				  var answer= Number(responseText);
+				  if (!isNaN(answer) && answer>0)
+				  {
+					 var inWait= this.actionComponent.getActionQueryStatusChangeInWait();
+					 this.actionComponent.setState({updateFromOtherTD:true,otherTd:inWait})
+					 this.queryText="Запит відправленно.";
+					 
+				  }else{
+					 this.queryText="Запит не відправленно.";
+				  }
+			  }catch(e)
+			  {
+				  this.queryText="Запит не відправленно.";
+			  }
+				this.answerState=true;
+			 this.setState({justUpdate:null})
+			 
+		    }.bind(this)
+		    
+		 Prom.then(updateIcon)
+		  
+		  
+		 
+		 
+	 }
+	 unMount(e)
+	 {
+		 var thisElement=ReactDOM.findDOMNode(this);
+		 ReactDOM.unmountComponentAtNode(thisElement);
+	 }
+	 /////////////////////////////////////
+	 componentDidMount()
+	 {
+		 super.componentDidMount();
+		  this.answerState=false;
+		 this.queryText="Чи відправити запит на відмову від позиції?";
+		 
+	 }
+	 componentDidUpdate()
+	 {
+		 super.componentDidUpdate();
+		  this.answerState=false;
+		 this.queryText="Чи відправити запит на відмову від позиції?";
+	 }
+	 render()
+	 {
+		 
+		  
+		   var buttons=(
+		                 <div className="row"> 
+		                   
+                          <div className="col-xs-6 text-left">
+						    <button type="button"  className="btn btn-sm btn-default" data-dismiss="modal"><font><font>{"  Ні  "}</font></font></button>
+ 						  </div>
+						  <div className="col-xs-6 text-right">		                   
+                            <button type="button" onClick={this.itemStatusChangeQuery}  className="btn btn-sm btn-primary"><font><font>{"  Так  "}</font></font></button>
+                          </div>
+                    </div>						 
+		               )
+		    if (this.answerState)
+			{
+			   buttons=(<div className="col-xs-12 text-right">
+			              <button type="button" onClick={this.unMount} className="btn btn-sm btn-default" data-dismiss="modal"><font><font>Вийти</font></font></button>						  
+						 </div>
+						 )
+			}				
+		  
+		  return (
+                       <div className="modal-dialog">                     
+                         <div className="modal-content">
+                           <div className="modal-header text-center">
+                              <h2 className="modal-title"><i className="fa fa-pencil"></i><font><font>Запит на відмову від позиції.</font></font></h2>
+                           </div>
+                           <div className="modal-body">
+                             <fieldset>
+                                <legend><font><font>{this.queryText}</font></font></legend>
+                             </fieldset>
+                              <div className="form-group form-actions">
+                                
+								 {buttons}
+								                          
+                               </div>
+                             </div>    
+                          <div className="modal-footer">
+                          </div>
+                    
+                        
+                      </div>
+                      </div> 
+		 )
+	 }
+	
+}*/
 
 

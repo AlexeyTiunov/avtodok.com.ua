@@ -36,6 +36,7 @@ import {Pay_notification} from './balance.js'
 import {Progress_bar} from './progress_bar.js'
 import {Check} from './check.js'
 import {Regions} from './regions_info.js'
+import {Brands} from './brands_info.js'
 
  
 import './css/plugins.css'; 
@@ -63,7 +64,10 @@ require ('./js/app.js');
     
 }  */
      
-
+function afterRender()
+{
+	$('[data-toggle="tooltip"]').tooltip();
+}
 export class Sidebar  extends Extends
 {
     constructor(props) 
@@ -198,7 +202,7 @@ export class Sidebar  extends Extends
                     <Auth /> 
                     <Pay_notification/>
                      <Regions />					
-					
+					 <Brands />
                 </div>  
                
               </Router> 
@@ -213,13 +217,26 @@ export class Sidebar  extends Extends
     
 }
  //debugger
- var body=document.getElementsByTagName("body"); 
-   ReactDOM.render(      
+ var body=document.getElementsByTagName("body");  
+ ReactDOM.render(      
      <Sidebar/>     
      ,
-   body[0]
+   document.getElementById("app"),
+   afterRender )
+ function loadSidebar()
+ {
+	ReactDOM.render
+      (  <Brands /> ,
+        document.getElementById("service"),
+		loadSidebar
+       )
+	   
 
-)
+
+ }
+ 
+ 
+  
 
  ReactDOM.render(
       <a></a>,

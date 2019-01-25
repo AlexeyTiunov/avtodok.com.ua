@@ -13,7 +13,7 @@ class IBPropertyAdvanced_ITG
 	{
 		$this->params = $params;
 		#$this->DB = Search_ITG::manualConnect();
-                 $this->DB = new mysqli("localhost","bitrix","a251d851","avtodok.com.ua");
+                 $this->DB = new mysqli("localhost","bitrix","a251d851","bitrix");
                   #$this->DB= $DBB;
                   $this->DB->set_charset("utf8");
 		switch ($this->params['IB'])

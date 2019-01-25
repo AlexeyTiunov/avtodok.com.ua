@@ -327,6 +327,40 @@ this.defineTh=function (TH,caption)
 	this.fValue=String(amt*rate);	
 	
  } 
+ this.convertCurrencyFromTo= function (amount,currFrom,currTo)
+ { 
+     if (typeof amount =="function")
+	{
+		amt=amount.call(this);
+	}		
+	if (typeof currFrom =="function")
+	{
+		cFrom=currFrom.call(this);
+	}		
+	 var usdRate=getCurrencyRate("USD");
+	 var eurRate=getCurrencyRate("EUR");
+	 var uahRate=1;
+	 var ratesObject=
+	 {
+		 "USD-UAH":amt*usdRate,
+		 "UAH-USD":amt/usdRate,
+		 "EUR-UAH":amt*eurRate,
+		 "UAH-EUR":amt/eurRate,
+		 "USD-EUR":(amt*usdRate)/eurRate,
+		 "EUR-USD":(amt*eurRate)/usdRate,
+	 }
+	  if (!ratesObject[cFrom+"-"+currTo])
+	  {
+		  this.fValue=String(amt);	
+	  }else
+	  {
+		  this.fValue=ratesObject[cFrom+"-"+currTo];
+	  } 
+	  
+	 
+	 
+	 
+ }
     ////////////////////////////////////////////////////////////////// 
       
       if (jsonData!=undefined && jsonData!=null)

@@ -19,6 +19,7 @@ import {Shipingdoc_detail} from './shipingdoc_detail.js'
 import {Contacts} from './contacts.js'
 import {Catalogs_auto} from './catalogs_auto.js'
 import {Return_docs} from './return_docs.js'
+import {Item_info} from './item_info.js'
 
 export class Page_content  extends Extends
 {
@@ -52,7 +53,7 @@ export class Page_content  extends Extends
      componentDidUpdate(prevProps, prevState)
      {
         super.componentDidUpdate(prevProps, prevState);
-		
+		$('[data-toggle="tooltip"]').tooltip();
      }
      
      defineRoutes(defRoutes)
@@ -76,8 +77,9 @@ export class Page_content  extends Extends
                          <Route path="/search/:id?" component={Search_table_v2} /> 
 						 <Route path="/avtodok.com.ua/search/:id?" component={Search_table_v2} /> 
 						 <Route path="/contacts" component={Contacts} />
-						 <Route path="/catalogs" component={Catalogs_auto} />
+						 <Route path="/catalogs_auto" component={Catalogs_auto} />
 						 <Route path="/retdocs" component={Return_docs} />
+						 <Route path="/catalog/:brandname?/:itemcode?/:itemanalogcode?" component={Item_info} />
                      </Switch>
                   
                 )

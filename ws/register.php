@@ -66,6 +66,15 @@ $arResult = $USER->Register($_REQUEST['LOGIN'], $_REQUEST['LOGIN'], "",$_REQUEST
 //COption::SetOptionString("main","captcha_registration","Y");
 COption::SetOptionString("main","new_user_registration_email_confirmation","Y");
 
+ if ($USER->IsAuthorized())
+  {
+    $sql="INSERT INTO b_user_extrainfo (ID,MONTH_TURNOVER,BUYER_TYPE,BISNESS_TYPE,USER_HOST,1C_CHECK_CREATE,STREET,HOUSE,PHONECODE,PHONE)
+    VALUES ({$USER->GetID()},'onebuyR','myavto#','myavto','{$_SERVER['REMOTE_ADDR']}',0,'#FutureIN# ','#FutureIN#','','{$_REQUEST['LOGIN']}')
+     ";
+     $result=$DB->Query($sql); 
+      
+  }
+
 $replyMassages["UserID"]=$USER->GetID();
 $replyMassages["Success"]=$arResult;
  echo (json_encode($replyMassages,JSON_UNESCAPED_UNICODE));

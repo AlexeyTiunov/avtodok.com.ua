@@ -603,7 +603,7 @@ export class Extends extends React.Component
 	   try
 	   {
 		 
-		 brandId= window.objectReg["Brands"].brandsFullName[FullName].id;  
+		 brandId= window.objectReg["Brands"].brandsFullName[fullName].id;  
 	  }catch(e)
 	  {
 		  
@@ -625,5 +625,19 @@ export class Extends extends React.Component
   {
 	   
 	   document.title=title;
+  }
+  updateItemInfoComponent()
+  {
+	  try
+	  {
+		  UObject=window.objectReg['Item_info'];
+		  UObject.setState({justUpdate:null});
+	  }catch(e)
+	  {
+		  
+	  }
+	  
+	  
+	  
   }
 }

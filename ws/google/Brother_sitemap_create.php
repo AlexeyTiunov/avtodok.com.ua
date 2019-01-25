@@ -66,7 +66,7 @@
       $itemCode= $itemRow["ItemCode"];
       $pic_base64code= $itemRow["Base64"];
       
-      $itemInfoArray['LOC_TEXT']="http://".$HTTP_HOST.$item_cards_root.$itemCode; 
+      $itemInfoArray['LOC_TEXT']="http://".$HTTP_HOST.$item_cards_root.$itemCode."/".$itemCode; ; 
       $itemInfoArray['IMG_PATH']="http://".$HTTP_HOST.getPicturePath($itemCode,"",$itemRow['Base64']);
       $itemInfoArray['IMG_CAPTION']=$itemCode; 
       

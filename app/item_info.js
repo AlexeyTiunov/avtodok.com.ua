@@ -115,30 +115,62 @@ export class Item_info extends Extends
 		super(props);
 		try
 		{
-			this.itemCode=this.props.match.params.itemcode;
+			if ("itemanalogcode" in this.props.match.params)
+			{
+				if (this.props.match.params.itemanalogcode!=undefined)
+				{
+					if (this.props.match.params.itemanalogcode!=this.props.match.params.itemcode)
+					{
+						this.itemAnalogCode=this.props.match.params.itemanalogcode;
+						this.itemCode=this.props.match.params.itemcode;
+					}else
+					{
+						this.itemAnalogCode=undefined;
+						this.itemCode=this.props.match.params.itemcode;
+					}
+					
+				}else
+				{
+					this.itemAnalogCode=undefined;
+					this.itemCode=this.props.match.params.itemcode;
+				} 
+			    
+				   
+			}else
+			{
+				this.itemCode=this.props.match.params.itemcode;
+			}
+			
 		}catch(e)
 		{
 			this.itemCode="";
 		}
 		try
 		{
-			this.brandCode=this.props.match.params.brandcode;
+			//this.brandCode=this.getBrandIdByFullName(this.props.match.params.brandcode);
+			this.brandName=this.props.match.params.brandname
+			this.brandCode=this.getBrandIdByFullName(this.props.match.params.brandcode);
 		}catch(e)
 		{
 			this.brandCode="";
 		}
 		
 	}
+	updateWithNoItemAnalogCode()
+	{
+		this.itemAnalogCode=undefined;
+		this.setState({justUpdate:null});
+	}
     /////////////////////////////
 
      render()
 	 {
-         var HeaderComponent=getItemInfoHeaderComponent(this.itemCode,this.brandCode,getItemInfoHeader);
-		 var PriceOrderComponent=getPriceOrderComponent(this.itemCode,this.brandCode);
-		 var ItemInfoCrosses=getItemInfoCrossesComponent(this.itemCode,this.brandCode);
+         var HeaderComponent=getItemInfoHeaderComponent(this.itemCode,this.itemAnalogCode,this.brandName,getItemInfoHeader);
+		 var PriceOrderComponent=getPriceOrderComponent(this.itemCode,this.brandName);
+		 var ItemInfoCrosses=getItemInfoCrossesComponent(this.itemCode,this.itemAnalogCode,this.brandName,this);
 		 return (<div class="block">
 		           <div class="block full">                    
-					  <HeaderComponent/>
+					  <HeaderComponent/><br/>
 				      <PriceOrderComponent/>
 				  </div> 
 				   <ItemInfoCrosses/>
@@ -150,11 +182,12 @@ export class Item_info extends Extends
 	
 }
 
-function getItemInfoHeaderComponent(itemCode,brandCode,itemInfoHeaderFunc)
+function getItemInfoHeaderComponent(itemCode,itemAnalogCode,brandName,itemInfoHeaderFunc)
 {
 	Item_info_header.itemCode=itemCode;
-    Item_info_header.brandCode=brandCode;
+    Item_info_header.brandName=brandName;
     Item_info_header.itemInfoHeaderFunc=itemInfoHeaderFunc;	
+	Item_info_header.itemAnalogCode=itemAnalogCode;
 	return Item_info_header;
 }
 
@@ -165,7 +198,8 @@ export class Item_info_header extends Extends
 		super(props);
 		this.itemInfoHeaderFunc=this.constructor.itemInfoHeaderFunc;
 		this.itemCode=this.constructor.itemCode;
-		this.brandCode=this.constructor.brandCode;
+		this.itemAnalogCode=this.constructor.itemAnalogCode;
+		this.brandName=this.constructor.brandName;
 	}
     /////////////////////////////
      getItemInfo()
@@ -200,7 +234,11 @@ export class Item_info_header extends Extends
 		}
        return langNames;		
 	 }
-	 
+	 updateWithNoItemAnalogCode()
+	{
+		this.itemAnalogCode=undefined;
+		this.setState({justUpdate:null});
+	}
 	 ////////////////////////////////////////
 	 
 	 componentDidMount()
@@ -212,16 +250,28 @@ export class Item_info_header extends Extends
 	 {
 		 var langNames=this.getLangNamesObjectFromMapArray("UKR");
 		 var infoArray=[];
+		 
 		 try
-		 {
+		 {   
+		     if (this.itemAnalogCode!=undefined)
+			 {
+				  var pointList=(<div className="form-group">
+                                        <label className="col-md-3 "><h2>{"OE Артикул"}</h2></label>
+                                        <div className="col-md-6">
+                                            <p className="form-control-label"><h2>{this.itemAnalogCode}</h2></p>
+                                        </div>
+									</div>	); 
+									infoArray.push(pointList);
+				 
+			 }
 			 for ( var item in langNames)
 			 {
 				 if (item in this.state.mapArray)
 				 {
 					 var pointList=(<div className="form-group">
-                                        <label className="col-md-3 ">{langNames[item]}</label>
+                                        <label className="col-md-3 "><h2>{langNames[item]}</h2></label>
                                         <div className="col-md-6">
-                                            <p className="form-control-label">{this.state.mapArray[item]}</p>
+                                            <p className="form-control-label"><h2>{this.state.mapArray[item]}</h2></p>
                                         </div>
 									</div>	); 
 					 infoArray.push(pointList)
@@ -233,6 +283,7 @@ export class Item_info_header extends Extends
 			
 		 }
 		 var imgSrc="";
+		 var imgAlt=(this.itemAnalogCode!=undefined && this.itemAnalogCode!="")?this.itemAnalogCode:this.itemCode;
          try
 		 {
 			  imgSrc=this.state.mapArray["IMGSRC"];
@@ -246,7 +297,7 @@ export class Item_info_header extends Extends
 			  <div className="col-md-6">
                      <form method="post"  className="form-horizontal form-bordered">
 					   <div class="form-group">
-                            <h2 class="sub-header">Інформація о товарі</h2>            
+                            <h2 class="sub-header">Інформація про товар</h2>            
                         </div>
 					 {infoArray}
 		             </form> 
@@ -254,7 +305,7 @@ export class Item_info_header extends Extends
 					 
                 <div className="col-sm-6 block-section text-center">
                                 <a href={imgSrc} data-toggle="lightbox-image">
-                                    <img src={imgSrc} alt="image"/>
+                                    <img src={imgSrc} alt={imgAlt}/>
                                 </a>
                         </div>   
                       	 
@@ -270,7 +321,7 @@ export class Item_info_header extends Extends
 function getItemInfoHeader()
 {
 	 var data="ItemCode="+this.itemCode+"&HEADER="; 
-	 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/catalog/"+this.brandCode+"/",data);
+	 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/catalog/"+this.brandName+"/",data);
 	 var itemInfoHeader=function(responseText)
 	 {
 		  handleHeader= new  handleData(responseText);
@@ -280,10 +331,10 @@ function getItemInfoHeader()
 	 Prom.then(itemInfoHeader);
 }
 
-function getPriceOrderComponent(itemCode,brandCode)
+function getPriceOrderComponent(itemCode,brandName)
 {
 	Price_order.itemCode=itemCode;
-	Price_order.brandCode=brandCode;
+	Price_order.brandName=brandName;
 	return Price_order;
 }
 
@@ -295,11 +346,40 @@ export class Price_order extends Extends
 		this.priceUSD=0;
 		this.priceUAH=0;
 		this.itemCode=this.constructor.itemCode;
-		this.brandCode=this.constructor.brandCode;
+		this.brandName=this.constructor.brandName;
 		this.inOurStock=false;
 		this.itemInfo=null;
+		this.updateIsCorrect=false;
 	}
-	getSearchData()
+	getData()
+	{
+		var Prom= this.getBrandCode(this.BrandName);
+		var getSearchData=this.getSearchData.bind(this);
+		Prom.then(getSearchData);
+		
+	}
+	
+	getBrandCode(BrandName)
+	{
+		var brandCodeGet= function (resolve,reject) 
+		{
+			if (this.getBrandIdByFullName(this.brandName)!=undefined)
+			{
+				clearInterval(this.interval);
+				resolve(this.getBrandIdByFullName(this.brandName));
+			}
+		}
+		brandCodeGet=brandCodeGet.bind(this);
+		sInterval=function (resolve,reject)
+		{
+			this.interval=setInterval(()=>{brandCodeGet(resolve,reject)},200);
+		}
+		sInterval=sInterval.bind(this);
+		var Prom = new Promise(sInterval)
+		
+		  return Prom;
+	}
+	getSearchData(brandCode)
 	{
 		if (this.itemCode=="" || this.itemCode==undefined)
 		{
@@ -311,7 +391,8 @@ export class Price_order extends Extends
             //this.noAnalogsFinded=true;
          } else
          {
-             data+="&BrandCode="+this.getBrandIdByFullName(this.brandCode); 
+			
+             data+="&BrandCode="+brandCode; 
 		 }
 		  var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/searchItems.php",data);
 		  
@@ -340,9 +421,11 @@ export class Price_order extends Extends
 			      this.inOurStock=true;
 				  this.priceUAH=regionRangeObjectValue["1-1"][0].PriceUAH.fValue; 
 				  this.itemInfo=regionRangeObjectValue["1-1"][0];
+				  this.updateIsCorrect=true;
 				  this.setState({justUpdate:null});
 		        }else
 		        {
+				  
 			      this.inOurStock=false;
 		        }
 			  
@@ -350,10 +433,16 @@ export class Price_order extends Extends
 		  searchData=searchData.bind(this)
 		  Prom.then(searchData);
 	}
-	/////
+	///////////////////////////////////////////
+	componentDidUpdate()
+	{
+		
+		
+	}
+	
 	componentDidMount()
 	{
-		this.getSearchData();
+		this.getData();
 	}
 	
 	render()
@@ -362,9 +451,11 @@ export class Price_order extends Extends
 	   {
         		   
 		return (
-		         <div className="block-title">
-                            <button type="button" className="btn btn-alt btn-lg btn-danger">{this.priceUAH+" грн."}</button>
-                            <div className="input-group col-md-3">
+		         <div className="row">
+				           <div className="input-group col-md-12">
+                              <button type="button" className="btn btn-alt btn-lg btn-danger">{this.priceUAH+" грн."}</button>
+							</div>
+                            <div className="input-group col-md-12">
                                <Action_td proto={this.itemInfo} />
                             </div>
                             
@@ -374,7 +465,7 @@ export class Price_order extends Extends
 	     }else
 		 {
 			  return (
-			  <div className="block-title">
+			  <div className="row">
 			   <div className="input-group col-md-3">
 			           <div class="btn-group pull-left">
 					   <a class="btn btn-primary" href={"/search/"+this.itemCode}>
@@ -625,17 +716,19 @@ export class Select_quantity extends Extends
 }
 //////////////////////////////////////////////////////////////////
 
-function getItemInfoCrossesComponent(itemCode,brandCode)
+function getItemInfoCrossesComponent(itemCode,captionStringItemAnalogCode,brandName,item_Info_Component)
 {   Item_info_crosses.itemCode=itemCode;
-    Item_info_crosses.brandCode=brandCode; 
+    Item_info_crosses.brandName=brandName; 
+	Item_info_crosses.captionStringItemAnalogCode=captionStringItemAnalogCode;
 	Item_info_crosses.itemInfoCrossFunc=getItemInfoCrosses;
+	Item_info_crosses.item_Info_Component=item_Info_Component;
 	return Item_info_crosses
 }
 
 function getItemInfoCrosses()
 {
    var data="ItemCode="+this.itemCode+"&CROSSES="; 
-	 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/catalog/"+this.brandCode+"/",data);
+	 var Prom=this.makeRequestToRecieveDataAsync("POST","/ws/catalog/"+this.brandName+"/",data);
 	 var itemInfoCrosses=function(responseText)
 	 {
 		  handleCrosses= new  handleData(responseText,getMapObjectCrosses());
@@ -652,7 +745,9 @@ export class Item_info_crosses extends Extends
 		super(props);		
 		this.itemInfoCrossFunc=this.constructor.itemInfoCrossFunc;
 		this.itemCode=this.constructor.itemCode;
-		this.brandCode=this.constructor.brandCode;
+		this.brandName=this.constructor.brandName;
+		this.captionStringItemAnalogCode=this.constructor.captionStringItemAnalogCode;
+		this.item_Info_Component=this.constructor.item_Info_Component;
 		this.state.mapArray=[];
 	}
 	 getItemInfo()
@@ -660,11 +755,41 @@ export class Item_info_crosses extends Extends
 		 if (this.itemInfoCrossFunc==null || this.itemInfoCrossFunc==undefined) return;
 		 this.itemInfoCrossFunc.call(this)
 	 }
-	
+	 checkForAnalog(itemAnalogCode)
+	 {
+		 if (itemAnalogCode==undefined || this.state.mapArray.length==0 ) return true;
+		 var check=false;
+		 for (var item in this.state.mapArray)
+		 {
+		        if (this.state.mapArray[item].I2Code.fValue==itemAnalogCode)
+				{
+					check=true;
+					return check;
+				}
+
+		 }
+		 return check;
+	 }
 	////////////////////////////
 	componentDidMount()
 	{
 		this.getItemInfo();
+	}
+	componentDidUpdate()
+	{
+		super.componentDidUpdate();
+	// if (this.state.mapArray.length>0)
+	 //{
+		//if (!this.checkForAnalog(this.captionStringItemAnalogCode))
+		//{
+			//this.item_Info_Component.updateWithNoItemAnalogCode();
+		//}
+	 //}
+	 if (!this.checkForAnalog(this.captionStringItemAnalogCode))
+	 {
+		 window.objectReg['Item_info_header'].updateWithNoItemAnalogCode();
+	 }
+		
 	}
 	render()
 	{
@@ -691,7 +816,7 @@ export class CrossBrand_td extends Extends
      render()
      {
        return(
-                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> {this.state.proto[this.state.NAME].fValue}</td> 
+                   <td className={this.state.proto[this.state.NAME].className+" text-center" }> <h4>{this.state.proto[this.state.NAME].fValue}</h4></td> 
         
         
          
@@ -715,7 +840,7 @@ export class CrossItem_td extends Extends
      {
        return(
                    <td className={this.state.proto[this.state.NAME].className+" text-center" }> 
-				   {this.state.proto[this.state.NAME].fValue}
+				   <h4>{this.state.proto[this.state.NAME].fValue}</h4>
 				   </td> 
         
         
@@ -788,6 +913,81 @@ export class Common_th extends Extends
      }
      
  }
+export class ItemDuplicateMassage extends Extends
+{
+	constructor(props) 
+   {
+	   super(props);
+	   this.state=this.props;
+	   
+	   this.addToBasket=this.addToBasket.bind(this);
+   }
+   ////////////////////////////////
+   addToBasket(e)
+   {   
+      var updateMassage= function(data)
+      {
+	    this.fullInfoMassage("",data);
+      }
+	  updateMassage=updateMassage.bind(this);
+       var aToBusket= function ()
+	   {
+		  // var actionComAddToBasket= this.state.info.actionCom.addToBasket.bind(this);
+		  var actionComAddToBasket= Action_td.prototype.addToBasket.bind(this);
+		   actionComAddToBasket(false).then(updateMassage);
+		   //this.showInforMassage();
+	   }
+       aToBusket=aToBusket.bind(this);
+       this.setState({Quantity:e.target.getAttribute("count")},aToBusket);
+	   
+	   
+   }
+   
+   render()
+   {
+	   
+	  var a=(
+	     <div>
+		   <p align="center">Ув. Пользователь.</p>  
+			<p align="center">В корзине уже имеется аналогичный товар.</p> 
+			<p align="center">{this.props.info.itemCode} -{this.props.info.caption}  в количестве {this.props.info.firstQuantity} шт. </p>
+		    <button type="button" onClick={this.addToBasket} className="btn btn-primary" count={Number(this.props.info.firstQuantity)+Number(this.props.info.secondQuantity)} ><i className="fa fa-search"></i> Замовити {Number(this.props.info.firstQuantity)+Number(this.props.info.secondQuantity)}</button>
+		    <button type="button"  onClick={this.addToBasket} className="btn btn-primary" count={this.props.info.firstQuantity} data-dismiss="modal"><i className="fa fa-search"></i> Залишити {this.props.info.firstQuantity}</button>
+		 </div>
+	   )
+	   return a;
+   }
+	
+}
+export class AddToBasketReturnMassage extends Extends
+{
+	constructor(props) 
+	{
+		 super(props);
+		 this.statusInfo={"0":"не виконано.","1":"виконано"};
+		 this.actionInfo={"0":"Оновлення","1":"Додавання"};
+		 
+	}
+	
+	
+	render()
+	{
+		
+		const a=(
+	     <div>
+		   <p align="center">Шановний  Клієнт.</p>  
+			<p align="center">{this.actionInfo[this.props.actionInfo] } {this.statusInfo[this.props.statusInfo]}! </p> 
+			<p align="center"> </p>
+		    <button align="center" type="button" className="btn btn-primary" data-dismiss="modal"> ОК </button>
+		    
+		 </div>
+	   )
+		   
+		
+		return a;
+		
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////
 

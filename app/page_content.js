@@ -79,7 +79,7 @@ export class Page_content  extends Extends
 						 <Route path="/contacts" component={Contacts} />
 						 <Route path="/catalogs_auto" component={Catalogs_auto} />
 						 <Route path="/retdocs" component={Return_docs} />
-						 <Route path="/catalog/:brandcode?/:itemcode?" component={Item_info} />
+						 <Route path="/catalog/:brandname?/:itemcode?/:itemanalogcode?" component={Item_info} />
                      </Switch>
                   
                 )

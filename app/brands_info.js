@@ -28,6 +28,7 @@ export class Brands extends Extends
 		 this.brandsShortName=handleShortName.mapArray;
 		 var handleFullName=new handleData(responseText,undefined,"FullName");
 		 this.brandsFullName=handleFullName.mapArray;
+		 //this.updateItemInfoComponent();
 	 }
 	 brandInfo=brandInfo.bind(this);
 	 Prom.then(brandInfo);

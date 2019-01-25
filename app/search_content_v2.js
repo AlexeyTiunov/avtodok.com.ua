@@ -933,7 +933,8 @@ function getV2_table()
 			    /*"order": [[ 2, 'desc' ]],*/ 
                 "aoColumnDefs": [ { "bSortable": false, "aTargets": [0,1] } ],
                 "iDisplayLength": 5,
-                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]]
+                "aLengthMenu": [[5, 10, -1], [5, 10, "Всі"]],
+				 "searching": false
             });
 
             /* Add placeholder attribute to the search input */

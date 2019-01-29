@@ -7,7 +7,7 @@ $DBHost = "localhost:31006";
 $DBLogin = "bitrix";
 $DBPassword = "a251d851";
 #$DBName = "sitemanager";
-$DBName = "avtodok.com.ua";
+$DBName = "bitrix";
 
 $DBDebug = false;
 $DBDebugToFile = false;

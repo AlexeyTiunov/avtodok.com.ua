@@ -1,6 +1,6 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
-import {Sidebar} from './sidebar.js'
+//import {Sidebar} from './sidebar.js'
 import {handleData} from './data_convert.js'
 
 

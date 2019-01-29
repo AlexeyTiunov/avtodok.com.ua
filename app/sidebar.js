@@ -13,8 +13,10 @@ window.moment=moment;
 
 var Li= require("./sidebar_li.js");
 //var Sidebar_nav =require('./sidebar_nav.js');
-import {Sidebar_nav} from './sidebar_nav.js';
-import {items as ITEMS }from './sidebar_nav.js';
+//import {Sidebar_nav} from './sidebar_nav.js';
+var Sidebar_nav=window.Sidebar_nav;
+var ITEMS=window.ITEMS;
+//import {items as ITEMS }from './sidebar_nav.js';
 import {Sidebar_header} from './sidebar_header.js'
 import {Page_content} from './page_content.js'
 import {Sidebar_userinfo} from './sidebar_userinfo.js'
@@ -26,7 +28,7 @@ import {Search_table} from './search_content.js'
 import {Search_table_v2} from './search_content_v2.js' 
 
 import {Basket_items_forModal} from './basket_items.js' 
-import {Basket} from './basket_items.js' 
+//import {Basket} from './basket_items.js'
 import {Order_basket} from './order_basket.js'   
 import {Order_list} from './order_list.js'  
 import {Info_message} from './info_message.js'         
@@ -40,9 +42,13 @@ import {Brands} from './brands_info.js'
 
  
 import './css/plugins.css'; 
+/*var Sidebar_header=require.ensure(['./sidebar_header.js'],function(){
+	 Sidebar_header=require('./sidebar_header.js');
+	
+})*/
 
-require ('bootstrap/dist/js/bootstrap.js');
-require ('bootstrap/dist/css/bootstrap.min.css');
+//require ('bootstrap/dist/js/bootstrap.js');
+//require ('bootstrap/dist/css/bootstrap.min.css');
 var App=require('./js/app.js'); 
 
 require ('./js/app.js');

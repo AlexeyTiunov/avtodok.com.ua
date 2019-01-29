@@ -156,6 +156,8 @@ export class Order_list extends Extends
 			this.initOrderList();	    
 		    this.deActivateProgressBar();
 		}
+		
+		setTimeout(this.initToolTip,5000);
        
     }
     componentDidMount()

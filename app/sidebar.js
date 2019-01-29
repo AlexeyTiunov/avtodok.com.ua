@@ -30,7 +30,7 @@ import {Search_table_v2} from './search_content_v2.js'
 import {Basket_items_forModal} from './basket_items.js' 
 //import {Basket} from './basket_items.js'
 import {Order_basket} from './order_basket.js'   
-import {Order_list} from './order_list.js'  
+//import {Order_list} from './order_list.js'  
 import {Info_message} from './info_message.js'         
 import {Auth} from './auth.js'
 import {Balance} from './balance.js' 
@@ -42,6 +42,7 @@ import {Brands} from './brands_info.js'
 
  
 import './css/plugins.css'; 
+//var context= require.context("bundle-loader!./",false,/\.js$/)
 /*var Sidebar_header=require.ensure(['./sidebar_header.js'],function(){
 	 Sidebar_header=require('./sidebar_header.js');
 	
@@ -160,6 +161,7 @@ export class Sidebar  extends Extends
        super.componentDidMount();
 	   this.isSideBarOpened=this.getWindowWidth()>991;
 	   this.deActivateProgressBar();
+	   App.App.init();
      }
 	 componentDidUpdate()
 	 {
@@ -208,7 +210,7 @@ export class Sidebar  extends Extends
                     <Auth /> 
                     <Pay_notification/>
                      <Regions />					
-					 <Brands />
+					 
                 </div>  
                
               </Router> 
@@ -221,7 +223,7 @@ export class Sidebar  extends Extends
      }
     
     
-}
+}  // out <Brands />
  //debugger
  var body=document.getElementsByTagName("body");  
  ReactDOM.render(      

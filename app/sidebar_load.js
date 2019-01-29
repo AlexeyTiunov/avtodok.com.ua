@@ -1,5 +1,6 @@
 var moment=require('moment');
 window.moment=moment;
+var context= require.context("bundle-loader!./",false,/\.js$/)
 require.ensure(["./sidebar_nav.js"],function (require)
 {
 	require.ensure(["./sidebar.js"],function (require)

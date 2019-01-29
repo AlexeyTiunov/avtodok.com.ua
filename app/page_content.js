@@ -1,7 +1,7 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 import {Extends} from './main_component.js' 
-import {Search_table} from './search_content.js'
+/*import {Search_table} from './search_content.js'
 import {Basket} from './basket_items.js'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'; 
 import {Order_basket} from './order_basket.js'
@@ -19,7 +19,9 @@ import {Shipingdoc_detail} from './shipingdoc_detail.js'
 import {Contacts} from './contacts.js'
 import {Catalogs_auto} from './catalogs_auto.js'
 import {Return_docs} from './return_docs.js'
-import {Item_info} from './item_info.js'
+import {Item_info} from './item_info.js'*/
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {Start_page} from './start_page.js'
 
 export class Page_content  extends Extends
 {
@@ -30,6 +32,8 @@ export class Page_content  extends Extends
        //this.state={parentMod:props.parentMod}; 
        this.state.defineRoutes=true; 
 	   this.touchMove=this.touchMove.bind(this) 
+	   this.state.componentSwitch=null;
+	   this.state.componentSwitchPath=null;
          
      }
 	 
@@ -55,7 +59,23 @@ export class Page_content  extends Extends
         super.componentDidUpdate(prevProps, prevState);
 		$('[data-toggle="tooltip"]').tooltip();
      }
-     
+	 
+     defineRoute(path,component)
+	 {
+		 return (	 
+                       <Switch>
+                         <Route exact path={path} component={component} />
+		                </Switch>
+		         )
+	 }
+	 defineDefaultRoute()
+	 {
+		  return (	 
+                      <Switch>
+                         <Route exact path="/" component={Start_page} />
+					  </Switch>  	 
+		         )
+	 }
      defineRoutes(defRoutes)
      {
         if (defRoutes)
@@ -94,8 +114,30 @@ export class Page_content  extends Extends
      
      render ()
      {
-         const routes=this.defineRoutes(this.state.defineRoutes);
-         return (<div id="page-content"  style={ {'min-height': '977px'} } > 
+        // const routes=this.defineRoutes(this.state.defineRoutes);
+		var routes="";
+		if (this.state.defineRoutes)
+		{	
+		  if (this.state.componentSwitch==null || this.state.componentSwitchPath==null)
+		  {
+			 var locationPath= location.pathname; 
+			 var func=function(moduleWebPath,component)
+			 {
+				 this.setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+			 }
+			 func=func.bind(this);
+			 this.loadNeedModule(locationPath,func);
+			 
+			 //routes=this.defineDefaultRoute();
+		  }else
+		  {
+			 routes=this.defineRoute(this.state.componentSwitchPath,this.state.componentSwitch)
+		  }
+		}else
+		{
+			routes=this.defineRoutes(this.state.defineRoutes);
+		}
+          return (<div id="page-content"  style={ {'min-height': '977px'} } > 
                  
                    {routes}
                    {this.state.renderIN}

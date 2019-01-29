@@ -64,7 +64,7 @@ export class Sidebar_nav  extends Extends
 	 {
 		 e.stopPropagation();
 	 }	 
-     onclick()
+     onclick_old()
      {
 		 if (window.isMobile) this.sideBarToogle();
 		 this.activateProgressBar();
@@ -81,6 +81,35 @@ export class Sidebar_nav  extends Extends
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 		 
      }
+	 onclick(e)
+	 {
+		 var func = function (moduleWebPath,component)
+		 {
+			 var target=e.target;
+			  if (window.isMobile) this.sideBarToogle();
+		   this.activateProgressBar();
+		   if (!this.checkAuth())
+		  {
+			//e.preventDefault();co
+			this.showAuthWindow();
+			this.deActivateProgressBar();
+		  }
+		 
+		 //this.deActivateProgressBar();
+		   this.scrollToTop();
+		 
+          //getWorkPage().setState({renderIN:"",defineRoutes:true});
+		  //var routingSwitch=getWorkPage().defineRoute(moduleWebPath,component);
+		   getWorkPage().setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+			 //getWorkPage().setState({renderIN:routingSwitch,defineRoutes:true});
+		 }
+		 func=func.bind(this);
+		 
+		 this.loadNeedModule(e.currentTarget.pathname,func);
+		 
+		 //e.stopPropagation();
+		 //return;
+	 }
 	 onclickNoAuthCheck()
 	 {
 		  if (window.isMobile) this.sideBarToogle();		

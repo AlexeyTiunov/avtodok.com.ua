@@ -1,5 +1,6 @@
  var path = require('path');
- const webpack= require('webpack')
+ const webpack= require('webpack');
+ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 var entryArray=[];
 var entryArray_2=[];
@@ -28,6 +29,8 @@ entryArrayExtJs.push('bootstrap/dist/js/bootstrap.js');
 entryArrayExtJs.push('bootstrap/dist/css/bootstrap.min.css');*/
 
 entryArray.push('babel-polyfill'); 
+//entryArray.push('./cheat.js')
+entryArray.push('./app/componentModulesPathes.js')
 entryArray.push('./app/js/detect_mobile.js');
 //entryArray.push("./app/my.jsx");
 entryArray.push("./app/sidebar_li.js");
@@ -48,12 +51,13 @@ entryArray.push('./app/css/themes/fire.css');
 entryArray.push('bootstrap/dist/js/bootstrap.js');
 entryArray.push('bootstrap/dist/css/bootstrap.min.css');
 
- 
+const NODE_ENV=process.env.NODE_ENV||"development";
+
 module.exports = {                
   //  entry: "./app/my.jsx", // входная точка - исходный файл
    entry: {bundle:entryArray},
    // entry:"/\.\/app\/.*\.js.*$/",
-  /* entry:{ appJs:entryArray,
+  /*entry:{ appJs:entryArray,
            appJs_2:entryArray_2,
            appExtJs:entryArrayExtJs,
 	       css:entryArrayCss,
@@ -66,16 +70,16 @@ module.exports = {
 		 chunkFilename: '[name].[id].js',
     },
     module:{
-        rules:[   
-		 /*   {
-        test: /\/app\/.*\.js$/,
+       rules:[   
+		     {
+        test: /\/app\/.+\.js$/,		
         use: {
           loader: 'bundle-loader',
           options: {
             name: 'my-chunk'
           }
         }
-      },*/
+      },
 		//загрузчик для jsx
             {
                 test: /\.jsx?$/, // определяем тип файлов
@@ -130,7 +134,7 @@ module.exports = {
 	})
 	
 	]*/
-	optimization: {
+	/*optimization: {
     splitChunks: {
       cacheGroups: {
         comm: {
@@ -148,6 +152,18 @@ module.exports = {
 	  
     }
 	
-  },
-    mode:"development"
+	
+  },*/
+  /*optimization: {
+	  minimize: true,
+    minimizer: [
+      new UglifyJsPlugin({
+        
+      }),
+    ],
+  },*/    
+   // mode:"production",
+	//devtool: NODE_ENV=="development"?"source-map":"cheap-source-map",
+
+	
 }

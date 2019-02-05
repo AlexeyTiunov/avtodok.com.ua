@@ -181,10 +181,10 @@ var Contacts = exports.Contacts = function (_Extends) {
 
 /***/ }),
 
-/***/ "./app/order_basket.js":
-/*!*****************************!*\
-  !*** ./app/order_basket.js ***!
-  \*****************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_basket.js":
+/*!*************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/order_basket.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -297,7 +297,7 @@ var Order_basket = exports.Order_basket = function (_Extends) {
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/page_content_v1.js":
 /*!****************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/page_content_v1.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/page_content_v1.js ***!
   \****************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -343,7 +343,7 @@ var _basket_items = __webpack_require__(/*! ./basket_items.js */ "./app/basket_i
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
-var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./app/order_basket.js");
+var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_basket.js");
 
 var _order_list = __webpack_require__(/*! ./order_list.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_list.js");
 
@@ -460,7 +460,7 @@ var Page_content = exports.Page_content = function (_Extends) {
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/return_docs.js":
 /*!************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/return_docs.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/return_docs.js ***!
   \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {

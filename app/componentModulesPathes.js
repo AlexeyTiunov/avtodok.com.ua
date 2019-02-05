@@ -41,13 +41,13 @@ return (
 						 <Route path="/catalog/:brandname?/:itemcode?/:itemanalogcode?" component={Item_info} />
                      </Switch>
                   
-                )*/
+                )
   
   window.componentModulesPathes=
   {
 	 Start_page:["/","start_page.js"],
      Basket:["/basket","./basket_items.js"],
-     Order_list:["/order_list","order_list.js"]	 
-	 
+     Order_list:["/order_list","order_list.js"],	 
+	 Balance:["/balance","basket_items.js"],
 	  
-  }
+  }*/

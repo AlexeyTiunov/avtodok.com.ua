@@ -196,11 +196,21 @@ class Search_form extends Extends
        this.onclick=this.onclick.bind(this); 
          
      } 
-     onclick()
+     onclick_old()
      {
 		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
      }
+	 onclick(e)
+	 {
+		 var func=function (moduleWebPath,component)
+		 {
+			getWorkPage().setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+		 }
+		 func=func.bind(this);
+		 
+		 this.loadNeedModule(e.currentTarget.pathname,func);
+	 }
      getBasketPartsQuantity()
      {
         var findMySelf=this.findMySelf(this.constructor.name);

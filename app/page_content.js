@@ -34,6 +34,8 @@ export class Page_content  extends Extends
 	   this.touchMove=this.touchMove.bind(this) 
 	   this.state.componentSwitch=null;
 	   this.state.componentSwitchPath=null;
+	   this.routesArray={};
+	   this.previousLocationPath="";
          
      }
 	 
@@ -60,14 +62,46 @@ export class Page_content  extends Extends
 		$('[data-toggle="tooltip"]').tooltip();
      }
 	 
-     defineRoute(path,component)
+     defineRoute_old(path,component)
 	 {
+		 
 		 return (	 
                        <Switch>
                          <Route exact path={path} component={component} />
 		                </Switch>
 		         )
 	 }
+	 
+	 defineRoute(moduleWebPath,component)
+	 {
+		 
+		 var isSwitchModuleIn=false;
+		 for (var item in this.routesArray)
+		 {
+			 if (item==moduleWebPath)
+			 {
+				 this.routesArray[item]= component;
+				 isSwitchModuleIn=true;
+			 }
+			 
+		 }
+		 if (!isSwitchModuleIn)    this.routesArray[moduleWebPath]= component;
+		 var routeArray=[];
+		 for (var item in this.routesArray)
+		 {
+			 routeArray.push(<Route exact path={item} component={this.routesArray[item]} />);
+			 
+		 }
+		 var locationPath= location.pathname;
+         this.previousLocationPath=locationPath;
+		 
+		 return (	 
+                       <Switch>
+					   {routeArray}
+		                </Switch>
+		         )
+	 }
+	 
 	 defineDefaultRoute()
 	 {
 		  return (	 
@@ -120,9 +154,13 @@ export class Page_content  extends Extends
 		{	
 		  if (this.state.componentSwitch==null || this.state.componentSwitchPath==null)
 		  {
-			 var locationPath= location.pathname; 
+			 var locationPath= location.pathname;
+             //this.previousLocationPath=locationPath;			 
 			 var func=function(moduleWebPath,component)
 			 {
+				 if ( component==null)
+				 this.setState({componentSwitch:Start_page,componentSwitchPath:moduleWebPath});
+                 else			  
 				 this.setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
 			 }
 			 func=func.bind(this);
@@ -131,12 +169,31 @@ export class Page_content  extends Extends
 			 //routes=this.defineDefaultRoute();
 		  }else
 		  {
-			 routes=this.defineRoute(this.state.componentSwitchPath,this.state.componentSwitch)
+			  var locationPath= location.pathname;
+			  if (this.previousLocationPath==locationPath)
+			  {
+				routes=this.defineRoute(this.state.componentSwitchPath,this.state.componentSwitch)  
+			  }else
+			  {
+				  this.previousLocationPath=locationPath;
+				  var func=function(moduleWebPath,component)
+			       {
+				   if ( component==null)
+				   this.setState({componentSwitch:Start_page,componentSwitchPath:moduleWebPath});
+                   else			  
+				   this.setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+			       }
+			       func=func.bind(this);
+			       this.loadNeedModule(locationPath,func);
+				  
+			  }
+			   
 		  }
 		}else
 		{
 			routes=this.defineRoutes(this.state.defineRoutes);
 		}
+		
           return (<div id="page-content"  style={ {'min-height': '977px'} } > 
                  
                    {routes}

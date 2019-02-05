@@ -281,120 +281,6 @@ var Info_message = exports.Info_message = function (_Extends) {
 
 /***/ }),
 
-/***/ "./app/order_basket.js":
-/*!*****************************!*\
-  !*** ./app/order_basket.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.Order_basket = undefined;
-
-var _createClass = function () {
-	function defineProperties(target, props) {
-		for (var i = 0; i < props.length; i++) {
-			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-		}
-	}return function (Constructor, protoProps, staticProps) {
-		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	};
-}();
-
-var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-
-var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
-
-var _order_detail = __webpack_require__(/*! ./order_detail.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_detail.js");
-
-var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
-
-function _classCallCheck(instance, Constructor) {
-	if (!(instance instanceof Constructor)) {
-		throw new TypeError("Cannot call a class as a function");
-	}
-}
-
-function _possibleConstructorReturn(self, call) {
-	if (!self) {
-		throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	}return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-	if (typeof superClass !== "function" && superClass !== null) {
-		throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-	}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-
-var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var Order_basket = exports.Order_basket = function (_Extends) {
-	_inherits(Order_basket, _Extends);
-
-	function Order_basket(props) {
-		_classCallCheck(this, Order_basket);
-
-		var _this = _possibleConstructorReturn(this, (Order_basket.__proto__ || Object.getPrototypeOf(Order_basket)).call(this, props));
-
-		_this.state = _this.props.match;
-		_this.state.id = 0;
-
-		return _this;
-	}
-
-	_createClass(Order_basket, [{
-		key: 'orderBusket',
-		value: function orderBusket() {
-
-			var Prom = this.makeRequestToRecieveDataAsyncNewObject("POST", "/ws/autodoc/process_order.php", this.makePostDataFromState());
-			var busket = function (responseText) {
-				handleOrders = new _data_convert.handleData(responseText, undefined, "ORDERS");
-				handleOrderNum = new _data_convert.handleData(responseText, undefined, "NUM_ORDERS");
-				this.setState({ mapArray: handleOrders.mapArray, ordersNum: handleOrderNum.mapArray });
-			}.bind(this);
-
-			Prom.then(busket);
-		}
-		//////////////////////////////////////
-
-	}, {
-		key: 'componentDidUpdate',
-		value: function componentDidUpdate() {
-			this.deActivateProgressBar();
-		}
-	}, {
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			this.orderBusket();
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var madeOrders = [];
-			try {
-
-				var idS = this.state.mapArray.map(function (item) {
-					return item.ORDER.ID;
-				});
-				madeOrders = idS.map(function (item) {
-					return React.createElement(_order_detail.Order_detail, { id: item });
-				});
-			} catch (e) {}
-			return React.createElement('div', { 'class': 'block full' }, madeOrders);
-		}
-	}]);
-
-	return Order_basket;
-}(_main_component.Extends);
-
-/***/ }),
-
 /***/ "./app/sidebar.js":
 /*!************************!*\
   !*** ./app/sidebar.js ***!
@@ -457,7 +343,7 @@ var _search_content_v = __webpack_require__(/*! ./search_content_v2.js */ "./app
 
 var _basket_items = __webpack_require__(/*! ./basket_items.js */ "./app/basket_items.js");
 
-var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./app/order_basket.js");
+var _order_basket = __webpack_require__(/*! ./order_basket.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_basket.js");
 
 var _info_message = __webpack_require__(/*! ./info_message.js */ "./app/info_message.js");
 
@@ -681,9 +567,9 @@ for (var a in aCollection)
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/page_content.js":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_basket.js":
 /*!*************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/page_content.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/order_basket.js ***!
   \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -691,34 +577,148 @@ for (var a in aCollection)
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
+});
+exports.Order_basket = undefined;
+
+var _createClass = function () {
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	};
+}();
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
+
+var _order_detail = __webpack_require__(/*! ./order_detail.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_detail.js");
+
+var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_convert.js");
+
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
+}
+
+function _possibleConstructorReturn(self, call) {
+	if (!self) {
+		throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	}return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+	if (typeof superClass !== "function" && superClass !== null) {
+		throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var Order_basket = exports.Order_basket = function (_Extends) {
+	_inherits(Order_basket, _Extends);
+
+	function Order_basket(props) {
+		_classCallCheck(this, Order_basket);
+
+		var _this = _possibleConstructorReturn(this, (Order_basket.__proto__ || Object.getPrototypeOf(Order_basket)).call(this, props));
+
+		_this.state = _this.props.match;
+		_this.state.id = 0;
+
+		return _this;
+	}
+
+	_createClass(Order_basket, [{
+		key: 'orderBusket',
+		value: function orderBusket() {
+
+			var Prom = this.makeRequestToRecieveDataAsyncNewObject("POST", "/ws/autodoc/process_order.php", this.makePostDataFromState());
+			var busket = function (responseText) {
+				handleOrders = new _data_convert.handleData(responseText, undefined, "ORDERS");
+				handleOrderNum = new _data_convert.handleData(responseText, undefined, "NUM_ORDERS");
+				this.setState({ mapArray: handleOrders.mapArray, ordersNum: handleOrderNum.mapArray });
+			}.bind(this);
+
+			Prom.then(busket);
+		}
+		//////////////////////////////////////
+
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			this.deActivateProgressBar();
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.orderBusket();
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var madeOrders = [];
+			try {
+
+				var idS = this.state.mapArray.map(function (item) {
+					return item.ORDER.ID;
+				});
+				madeOrders = idS.map(function (item) {
+					return React.createElement(_order_detail.Order_detail, { id: item });
+				});
+			} catch (e) {}
+			return React.createElement('div', { 'class': 'block full' }, madeOrders);
+		}
+	}]);
+
+	return Order_basket;
+}(_main_component.Extends);
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/page_content.js":
+/*!*************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/page_content.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
 });
 exports.Page_content = undefined;
 
 var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	};
 }();
 
 var _get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;if (getter === undefined) {
-      return undefined;
-    }return getter.call(receiver);
-  }
+	if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+		var parent = Object.getPrototypeOf(object);if (parent === null) {
+			return undefined;
+		} else {
+			return get(parent, property, receiver);
+		}
+	} else if ("value" in desc) {
+		return desc.value;
+	} else {
+		var getter = desc.get;if (getter === undefined) {
+			return undefined;
+		}return getter.call(receiver);
+	}
 };
 
 var _main_component = __webpack_require__(/*! ./main_component.js */ "./app/main_component.js");
@@ -728,21 +728,21 @@ var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_module
 var _start_page = __webpack_require__(/*! ./start_page.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/start_page.js");
 
 function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
 }
 
 function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	if (!self) {
+		throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	}return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
 function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	if (typeof superClass !== "function" && superClass !== null) {
+		throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
@@ -768,99 +768,135 @@ import {Return_docs} from './return_docs.js'
 import {Item_info} from './item_info.js'*/
 
 var Page_content = exports.Page_content = function (_Extends) {
-  _inherits(Page_content, _Extends);
+	_inherits(Page_content, _Extends);
 
-  function Page_content(props) {
-    _classCallCheck(this, Page_content);
+	function Page_content(props) {
+		_classCallCheck(this, Page_content);
 
-    //this.state={renderIN:""};
-    //this.state={parentMod:props.parentMod}; 
-    var _this = _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
+		//this.state={renderIN:""};
+		//this.state={parentMod:props.parentMod}; 
+		var _this = _possibleConstructorReturn(this, (Page_content.__proto__ || Object.getPrototypeOf(Page_content)).call(this, props));
 
-    _this.state.defineRoutes = true;
-    _this.touchMove = _this.touchMove.bind(_this);
-    _this.state.componentSwitch = null;
-    _this.state.componentSwitchPath = null;
+		_this.state.defineRoutes = true;
+		_this.touchMove = _this.touchMove.bind(_this);
+		_this.state.componentSwitch = null;
+		_this.state.componentSwitchPath = null;
+		_this.routesArray = {};
+		_this.previousLocationPath = "";
 
-    return _this;
-  }
+		return _this;
+	}
 
-  _createClass(Page_content, [{
-    key: 'touchMove',
-    value: function touchMove(e) {
-      var x = e.touches[0].clientX;
-      var y = e.touches[0].clientY;
-      alert(x);
-    }
-    ////////////////////////////
+	_createClass(Page_content, [{
+		key: 'touchMove',
+		value: function touchMove(e) {
+			var x = e.touches[0].clientX;
+			var y = e.touches[0].clientY;
+			alert(x);
+		}
+		////////////////////////////
 
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidMount', this).call(this);
-      // super.childUpdate(this,<h1>success</h1>);   
-      // this.state.parentMod.childUpdate(this);
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			_get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidMount', this).call(this);
+			// super.childUpdate(this,<h1>success</h1>);   
+			// this.state.parentMod.childUpdate(this);
 
-      // super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      _get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
-      $('[data-toggle="tooltip"]').tooltip();
-    }
-  }, {
-    key: 'defineRoute',
-    value: function defineRoute(path, component) {
-      return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: path, component: component }));
-    }
-  }, {
-    key: 'defineDefaultRoute',
-    value: function defineDefaultRoute() {
-      return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _start_page.Start_page }));
-    }
-  }, {
-    key: 'defineRoutes',
-    value: function defineRoutes(defRoutes) {
-      if (defRoutes) {
-        return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _start_page.Start_page }), React.createElement(_reactRouterDom.Route, { path: '/balance', component: Balance }), React.createElement(_reactRouterDom.Route, { path: '/history', component: History }), React.createElement(_reactRouterDom.Route, { path: '/shdocs', component: Shiping_docs }), React.createElement(_reactRouterDom.Route, { path: '/shipments', component: Shipments }), React.createElement(_reactRouterDom.Route, { path: '/basket', component: Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: Order_basket }), React.createElement(_reactRouterDom.Route, { path: '/order_list', component: Order_list }), React.createElement(_reactRouterDom.Route, { path: '/order_detail/:id', component: Order_detail }), React.createElement(_reactRouterDom.Route, { path: '/shiping_detail/:id', component: Shiping_detail }), React.createElement(_reactRouterDom.Route, { path: '/shipingdoc_detail/:id', component: Shipingdoc_detail }), React.createElement(_reactRouterDom.Route, { path: '/user_info', component: Sidebar_usersettings }), React.createElement(_reactRouterDom.Route, { path: '/search/:id?', component: Search_table_v2 }), React.createElement(_reactRouterDom.Route, { path: '/avtodok.com.ua/search/:id?', component: Search_table_v2 }), React.createElement(_reactRouterDom.Route, { path: '/contacts', component: Contacts }), React.createElement(_reactRouterDom.Route, { path: '/catalogs_auto', component: Catalogs_auto }), React.createElement(_reactRouterDom.Route, { path: '/retdocs', component: Return_docs }), React.createElement(_reactRouterDom.Route, { path: '/catalog/:brandname?/:itemcode?/:itemanalogcode?', component: Item_info }));
-      } else {
-        return React.createElement('div', null);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      // const routes=this.defineRoutes(this.state.defineRoutes);
-      var routes = "";
-      if (this.state.defineRoutes) {
-        if (this.state.componentSwitch == null || this.state.componentSwitchPath == null) {
-          var locationPath = location.pathname;
-          var func = function func(moduleWebPath, component) {
-            this.setState({ componentSwitch: component, componentSwitchPath: moduleWebPath });
-          };
-          func = func.bind(this);
-          this.loadNeedModule(locationPath, func);
+			// super.makeRequest("POST","/ws/auth.php",false,"LOGIN=Alex");
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps, prevState) {
+			_get(Page_content.prototype.__proto__ || Object.getPrototypeOf(Page_content.prototype), 'componentDidUpdate', this).call(this, prevProps, prevState);
+			$('[data-toggle="tooltip"]').tooltip();
+		}
+	}, {
+		key: 'defineRoute_old',
+		value: function defineRoute_old(path, component) {
 
-          //routes=this.defineDefaultRoute();
-        } else {
-          routes = this.defineRoute(this.state.componentSwitchPath, this.state.componentSwitch);
-        }
-      } else {
-        routes = this.defineRoutes(this.state.defineRoutes);
-      }
-      return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, routes, this.state.renderIN);
-    }
-  }]);
+			return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: path, component: component }));
+		}
+	}, {
+		key: 'defineRoute',
+		value: function defineRoute(moduleWebPath, component) {
 
-  return Page_content;
+			var isSwitchModuleIn = false;
+			for (var item in this.routesArray) {
+				if (item == moduleWebPath) {
+					this.routesArray[item] = component;
+					isSwitchModuleIn = true;
+				}
+			}
+			if (!isSwitchModuleIn) this.routesArray[moduleWebPath] = component;
+			var routeArray = [];
+			for (var item in this.routesArray) {
+				routeArray.push(React.createElement(_reactRouterDom.Route, { exact: true, path: item, component: this.routesArray[item] }));
+			}
+			var locationPath = location.pathname;
+			this.previousLocationPath = locationPath;
+
+			return React.createElement(_reactRouterDom.Switch, null, routeArray);
+		}
+	}, {
+		key: 'defineDefaultRoute',
+		value: function defineDefaultRoute() {
+			return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _start_page.Start_page }));
+		}
+	}, {
+		key: 'defineRoutes',
+		value: function defineRoutes(defRoutes) {
+			if (defRoutes) {
+				return React.createElement(_reactRouterDom.Switch, null, React.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _start_page.Start_page }), React.createElement(_reactRouterDom.Route, { path: '/balance', component: Balance }), React.createElement(_reactRouterDom.Route, { path: '/history', component: History }), React.createElement(_reactRouterDom.Route, { path: '/shdocs', component: Shiping_docs }), React.createElement(_reactRouterDom.Route, { path: '/shipments', component: Shipments }), React.createElement(_reactRouterDom.Route, { path: '/basket', component: Basket }), React.createElement(_reactRouterDom.Route, { path: '/order_basket/:DELIVERY/:PAYS', component: Order_basket }), React.createElement(_reactRouterDom.Route, { path: '/order_list', component: Order_list }), React.createElement(_reactRouterDom.Route, { path: '/order_detail/:id', component: Order_detail }), React.createElement(_reactRouterDom.Route, { path: '/shiping_detail/:id', component: Shiping_detail }), React.createElement(_reactRouterDom.Route, { path: '/shipingdoc_detail/:id', component: Shipingdoc_detail }), React.createElement(_reactRouterDom.Route, { path: '/user_info', component: Sidebar_usersettings }), React.createElement(_reactRouterDom.Route, { path: '/search/:id?', component: Search_table_v2 }), React.createElement(_reactRouterDom.Route, { path: '/avtodok.com.ua/search/:id?', component: Search_table_v2 }), React.createElement(_reactRouterDom.Route, { path: '/contacts', component: Contacts }), React.createElement(_reactRouterDom.Route, { path: '/catalogs_auto', component: Catalogs_auto }), React.createElement(_reactRouterDom.Route, { path: '/retdocs', component: Return_docs }), React.createElement(_reactRouterDom.Route, { path: '/catalog/:brandname?/:itemcode?/:itemanalogcode?', component: Item_info }));
+			} else {
+				return React.createElement('div', null);
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			// const routes=this.defineRoutes(this.state.defineRoutes);
+			var routes = "";
+			if (this.state.defineRoutes) {
+				if (this.state.componentSwitch == null || this.state.componentSwitchPath == null) {
+					var locationPath = location.pathname;
+					//this.previousLocationPath=locationPath;			 
+					var func = function func(moduleWebPath, component) {
+						if (component == null) this.setState({ componentSwitch: _start_page.Start_page, componentSwitchPath: moduleWebPath });else this.setState({ componentSwitch: component, componentSwitchPath: moduleWebPath });
+					};
+					func = func.bind(this);
+					this.loadNeedModule(locationPath, func);
+
+					//routes=this.defineDefaultRoute();
+				} else {
+					var locationPath = location.pathname;
+					if (this.previousLocationPath == locationPath) {
+						routes = this.defineRoute(this.state.componentSwitchPath, this.state.componentSwitch);
+					} else {
+						this.previousLocationPath = locationPath;
+						var func = function func(moduleWebPath, component) {
+							if (component == null) this.setState({ componentSwitch: _start_page.Start_page, componentSwitchPath: moduleWebPath });else this.setState({ componentSwitch: component, componentSwitchPath: moduleWebPath });
+						};
+						func = func.bind(this);
+						this.loadNeedModule(locationPath, func);
+					}
+				}
+			} else {
+				routes = this.defineRoutes(this.state.defineRoutes);
+			}
+
+			return React.createElement('div', { id: 'page-content', style: { 'min-height': '977px' } }, routes, this.state.renderIN);
+		}
+	}]);
+
+	return Page_content;
 }(_main_component.Extends);
 
 /***/ }),
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/regions_info.js":
 /*!*************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/regions_info.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/regions_info.js ***!
   \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -999,7 +1035,7 @@ var Regions = exports.Regions = function (_Extends) {
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/sidebar_brand.js":
 /*!**************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/sidebar_brand.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/sidebar_brand.js ***!
   \**************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {

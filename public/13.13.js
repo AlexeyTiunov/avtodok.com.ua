@@ -2,7 +2,7 @@
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/order_list.js":
 /*!***********************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--5!./node_modules/babel-loader/lib??ref--6!./app/order_list.js ***!
+  !*** ./node_modules/babel-loader/lib??ref--4!./node_modules/babel-loader/lib??ref--5!./app/order_list.js ***!
   \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -281,9 +281,20 @@ var Orderid_td = exports.Orderid_td = function (_Extends2) {
 	}
 
 	_createClass(Orderid_td, [{
-		key: 'onclick',
-		value: function onclick() {
+		key: 'onclick_old',
+		value: function onclick_old() {
 			this.activateProgressBar();
+		}
+	}, {
+		key: 'onclick',
+		value: function onclick(e) {
+
+			var func = function func(moduleWebPath, component) {
+				this.activateProgressBar();
+				getWorkPage().setState({ componentSwitch: component, componentSwitchPath: moduleWebPath });
+			};
+			func = func.bind(this);
+			this.loadNeedModule(e.currentTarget.pathname, func);
 		}
 	}, {
 		key: 'render',

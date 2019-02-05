@@ -110,7 +110,7 @@ export class Sidebar_nav  extends Extends
 		 //e.stopPropagation();
 		 //return;
 	 }
-	 onclickNoAuthCheck()
+	 onclickNoAuthCheck_old()
 	 {
 		  if (window.isMobile) this.sideBarToogle();		
 		 //this.deActivateProgressBar();
@@ -118,6 +118,22 @@ export class Sidebar_nav  extends Extends
 		 this.activateProgressBar();
          getWorkPage().setState({renderIN:"",defineRoutes:true});
 	 }
+	  onclickNoAuthCheck(e)
+	 {
+		 var func=function (moduleWebPath,component)
+		 {
+		  if (window.isMobile) this.sideBarToogle();		
+		 //this.deActivateProgressBar();
+		 this.scrollToTop();
+		 this.activateProgressBar();
+          getWorkPage().setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+		 }
+		 
+		 func=func.bind(this);
+		 
+		 this.loadNeedModule(e.currentTarget.pathname,func);
+	 }
+	 
      componentDidCatch(error, info) 
      {
          console.log(error);
@@ -157,7 +173,7 @@ export class Sidebar_nav  extends Extends
                                     );
                          return c;
                          
-                     }
+                     }else
                      {
                          const ff=  ( <li>
                                <Link onClickCapture={self.onclickNoAuthCheck} onMouseOutCapture={self.stPropagation} onMouseOverCapture={self.stPropagation} onTouchStartCapture={self.stPropagation} onTouchMoveCapture={self.stPropagation} to={item.href}  ><i className={item.className}></i><font><font>{item.name}</font></font></Link>

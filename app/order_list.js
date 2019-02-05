@@ -251,9 +251,20 @@ export class Orderid_td extends Extends
         this.state=this.props;
         this.onclick=this.onclick.bind(this);
      } 
-	 onclick()
+	 onclick_old()
 	 {
 		 this.activateProgressBar();
+	 }
+	 onclick(e)
+	 {
+		 
+		 var func = function (moduleWebPath,component)
+		 {
+			 this.activateProgressBar();
+			 getWorkPage().setState({componentSwitch:component,componentSwitchPath:moduleWebPath});
+		 }
+		 func=func.bind(this);
+		 this.loadNeedModule(e.currentTarget.pathname,func);
 	 }
      render()
      {

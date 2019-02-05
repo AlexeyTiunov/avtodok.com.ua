@@ -71,7 +71,7 @@ module.exports = {
     },
     module:{
        rules:[   
-		     {
+		    /* {
         test: /\/app\/.+\.js$/,		
         use: {
           loader: 'bundle-loader',
@@ -79,7 +79,7 @@ module.exports = {
             name: 'my-chunk'
           }
         }
-      },
+      },*/
 		//загрузчик для jsx
             {
                 test: /\.jsx?$/, // определяем тип файлов
@@ -134,11 +134,13 @@ module.exports = {
 	})
 	
 	]*/
-	/*optimization: {
+	optimization: {
+	
     splitChunks: {
       cacheGroups: {
         comm: {
-          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+         // test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+		 test: /[\\/]node_modules[\\/]/,
           name: 'vendor',
           chunks: 'all',
         },
@@ -150,10 +152,11 @@ module.exports = {
 		  }
       },
 	  
-    }
+    },
 	
+     
 	
-  },*/
+  },
   /*optimization: {
 	  minimize: true,
     minimizer: [

@@ -14,11 +14,19 @@ export class Search_content_header extends Extends
           this.state.itemCode="";
           this.onchange=this.onchange.bind(this);
           this.onclick=this.onclick.bind(this);
+		  this.keyup=this.keyup.bind(this);
           this.analogAdd=this.analogAdd.bind(this);
           this.state.searchTableComponent=null;
           this.state.analogAdd="checked";
 		  this.state.itemCode=this.props.itemCode;
       }
+	  keyup(e)
+	  {
+		  if (e.keyCode==13)
+		  {
+			   this.onclick(e);
+		  }
+	  }
       onchange(e)
       {
           this.setState({itemCode:e.target.value});
@@ -50,13 +58,13 @@ export class Search_content_header extends Extends
                     function (mainComp){          
                       this.state.searchTableComponent=mainComp;
                     return(     
-                     <form action="" method="post" className="form-horizontal form-bordered">
+                     <div action="" method="post" className="form-horizontal form-bordered">
                           <div className="form-group">
                                <div className="col-md-4"></div>    
                                 <div className="col-md-4" >
                                     <div className="input-group">
                                         
-                                        <input type="text" onChange={this.onchange} value={this.state.itemCode} id="example-input1-group2" name="example-input1-group2" className="form-control" placeholder="Введіть номер запчастини"/>
+                                        <input type="text" onKeyUp={this.keyup} onChange={this.onchange} value={this.state.itemCode} id="example-input1-group2" name="example-input1-group2" className="form-control" placeholder="Введіть номер запчастини"/>
                                         <span className="input-group-btn">
                                             <button type="button" onClick={this.onclick} className="btn btn-primary"><i className="fa fa-search"></i> Пошук </button> 
                                         </span>
@@ -69,7 +77,7 @@ export class Search_content_header extends Extends
                                    </div>    
                                </div>    
                            </div>
-                   </form> )     
+                   </div> )     
                     } .bind(this)
                   }                  
                   </ComContext.Consumer>

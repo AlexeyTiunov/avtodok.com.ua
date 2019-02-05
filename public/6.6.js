@@ -132,13 +132,28 @@ var Sidebar_nav = exports.Sidebar_nav = function (_Extends) {
       //return;
     }
   }, {
-    key: 'onclickNoAuthCheck',
-    value: function onclickNoAuthCheck() {
+    key: 'onclickNoAuthCheck_old',
+    value: function onclickNoAuthCheck_old() {
       if (window.isMobile) this.sideBarToogle();
       //this.deActivateProgressBar();
       this.scrollToTop();
       this.activateProgressBar();
       getWorkPage().setState({ renderIN: "", defineRoutes: true });
+    }
+  }, {
+    key: 'onclickNoAuthCheck',
+    value: function onclickNoAuthCheck(e) {
+      var func = function func(moduleWebPath, component) {
+        if (window.isMobile) this.sideBarToogle();
+        //this.deActivateProgressBar();
+        this.scrollToTop();
+        this.activateProgressBar();
+        getWorkPage().setState({ componentSwitch: component, componentSwitchPath: moduleWebPath });
+      };
+
+      func = func.bind(this);
+
+      this.loadNeedModule(e.currentTarget.pathname, func);
     }
   }, {
     key: 'componentDidCatch',
@@ -163,8 +178,7 @@ var Sidebar_nav = exports.Sidebar_nav = function (_Extends) {
 
             var c = React.createElement('li', null, React.createElement('a', { onClick: self.onclick, href: item.href, className: item.className + " open" }, React.createElement('i', { className: 'fa fa-angle-left sidebar-nav-indicator' }), React.createElement('i', { className: 'gi gi-home sidebar-nav-icon' }), React.createElement('font', null, React.createElement('font', null, item.name))), React.createElement('ul', { style: { "display": "block" } }, gg));
             return c;
-          }
-          {
+          } else {
             var ff = React.createElement('li', null, React.createElement(_reactRouterDom.Link, { onClickCapture: self.onclickNoAuthCheck, onMouseOutCapture: self.stPropagation, onMouseOverCapture: self.stPropagation, onTouchStartCapture: self.stPropagation, onTouchMoveCapture: self.stPropagation, to: item.href }, React.createElement('i', { className: item.className }), React.createElement('font', null, React.createElement('font', null, item.name))));
             return ff;
           }

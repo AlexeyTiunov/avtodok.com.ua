@@ -220,7 +220,15 @@ var _data_convert = __webpack_require__(/*! ./data_convert.js */ "./app/data_con
 
 var _carousel = __webpack_require__(/*! ./carousel.js */ "./app/carousel.js");
 
+<<<<<<< HEAD
 var _search_content_header = __webpack_require__(/*! ./search_content_header.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/search_content_header.js");
+=======
+<<<<<<< HEAD
+var _search_content_header = __webpack_require__(/*! ./search_content_header.js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/babel-loader/lib/index.js?!./app/search_content_header.js");
+=======
+var _search_content_header = __webpack_require__(/*! ./search_content_header.js */ "./app/search_content_header.js");
+>>>>>>> 1d07b1280debee750597fb834e183061e0456c69
+>>>>>>> 4d2fcec8f3f2b89073c13d3e082a0d22154f972c
 
 var _search_content_v = __webpack_require__(/*! ./search_content_v2.js */ "./app/search_content_v2.js");
 

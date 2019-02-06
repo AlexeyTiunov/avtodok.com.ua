@@ -1,4 +1,0 @@
-<?
-$arTooltips = array(
-);
-?>

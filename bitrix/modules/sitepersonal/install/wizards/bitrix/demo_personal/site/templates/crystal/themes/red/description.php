@@ -1,1 +1,0 @@
-<?$arTemplate = Array("NAME"=>GetMessage("SITE_TEMPLATE_THEME_NAME"), "DESCRIPTION"=>GetMessage("SITE_TEMPLATE_THEME_DESCRIPTION"));?>

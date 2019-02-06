@@ -1,3 +1,0 @@
-<?
-$sSectionName="IB.property";
-?>

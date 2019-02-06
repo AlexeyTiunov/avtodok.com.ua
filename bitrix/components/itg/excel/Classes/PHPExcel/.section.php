@@ -1,6 +1,0 @@
-<?
-$sSectionName = "PHPExcel";
-$arDirProperties = array(
-
-);
-?>

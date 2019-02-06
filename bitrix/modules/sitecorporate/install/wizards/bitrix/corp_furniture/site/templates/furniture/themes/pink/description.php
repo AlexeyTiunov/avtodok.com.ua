@@ -1,1 +1,0 @@
-<?$arTemplate = Array("NAME" => GetMessage('CFST_THEME_PINK'));?>

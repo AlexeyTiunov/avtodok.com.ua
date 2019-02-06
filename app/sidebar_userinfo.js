@@ -103,7 +103,7 @@ export class Sidebar_userinfo extends Extends
      getUserData()
      {
         var findMySelf=this.findMySelf(this.constructor.name);
-         var Prom=this.makeRequestToRecieveData("POST","/ws/personal_profile.php",false,"")
+         var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/personal_profile.php","")
          
          Prom.then(function(responseText){
 			 var state=null;

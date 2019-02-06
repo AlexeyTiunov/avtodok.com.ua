@@ -1,0 +1,1 @@
+var configObject={Action_td:{bClasses:{"0-7":"text-center"}},Status_td:{bClasses:{"0-7":"text-center"}}};window.configObject=configObject,window.componentModulesPathes={Start_page:["/","start_page.js"],Basket:["/basket","./basket_items.js"],Order_list:["/order_list","order_list.js"],Balance:["/balance","balance.js"]};

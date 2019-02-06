@@ -19,7 +19,7 @@ export class Auth extends Extends
     auth(request)
     { 
         
-         var Prom=this.makeRequestToRecieveData("POST","/ws/auth.php",false,request)
+         var Prom=this.makeRequestToRecieveDataAsyncNewObject("POST","/ws/auth.php",request)
 		 
 		/* var authRequest_old=function(responseText){              
                if (Number(responseText)>0)               {

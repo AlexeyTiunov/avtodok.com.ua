@@ -1,7 +1,8 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
-import {Sidebar} from './sidebar.js'
+//import {Sidebar} from './sidebar.js'
 import {handleData} from './data_convert.js'
+var bundle=require("bundle-loader");
 
 
 window.objectReg={};
@@ -638,6 +639,136 @@ export class Extends extends React.Component
 	  }
 	  
 	  
+	  
+  }
+  findModulePath(moduleWebPath)
+  {
+	  var cmp=window.componentModulesPathes;
+	  for (var item in cmp)
+	  {
+		 if (cmp[item][0] instanceof RegExp)
+		 {
+			 if (cmp[item][0].test(moduleWebPath))
+			 {
+				 return cmp[item][1];
+			 }
+			 
+		 }else
+         {			 
+		  if (cmp[item][0]==moduleWebPath) 
+		  {
+			 return cmp[item][1];
+		  }
+		 } 
+		  
+	  }
+	  return "";
+	  
+  }
+  findModuleName(moduleWebPath)
+  {
+	  var cmp=window.componentModulesPathes;
+	  for (var item in cmp)
+	  {
+		if (cmp[item][0] instanceof RegExp)
+		{
+			 if (cmp[item][0].test(moduleWebPath))
+			 {
+				  return item;
+			 }
+			
+		}else
+		{ 
+		  
+		 if (cmp[item][0]==moduleWebPath) 
+		 {
+			 return item;
+		 }
+		}
+		  
+	  }
+	  return "";
+	  
+  }
+  findRoutePath(moduleWebPath)
+  {
+	   var cmp=window.componentModulesPathes;
+	  for (var item in cmp)
+	  {
+		if (cmp[item][0] instanceof RegExp)
+		{
+			 if (cmp[item][0].test(moduleWebPath))
+			 {
+				   return cmp[item][2];
+			 }
+			
+		}else
+		{   
+		 if (cmp[item][0]==moduleWebPath) 
+		 {
+			 return cmp[item][2];
+		 }
+		} 
+		  
+	  }
+	  return "";
+	  
+  }
+  correctModuleWebPath(moduleWebPath)
+  {
+	   var cmp=window.componentModulesPathes;
+	   for (var item in cmp)
+	   {
+		   if (cmp[item][0] instanceof RegExp)
+		   {
+			    if (cmp[item][0].test(moduleWebPath))
+			    {
+					
+				  return moduleWebPath.replace(cmp[item][0],"$1");
+			    }
+			   
+		   }
+		   
+		   
+	   }
+	   
+	 return  moduleWebPath;
+  }
+  loadNeedModule(moduleWebPath,func)
+  {
+	  var modulePath=this.findModulePath(moduleWebPath);
+	  var componentName=this.findModuleName(moduleWebPath);
+	  var routerPath=this.findRoutePath(moduleWebPath);
+	  var cModuleWebPath=this.correctModuleWebPath(moduleWebPath);
+	  var modFunc=function (modul)
+	  {
+		  func(cModuleWebPath+routerPath,modul[arguments.callee.componentName]);
+	  }
+	  modFunc.componentName=componentName;
+	  if (modulePath=="") 
+	  {
+		  func(cModuleWebPath+routerPath,null);
+		  return;
+	  }
+	 // require.ensure([modulePath],(require)=>
+	 // {
+		 // var module=require("bundle-loader!./"+modulePath); 
+		 //var module=require("./"+modulePath); 
+		 //var module=require.context("bundle-loader!./",false,/\.js?$/);
+		
+		var context= require.context("bundle-loader!./",false,/\.js$/)
+		 var module=context("./"+modulePath);
+		 module(modFunc );
+		       
+			  
+		 /*bundle(function(f){
+			 
+			  var context= require.context("./",false,/\.js$/)
+		      var module=context("./"+modulePath);
+			  func(moduleWebPath,"");
+		 })*/
+		 
+	 // })
 	  
   }
 }

@@ -143,7 +143,7 @@ var Page_content = exports.Page_content = function (_Extends) {
 			var isSwitchModuleIn = false;
 			for (var item in this.routesArray) {
 				if (item == moduleWebPath) {
-					this.routesArray[item] = component;
+					this.routesArray[item] = component; // v
 					isSwitchModuleIn = true;
 				}
 			}

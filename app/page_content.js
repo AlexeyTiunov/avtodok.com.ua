@@ -80,7 +80,7 @@ export class Page_content  extends Extends
 		 {
 			 if (item==moduleWebPath)
 			 {
-				 this.routesArray[item]= component;
+				 this.routesArray[item]= component; // v
 				 isSwitchModuleIn=true;
 			 }
 			 
